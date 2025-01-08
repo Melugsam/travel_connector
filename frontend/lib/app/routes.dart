@@ -3,13 +3,13 @@ import 'package:go_router/go_router.dart';
 import 'package:travel_connector/features/auth/presentation/login_screen.dart';
 import 'package:travel_connector/features/auth/presentation/register_screen.dart';
 import 'package:travel_connector/features/navigation/presentation/navigation_screen.dart';
-import 'package:travel_connector/features/newsfeed/presentation/neewsfeed_screen.dart';
+import 'package:travel_connector/features/newsfeed/presentation/newsfeed_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
 final GoRouter route = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: "/newsfeed",
+  initialLocation: "/",
   debugLogDiagnostics: true,
   routes: [
     GoRoute(

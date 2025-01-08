@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
-import 'package:travel_connector/features/auth/data/model/auth_request_model.dart';
 import 'package:travel_connector/features/auth/data/model/auth_response_model.dart';
+import 'package:travel_connector/features/auth/data/model/login_request_model.dart';
 
 part 'login_api_service.g.dart';
 
@@ -9,6 +9,6 @@ part 'login_api_service.g.dart';
 abstract class LoginApiService {
   factory LoginApiService(Dio dio, {String baseUrl}) = _LoginApiService;
 
-  @POST('/login')
-  Future<AuthResponseModel> fetchLogin(@Body() AuthRequestModel request);
+  @POST('/auth/login')
+  Future<AuthResponseModel> fetchLogin(@Body() LoginRequestModel request);
 }

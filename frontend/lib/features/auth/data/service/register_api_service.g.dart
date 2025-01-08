@@ -18,7 +18,7 @@ class _RegisterApiService implements RegisterApiService {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<AuthResponseModel> fetchRegister(AuthRequestModel request) async {
+  Future<AuthResponseModel> fetchRegister(RegisterRequestModel request) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -28,7 +28,7 @@ class _RegisterApiService implements RegisterApiService {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/register',
+            '/auth/register',
             queryParameters: queryParameters,
             data: _data,
           )

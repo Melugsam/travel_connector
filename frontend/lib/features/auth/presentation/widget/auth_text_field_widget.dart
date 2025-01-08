@@ -39,7 +39,7 @@ class _AuthTextFieldWidgetState extends State<AuthTextFieldWidget> {
         Text(
           widget.title,
           style: theme.bodyLarge!.copyWith(
-            color: AppColors.grey,
+            color: AppColors.darkGrey,
             fontWeight: FontWeight.bold,
           ),
         ),

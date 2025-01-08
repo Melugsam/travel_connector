@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:travel_connector/app/di.dart';
 import 'package:travel_connector/core/color/app_colors.dart';
 import 'package:travel_connector/core/manager/notification_manager.dart';
+import 'package:travel_connector/core/service/local_database.dart';
 import 'package:travel_connector/core/widget/custom_button_widget.dart';
 import 'package:travel_connector/core/widget/custom_circular_indicator_widget.dart';
 import 'package:travel_connector/features/auth/domain/usecase/register_usecase.dart';
@@ -12,6 +13,7 @@ import 'package:travel_connector/features/auth/presentation/bloc/register/regist
 import 'widget/auth_text_field_widget.dart';
 
 class RegisterScreen extends StatelessWidget {
+  final usernameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
@@ -26,9 +28,10 @@ class RegisterScreen extends StatelessWidget {
       child: BlocListener<RegisterBloc, RegisterState>(
         listener: (context, state) {
           if (state is RegisterSuccess) {
-            getIt<NotificationManager>().showSuccess(message: 'Успешная регистрация');
+            getIt<NotificationManager>()
+                .showSuccess(message: 'Успешная регистрация');
           }
-          if (state is RegisterError){
+          if (state is RegisterError) {
             getIt<NotificationManager>().showError(message: state.message);
           }
         },
@@ -55,10 +58,18 @@ class RegisterScreen extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  flex: 3,
+                  flex: 4,
                   child: Column(
+                    spacing: 16,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      AuthTextFieldWidget(
+                        controller: usernameController,
+                        isPassword: false,
+                        title: "Имя пользователя",
+                        hint: "Введите имя пользователя",
+                        validator: (p0) {},
+                      ),
                       AuthTextFieldWidget(
                         controller: emailController,
                         isPassword: false,
@@ -66,18 +77,12 @@ class RegisterScreen extends StatelessWidget {
                         hint: "Введите почту",
                         validator: (p0) {},
                       ),
-                      SizedBox(
-                        height: 16,
-                      ),
                       AuthTextFieldWidget(
                         controller: passwordController,
                         isPassword: true,
                         title: "Пароль",
                         hint: "Введите пароль",
                         validator: (p0) {},
-                      ),
-                      SizedBox(
-                        height: 16,
                       ),
                       AuthTextFieldWidget(
                         controller: confirmPasswordController,
@@ -102,12 +107,13 @@ class RegisterScreen extends StatelessWidget {
                       outline: false,
                       onPressed: () {
                         context.read<RegisterBloc>().add(
-                          ExecuteRegisterEvent(
-                              email: emailController.text,
-                              password: passwordController.text,
-                              confirmPassword:
-                              confirmPasswordController.text),
-                        );
+                              ExecuteRegisterEvent(
+                                name: usernameController.text,
+                                email: emailController.text,
+                                password: passwordController.text,
+                                confirmPassword: confirmPasswordController.text,
+                              ),
+                            );
                       },
                     );
                   },

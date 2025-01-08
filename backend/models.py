@@ -1,5 +1,5 @@
 from database import Base
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy import ARRAY, JSON, Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
@@ -14,7 +14,17 @@ class User(Base):
 
     posts = relationship("Post", back_populates="user")
 
+class Comment(Base):
+    __tablename__ = "comments"
 
+    id = Column(Integer, primary_key=True, index=True)
+    post_id = Column(Integer, ForeignKey("posts.id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    content = Column(String, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    post = relationship("Post", back_populates="comments")
+    user = relationship("User")
 
 class Post(Base):
     __tablename__ = "posts"
@@ -25,9 +35,12 @@ class Post(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     likes_count = Column(Integer, default=0)
     comments_count = Column(Integer, default=0)
+    liked_by = Column(JSON, default=list)  # JSON для хранения списка ID
 
     user = relationship("User", back_populates="posts")
     images = relationship("PostImage", back_populates="post")
+    comments = relationship("Comment", back_populates="post", cascade="all, delete-orphan")
+
 
 
 class PostImage(Base):

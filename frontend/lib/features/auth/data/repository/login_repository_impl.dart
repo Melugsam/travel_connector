@@ -3,7 +3,7 @@ import 'package:travel_connector/core/exception/domain_exception.dart';
 import 'package:travel_connector/core/service/logging_service.dart';
 import 'package:travel_connector/features/auth/data/datasource/remote/login_remote_datasource.dart';
 import 'package:travel_connector/features/auth/data/mapper/user_mapper.dart';
-import 'package:travel_connector/features/auth/data/model/auth_request_model.dart';
+import 'package:travel_connector/features/auth/data/model/login_request_model.dart';
 import 'package:travel_connector/features/auth/domain/entity/user_entity.dart';
 import 'package:travel_connector/features/auth/domain/repository/login_repository.dart';
 
@@ -24,7 +24,7 @@ class LoginRepositoryImpl implements LoginRepository {
     try {
       _loggingService.logInfo('test');
       final response = await _loginRemoteDataSource.login(
-        AuthRequestModel(email: email, password: password),
+        LoginRequestModel(email: email, password: password),
       );
       return _userMapper.mapToEntity(response);
     } on ServerException catch (e) {

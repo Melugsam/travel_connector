@@ -46,17 +46,34 @@ class UserSchema(BaseModel):
     class Config:
         from_attributes = True
 
-class PostSchema(BaseModel):
+class CommentResponseSchema(BaseModel):
     id: int
-    description: Optional[str]
-    created_at: datetime
-    likes_count: int
-    comments_count: int
+    content: str
     user: UserSchema
-    images: List[PostImageSchema]
+    created_at: str
 
     class Config:
         from_attributes = True
+
+class AddCommentSchema(BaseModel):
+    post_id: int
+    user_id: int
+    content: str
+
+class PostSchema(BaseModel):
+    id: int
+    description: Optional[str]
+    created_at: str  # Поле для строки даты
+    likes_count: int
+    comments_count: int
+    liked_by: List[int]  # Список ID пользователей
+    user: UserSchema
+    images: List[PostImageSchema]
+    comments: List[CommentResponseSchema]
+
+    class Config:
+        from_attributes = True
+
 
 class PostImageCreateSchema(BaseModel):
     url: str
@@ -69,3 +86,6 @@ class PostCreateSchema(BaseModel):
     class Config:
         from_attributes = True
 
+class LikePostSchema(BaseModel):
+    post_id: int
+    user_id: int

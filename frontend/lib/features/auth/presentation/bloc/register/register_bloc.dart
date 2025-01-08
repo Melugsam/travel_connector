@@ -18,7 +18,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         );
         return;
       }
-      final result = await _registerUseCase(event.email, event.password);
+      final result =
+          await _registerUseCase(event.name, event.email, event.password);
       result.fold(
         (l) => emit(RegisterError(message: l.message)),
         (r) => emit(

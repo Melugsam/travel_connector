@@ -47,8 +47,7 @@ class CustomButtonWidget extends StatelessWidget {
             if (icon != null)
               Icon(
                 icon,
-                color:
-                    outline ? theme.primaryColor : Colors.white,
+                color: outline ? theme.primaryColor : Colors.white,
                 size: 20,
               ),
             if (svgPath != null)
@@ -57,15 +56,11 @@ class CustomButtonWidget extends StatelessWidget {
                 height: 20,
                 width: 20,
               ),
-            if (icon != null || svgPath != null)
-              const SizedBox(width: 8),
+            if (icon != null || svgPath != null) const SizedBox(width: 8),
             Text(
               text,
-              style: TextStyle(
-                color:
-                    outline ? theme.primaryColor : Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
+              style: theme.textTheme.bodyMedium!.copyWith(
+                color: outline ? theme.primaryColor : Colors.white,
               ),
             ),
           ],

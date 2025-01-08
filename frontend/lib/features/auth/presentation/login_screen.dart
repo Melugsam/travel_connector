@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:toastification/toastification.dart';
 import 'package:travel_connector/app/di.dart';
 import 'package:travel_connector/core/color/app_colors.dart';
 import 'package:travel_connector/core/manager/notification_manager.dart';
 import 'package:travel_connector/core/widget/custom_button_widget.dart';
 import 'package:travel_connector/core/widget/custom_circular_indicator_widget.dart';
-import 'package:travel_connector/features/auth/domain/usecase/login_usecase.dart';
 import 'package:travel_connector/features/auth/presentation/bloc/login/login_bloc.dart';
 
 import 'widget/auth_text_field_widget.dart';
@@ -22,7 +20,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return BlocProvider(
-      create: (context) => LoginBloc(getIt<LoginUseCase>()),
+      create: (context) => LoginBloc(getIt(), getIt()),
       child: BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state is LoginSuccess) {

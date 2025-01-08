@@ -7,22 +7,27 @@ final ThemeData lightTheme = ThemeData(
   fontFamily: GoogleFonts.rubik().fontFamily,
   primaryColor: AppColors.primary,
   scaffoldBackgroundColor: AppColors.white,
-  dividerTheme: const DividerThemeData(color: AppColors.grey),
+  dividerTheme: const DividerThemeData(color: AppColors.lightGrey),
   dialogBackgroundColor: AppColors.white,
   textTheme: TextTheme(
     bodyLarge: TextStyle(color: AppColors.primary, fontSize: 16),
     bodyMedium: TextStyle(color: AppColors.secondary, fontSize: 14),
     bodySmall: TextStyle(color: AppColors.secondary, fontSize: 12),
   ),
+  listTileTheme: ListTileThemeData(
+    contentPadding: EdgeInsets.zero,
+    minLeadingWidth: 0,
+    minTileHeight: 0,
+  ),
   appBarTheme: const AppBarTheme(
     color: AppColors.white,
     titleTextStyle: TextStyle(
-      color: AppColors.grey,
+      color: AppColors.darkGrey,
       fontSize: 20,
       fontWeight: FontWeight.w900,
     ),
     centerTitle: true,
-    iconTheme: IconThemeData(color: AppColors.grey),
+    iconTheme: IconThemeData(color: AppColors.lightGrey),
   ),
   bottomAppBarTheme: const BottomAppBarTheme(
     color: AppColors.white,
@@ -34,7 +39,7 @@ final ThemeData lightTheme = ThemeData(
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: Colors.white,
     selectedItemColor: AppColors.primary,
-    unselectedItemColor: AppColors.grey,
+    unselectedItemColor: AppColors.darkGrey,
   ),
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: AppColors.primary,

@@ -8,9 +8,9 @@ class RegisterUseCase {
 
   RegisterUseCase(this._registerRepository);
 
-  Future<Either<DomainException,UserEntity>> call(String email, String password) async {
+  Future<Either<DomainException,UserEntity>> call(String name, String email, String password) async {
     try{
-      final result = await _registerRepository.fetchRegister(email, password);
+      final result = await _registerRepository.fetchRegister(name, email, password);
       return Right(result);
     }on DomainException catch (e) {
       return Left(e);
