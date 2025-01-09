@@ -2,11 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_connector/core/manager/notification_manager.dart';
+import 'package:travel_connector/core/manager/session_manager.dart';
 import 'package:travel_connector/core/manager/user_manager.dart';
 import 'package:travel_connector/core/network/dio_client.dart';
 import 'package:travel_connector/core/service/local_database.dart';
 import 'package:travel_connector/core/service/logging_service.dart';
 import 'package:travel_connector/core/service/notification_service.dart';
+import 'package:travel_connector/features/app/presentation/bloc/session_bloc.dart';
 import 'package:travel_connector/features/auth/data/datasource/remote/login_remote_datasource.dart';
 import 'package:travel_connector/features/auth/data/datasource/remote/register_remote_datasource.dart';
 import 'package:travel_connector/features/auth/data/mapper/user_mapper.dart';
@@ -18,13 +20,29 @@ import 'package:travel_connector/features/auth/domain/repository/login_repositor
 import 'package:travel_connector/features/auth/domain/repository/register_repository.dart';
 import 'package:travel_connector/features/auth/domain/usecase/login_usecase.dart';
 import 'package:travel_connector/features/auth/domain/usecase/register_usecase.dart';
-import 'package:travel_connector/features/auth/presentation/bloc/login/login_bloc.dart';
-import 'package:travel_connector/features/auth/presentation/bloc/register/register_bloc.dart';
+import 'package:travel_connector/features/newsfeed/data/datasource/remote/post_comment_remote_datasource.dart';
+import 'package:travel_connector/features/newsfeed/data/datasource/remote/post_write_comment_remote_datasource.dart';
+import 'package:travel_connector/features/newsfeed/data/datasource/remote/post_like_remote_datasource.dart';
 import 'package:travel_connector/features/newsfeed/data/datasource/remote/post_remote_datasource.dart';
+import 'package:travel_connector/features/newsfeed/data/mapper/post_comment_mapper.dart';
+import 'package:travel_connector/features/newsfeed/data/mapper/post_write_comment_mapper.dart';
+import 'package:travel_connector/features/newsfeed/data/mapper/post_like_mapper.dart';
 import 'package:travel_connector/features/newsfeed/data/mapper/post_mapper.dart';
+import 'package:travel_connector/features/newsfeed/data/repository/post_comment_repository_impl.dart';
+import 'package:travel_connector/features/newsfeed/data/repository/post_write_comment_repository_impl.dart';
+import 'package:travel_connector/features/newsfeed/data/repository/post_like_repository_impl.dart';
 import 'package:travel_connector/features/newsfeed/data/repository/post_repository_impl.dart';
 import 'package:travel_connector/features/newsfeed/data/service/post_api_service.dart';
+import 'package:travel_connector/features/newsfeed/data/service/post_comment_api_service.dart';
+import 'package:travel_connector/features/newsfeed/data/service/post_write_comment_api_service.dart';
+import 'package:travel_connector/features/newsfeed/data/service/post_like_api_service.dart';
+import 'package:travel_connector/features/newsfeed/domain/repository/post_comment_repository.dart';
+import 'package:travel_connector/features/newsfeed/domain/repository/post_write_comment_repository.dart';
+import 'package:travel_connector/features/newsfeed/domain/repository/post_like_repository.dart';
 import 'package:travel_connector/features/newsfeed/domain/repository/post_repository.dart';
+import 'package:travel_connector/features/newsfeed/domain/usecase/post_comment_usecase.dart';
+import 'package:travel_connector/features/newsfeed/domain/usecase/post_write_comment_usecase.dart';
+import 'package:travel_connector/features/newsfeed/domain/usecase/post_like_usecase.dart';
 import 'package:travel_connector/features/newsfeed/domain/usecase/post_usecase.dart';
 
 final getIt = GetIt.instance;
@@ -41,10 +59,21 @@ Future<void> init() async {
     () => LocalDatabase(sharedPreferences),
   );
 
+  // Session
+  getIt.registerLazySingleton<SessionBloc>(
+    () => SessionBloc(),
+  );
+  getIt.registerLazySingleton<SessionManager>(
+    () => SessionManager(
+      getIt<SessionBloc>(),
+    ),
+  );
+
   // UserManager
   getIt.registerLazySingleton<UserManager>(
     () => UserManager(
       getIt<LocalDatabase>(),
+      getIt<SessionManager>(),
     ),
   );
 
@@ -139,6 +168,84 @@ Future<void> init() async {
   getIt.registerLazySingleton(
     () => PostUseCase(
       getIt<PostRepository>(),
+    ),
+  );
+
+  // Like
+  getIt.registerLazySingleton<PostLikeMapper>(
+        () => PostLikeMapper(),
+  );
+  getIt.registerLazySingleton<PostLikeApiService>(
+        () => PostLikeApiService(
+      getIt<Dio>(),
+    ),
+  );
+  getIt.registerLazySingleton<PostLikeRemoteDataSource>(
+        () => PostLikeRemoteDataSource(
+      getIt<PostLikeApiService>(),
+    ),
+  );
+  getIt.registerLazySingleton<PostLikeRepository>(
+        () => PostLikeRepositoryImpl(
+      getIt<PostLikeRemoteDataSource>(),
+      getIt<PostLikeMapper>(),
+    ),
+  );
+  getIt.registerLazySingleton(
+        () => PostLikeUseCase(
+      getIt<PostLikeRepository>(),
+    ),
+  );
+
+  // WriteComment
+  getIt.registerLazySingleton<PostWriteCommentMapper>(
+        () => PostWriteCommentMapper(),
+  );
+  getIt.registerLazySingleton<PostWriteCommentApiService>(
+        () => PostWriteCommentApiService(
+      getIt<Dio>(),
+    ),
+  );
+  getIt.registerLazySingleton<PostWriteCommentRemoteDataSource>(
+        () => PostWriteCommentRemoteDataSource(
+      getIt<PostWriteCommentApiService>(),
+    ),
+  );
+  getIt.registerLazySingleton<PostWriteCommentRepository>(
+        () => PostWriteCommentRepositoryImpl(
+      getIt<PostWriteCommentRemoteDataSource>(),
+      getIt<PostWriteCommentMapper>(),
+    ),
+  );
+  getIt.registerLazySingleton(
+        () => PostWriteCommentUseCase(
+      getIt<PostWriteCommentRepository>(),
+    ),
+  );
+
+  // FetchComment
+  getIt.registerLazySingleton<PostCommentMapper>(
+        () => PostCommentMapper(),
+  );
+  getIt.registerLazySingleton<PostCommentApiService>(
+        () => PostCommentApiService(
+      getIt<Dio>(),
+    ),
+  );
+  getIt.registerLazySingleton<PostCommentRemoteDataSource>(
+        () => PostCommentRemoteDataSource(
+      getIt<PostCommentApiService>(),
+    ),
+  );
+  getIt.registerLazySingleton<PostCommentRepository>(
+        () => PostCommentRepositoryImpl(
+      getIt<PostCommentRemoteDataSource>(),
+      getIt<PostCommentMapper>(),
+    ),
+  );
+  getIt.registerLazySingleton(
+        () => PostCommentUseCase(
+      getIt<PostCommentRepository>(),
     ),
   );
 }

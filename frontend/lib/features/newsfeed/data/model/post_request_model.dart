@@ -4,7 +4,8 @@ part 'post_request_model.g.dart';
 
 @JsonSerializable()
 class PostRequestModel {
-  final int? userId;
+  @JsonKey(name: 'user_id')
+  final int userId;
   final int? offset;
   final int? limit;
 

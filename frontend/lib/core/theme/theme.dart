@@ -7,12 +7,15 @@ final ThemeData lightTheme = ThemeData(
   fontFamily: GoogleFonts.rubik().fontFamily,
   primaryColor: AppColors.primary,
   scaffoldBackgroundColor: AppColors.white,
-  dividerTheme: const DividerThemeData(color: AppColors.lightGrey),
+  dividerTheme: const DividerThemeData(color: AppColors.dividerColor),
   dialogBackgroundColor: AppColors.white,
   textTheme: TextTheme(
-    bodyLarge: TextStyle(color: AppColors.primary, fontSize: 16),
-    bodyMedium: TextStyle(color: AppColors.secondary, fontSize: 14),
-    bodySmall: TextStyle(color: AppColors.secondary, fontSize: 12),
+    bodyLarge: TextStyle(color: AppColors.black, fontSize: 16),
+    bodyMedium: TextStyle(color: AppColors.black, fontSize: 14),
+    bodySmall: TextStyle(color: AppColors.black, fontSize: 12),
+  ),
+  textSelectionTheme: TextSelectionThemeData(
+    cursorColor: AppColors.primary
   ),
   listTileTheme: ListTileThemeData(
     contentPadding: EdgeInsets.zero,

@@ -1,17 +1,29 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:travel_connector/core/color/app_colors.dart';
+import 'package:travel_connector/core/widget/default_avatar_widget.dart';
 import 'package:travel_connector/features/newsfeed/domain/entity/post_entity.dart';
 import 'package:intl/intl.dart';
+import 'package:travel_connector/features/newsfeed/presentation/bloc/post/post_bloc.dart';
+import 'package:travel_connector/features/newsfeed/presentation/bloc/post_write_comment/post_write_comment_bloc.dart';
+import 'package:travel_connector/features/newsfeed/presentation/bloc/post_like/post_like_bloc.dart';
 
 class PostWidget extends StatelessWidget {
   final PostEntity post;
+  final PostLikeBloc? postLikeBloc;
+  final PostWriteCommentBloc? postWriteCommentBloc;
 
-  const PostWidget({super.key, required this.post});
+  const PostWidget({
+    super.key,
+    required this.post,
+    required this.postLikeBloc,
+    required this.postWriteCommentBloc,
+  });
 
   @override
   Widget build(BuildContext context) {
-    // final bool liked = post.likedBy.contains(my id)
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: Column(
@@ -21,7 +33,11 @@ class PostWidget extends StatelessWidget {
           _buildHeader(context),
           _buildDescription(context),
           if (post.images.isNotEmpty) _buildImages(context),
-          _buildFooter(context),
+          postLikeBloc != null && postWriteCommentBloc != null
+              ? _buildFooter(context)
+              : SizedBox(
+                  height: 4,
+                ),
         ],
       ),
     );
@@ -29,17 +45,8 @@ class PostWidget extends StatelessWidget {
 
   Widget _buildHeader(BuildContext context) {
     return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: Colors.grey[300],
-        backgroundImage: post.user.avatar != null
-            ? CachedNetworkImageProvider(post.user.avatar!)
-            : null,
-        child: post.user.avatar == null
-            ? const Icon(
-                Icons.person,
-                color: AppColors.lightGrey,
-              )
-            : null,
+      leading: DefaultAvatarWidget(
+        avatarUrl: post.user.avatar,
       ),
       title: Text(
         post.user.name,
@@ -51,7 +58,7 @@ class PostWidget extends StatelessWidget {
       subtitle: Text(
         _formatDate(post.createdAt),
         style: Theme.of(context).textTheme.bodySmall!.copyWith(
-              color: AppColors.darkGrey,
+              color: AppColors.lightGrey,
             ),
       ),
     );
@@ -97,15 +104,27 @@ class PostWidget extends StatelessWidget {
         Row(
           spacing: 16,
           children: [
-            ActionButtonWidget(
+            LikeButtonWidget(
               onTap: () {
-
+                postLikeBloc!.add(ExecuteLikeEvent(postId: post.id));
               },
               iconData: Icons.thumb_up_alt_outlined,
-              text: '${post.likesCount}',
+              initialCount: post.likesCount,
+              liked: post.liked,
             ),
             ActionButtonWidget(
-              onTap: () {},
+              onTap: () {
+                context.pushNamed('comments', extra: {
+                  'post': post,
+                  'postWriteCommentBloc': postWriteCommentBloc,
+                }).then(
+                  (value) {
+                    if (context.mounted) {
+                      context.read<PostBloc>().add(FetchPostEvent());
+                    }
+                  },
+                );
+              },
               iconData: Icons.comment_outlined,
               text: '${post.commentsCount}',
             ),
@@ -147,7 +166,10 @@ class ActionButtonWidget extends StatelessWidget {
         child: Row(
           spacing: 8,
           children: [
-            Icon(iconData),
+            Icon(
+              iconData,
+              color: AppColors.black,
+            ),
             if (text != null)
               Text(
                 text!,
@@ -155,6 +177,78 @@ class ActionButtonWidget extends StatelessWidget {
                       color: AppColors.black,
                     ),
               ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class LikeButtonWidget extends StatefulWidget {
+  final IconData iconData;
+  final int initialCount;
+  final bool liked;
+  final GestureTapCallback? onTap;
+
+  const LikeButtonWidget({
+    super.key,
+    required this.iconData,
+    required this.liked,
+    this.initialCount = 0,
+    this.onTap,
+  });
+
+  @override
+  State<LikeButtonWidget> createState() => _LikeButtonWidgetState();
+}
+
+class _LikeButtonWidgetState extends State<LikeButtonWidget> {
+  late int count;
+  late bool isLiked;
+
+  @override
+  void initState() {
+    super.initState();
+    count = widget.initialCount;
+    isLiked = widget.liked;
+  }
+
+  void _toggleLike() {
+    setState(() {
+      if (isLiked) {
+        count--;
+      } else {
+        count++;
+      }
+      isLiked = !isLiked;
+    });
+
+    if (widget.onTap != null) {
+      widget.onTap!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: _toggleLike,
+      child: SizedBox(
+        height: 40,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Icon(
+              widget.iconData,
+              color: isLiked ? Theme.of(context).primaryColor : Colors.black,
+            ),
+            SizedBox(width: 8),
+            Text(
+              count.toString(),
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    color:
+                        isLiked ? Theme.of(context).primaryColor : Colors.black,
+                  ),
+            ),
           ],
         ),
       ),

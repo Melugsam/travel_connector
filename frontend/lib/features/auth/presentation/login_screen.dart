@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:travel_connector/app/di.dart';
+import 'package:travel_connector/core/injector/di.dart';
 import 'package:travel_connector/core/color/app_colors.dart';
 import 'package:travel_connector/core/manager/notification_manager.dart';
 import 'package:travel_connector/core/widget/custom_button_widget.dart';

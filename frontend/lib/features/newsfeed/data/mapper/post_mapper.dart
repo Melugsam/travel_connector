@@ -12,6 +12,7 @@ class PostMapper {
             likesCount: e.likesCount,
             commentsCount: e.commentsCount,
             likedBy: e.likedBy,
+            liked: e.liked,
             user: PostUserEntity(
               id: e.user.id,
               name: e.user.name,
@@ -20,7 +21,7 @@ class PostMapper {
             images: e.images,
             comments: e.comments
                 .map(
-                  (comment) => CommentEntity(
+                  (comment) => PostCommentEntity(
                     id: comment.id,
                     content: comment.content,
                     createdAt: comment.createdAt,

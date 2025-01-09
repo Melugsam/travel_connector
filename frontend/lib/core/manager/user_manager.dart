@@ -1,17 +1,21 @@
 import 'package:travel_connector/core/constant/storage_keys.dart';
 import 'package:travel_connector/core/service/local_database.dart';
 
+import 'session_manager.dart';
+
 class UserManager {
   final LocalDatabase _localDatabase;
+  final SessionManager _sessionManager;
 
-  UserManager(this._localDatabase);
+  UserManager(this._localDatabase, this._sessionManager);
 
-  Future<int?> getUserId() async {
-    try {
-      return _localDatabase.read<int>(userIdKey);
-    } catch (e) {
-      return null;
+  Future<int> getUserId() async {
+    final userId = _localDatabase.read<int>(userIdKey);
+    if (userId == null) {
+      _sessionManager.handleSessionExpired("Срок сессии истёк");
+      throw Exception("Срок сессии истёк");
     }
+    return userId;
   }
 
   Future<void> saveUserId(int userId) async {

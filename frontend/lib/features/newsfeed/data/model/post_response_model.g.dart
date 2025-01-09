@@ -16,6 +16,7 @@ PostResponseModel _$PostResponseModelFromJson(Map<String, dynamic> json) =>
       likedBy: (json['liked_by'] as List<dynamic>)
           .map((e) => (e as num).toInt())
           .toList(),
+      liked: json['liked'] as bool,
       user: UserResponseModel.fromJson(json['user'] as Map<String, dynamic>),
       images:
           (json['images'] as List<dynamic>).map((e) => e as String).toList(),
@@ -32,6 +33,7 @@ Map<String, dynamic> _$PostResponseModelToJson(PostResponseModel instance) =>
       'likes_count': instance.likesCount,
       'comments_count': instance.commentsCount,
       'liked_by': instance.likedBy,
+      'liked': instance.liked,
       'user': instance.user.toJson(),
       'images': instance.images,
       'comments': instance.comments.map((e) => e.toJson()).toList(),

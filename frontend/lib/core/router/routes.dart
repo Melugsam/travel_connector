@@ -3,6 +3,10 @@ import 'package:go_router/go_router.dart';
 import 'package:travel_connector/features/auth/presentation/login_screen.dart';
 import 'package:travel_connector/features/auth/presentation/register_screen.dart';
 import 'package:travel_connector/features/navigation/presentation/navigation_screen.dart';
+import 'package:travel_connector/features/newsfeed/domain/entity/post_entity.dart';
+import 'package:travel_connector/features/newsfeed/presentation/bloc/post_write_comment/post_write_comment_bloc.dart';
+import 'package:travel_connector/features/newsfeed/presentation/bloc/post_like/post_like_bloc.dart';
+import 'package:travel_connector/features/newsfeed/presentation/comments_screen.dart';
 import 'package:travel_connector/features/newsfeed/presentation/newsfeed_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -34,6 +38,22 @@ final GoRouter route = GoRouter(
               pageBuilder: (context, state) => const NoTransitionPage(
                 child: NewsfeedScreen(),
               ),
+              routes: [
+                GoRoute(
+                  path: '/comments',
+                  name: 'comments',
+                  builder: (context, state) {
+                    final extra = state.extra as Map<String, dynamic>;
+                    final PostEntity post = extra["post"] as PostEntity;
+                    final PostWriteCommentBloc postWriteCommentBloc =
+                        extra["postWriteCommentBloc"] as PostWriteCommentBloc;
+                    return CommentsScreen(
+                      post: post,
+                      postWriteCommentBloc: postWriteCommentBloc,
+                    );
+                  },
+                ),
+              ],
             ),
           ],
         ),

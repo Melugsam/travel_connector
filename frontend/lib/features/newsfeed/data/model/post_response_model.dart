@@ -14,6 +14,7 @@ class PostResponseModel {
   final int commentsCount;
   @JsonKey(name: 'liked_by')
   final List<int> likedBy;
+  final bool liked;
   final UserResponseModel user;
   final List<String> images;
   final List<CommentResponseModel> comments;
@@ -25,6 +26,7 @@ class PostResponseModel {
     required this.likesCount,
     required this.commentsCount,
     required this.likedBy,
+    required this.liked,
     required this.user,
     required this.images,
     required this.comments,

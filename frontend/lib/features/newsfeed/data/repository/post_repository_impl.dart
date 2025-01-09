@@ -7,18 +7,18 @@ import 'package:travel_connector/features/newsfeed/domain/repository/post_reposi
 
 class PostRepositoryImpl implements PostRepository {
   final PostMapper _postMapper;
-  final PostRemoteDataSource _loginRemoteDataSource;
+  final PostRemoteDataSource _postRemoteDataSource;
 
   PostRepositoryImpl(
-    this._loginRemoteDataSource,
+    this._postRemoteDataSource,
     this._postMapper,
   );
 
   @override
   Future<List<PostEntity>> fetchPosts(
-      int? userId, int? offset, int? limit) async {
+      int userId, int? offset, int? limit) async {
     try {
-      final response = await _loginRemoteDataSource.fetchPosts(
+      final response = await _postRemoteDataSource.fetchPosts(
         userId,
         offset,
         limit,

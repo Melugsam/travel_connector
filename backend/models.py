@@ -35,7 +35,7 @@ class Post(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     likes_count = Column(Integer, default=0)
     comments_count = Column(Integer, default=0)
-    liked_by = Column(JSON, default=list)  # JSON для хранения списка ID
+    liked_by = Column(JSON, default=list)
 
     user = relationship("User", back_populates="posts")
     images = relationship("PostImage", back_populates="post")

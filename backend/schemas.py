@@ -63,11 +63,12 @@ class AddCommentSchema(BaseModel):
 class PostSchema(BaseModel):
     id: int
     description: Optional[str]
-    created_at: str  # Поле для строки даты
+    created_at: str  
     likes_count: int
     comments_count: int
-    liked_by: List[int]  # Список ID пользователей
+    liked_by: List[int] 
     user: UserSchema
+    liked: bool
     images: List[PostImageSchema]
     comments: List[CommentResponseSchema]
 
@@ -89,3 +90,18 @@ class PostCreateSchema(BaseModel):
 class LikePostSchema(BaseModel):
     post_id: int
     user_id: int
+
+class GetPostsRequest(BaseModel):
+    user_id: int
+
+class CommentSchema(BaseModel):
+    id: int
+    content: str
+    created_at: Optional[str] = None
+    user: Optional[UserSchema] = None
+
+    class Config:
+        from_attributes = True
+
+class PostIdSchema(BaseModel):
+    post_id: int

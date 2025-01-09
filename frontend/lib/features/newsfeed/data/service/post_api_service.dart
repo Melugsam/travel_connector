@@ -9,6 +9,6 @@ part 'post_api_service.g.dart';
 abstract class PostApiService {
   factory PostApiService(Dio dio, {String baseUrl}) = _PostApiService;
 
-  @GET('/posts')
+  @POST('/posts')
   Future<List<PostResponseModel>> fetchPosts(@Body() PostRequestModel request);
 }

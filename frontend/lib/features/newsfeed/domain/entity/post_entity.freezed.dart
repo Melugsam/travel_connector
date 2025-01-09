@@ -20,11 +20,12 @@ mixin _$PostEntity {
   String get description => throw _privateConstructorUsedError;
   String get createdAt => throw _privateConstructorUsedError;
   int get likesCount => throw _privateConstructorUsedError;
+  bool get liked => throw _privateConstructorUsedError;
   int get commentsCount => throw _privateConstructorUsedError;
   List<int> get likedBy => throw _privateConstructorUsedError;
   PostUserEntity get user => throw _privateConstructorUsedError;
   List<String> get images => throw _privateConstructorUsedError;
-  List<CommentEntity> get comments => throw _privateConstructorUsedError;
+  List<PostCommentEntity> get comments => throw _privateConstructorUsedError;
 
   /// Create a copy of PostEntity
   /// with the given fields replaced by the non-null parameter values.
@@ -44,11 +45,12 @@ abstract class $PostEntityCopyWith<$Res> {
       String description,
       String createdAt,
       int likesCount,
+      bool liked,
       int commentsCount,
       List<int> likedBy,
       PostUserEntity user,
       List<String> images,
-      List<CommentEntity> comments});
+      List<PostCommentEntity> comments});
 
   $PostUserEntityCopyWith<$Res> get user;
 }
@@ -72,6 +74,7 @@ class _$PostEntityCopyWithImpl<$Res, $Val extends PostEntity>
     Object? description = null,
     Object? createdAt = null,
     Object? likesCount = null,
+    Object? liked = null,
     Object? commentsCount = null,
     Object? likedBy = null,
     Object? user = null,
@@ -95,6 +98,10 @@ class _$PostEntityCopyWithImpl<$Res, $Val extends PostEntity>
           ? _value.likesCount
           : likesCount // ignore: cast_nullable_to_non_nullable
               as int,
+      liked: null == liked
+          ? _value.liked
+          : liked // ignore: cast_nullable_to_non_nullable
+              as bool,
       commentsCount: null == commentsCount
           ? _value.commentsCount
           : commentsCount // ignore: cast_nullable_to_non_nullable
@@ -114,7 +121,7 @@ class _$PostEntityCopyWithImpl<$Res, $Val extends PostEntity>
       comments: null == comments
           ? _value.comments
           : comments // ignore: cast_nullable_to_non_nullable
-              as List<CommentEntity>,
+              as List<PostCommentEntity>,
     ) as $Val);
   }
 
@@ -142,11 +149,12 @@ abstract class _$$PostEntityImplCopyWith<$Res>
       String description,
       String createdAt,
       int likesCount,
+      bool liked,
       int commentsCount,
       List<int> likedBy,
       PostUserEntity user,
       List<String> images,
-      List<CommentEntity> comments});
+      List<PostCommentEntity> comments});
 
   @override
   $PostUserEntityCopyWith<$Res> get user;
@@ -169,6 +177,7 @@ class __$$PostEntityImplCopyWithImpl<$Res>
     Object? description = null,
     Object? createdAt = null,
     Object? likesCount = null,
+    Object? liked = null,
     Object? commentsCount = null,
     Object? likedBy = null,
     Object? user = null,
@@ -192,6 +201,10 @@ class __$$PostEntityImplCopyWithImpl<$Res>
           ? _value.likesCount
           : likesCount // ignore: cast_nullable_to_non_nullable
               as int,
+      liked: null == liked
+          ? _value.liked
+          : liked // ignore: cast_nullable_to_non_nullable
+              as bool,
       commentsCount: null == commentsCount
           ? _value.commentsCount
           : commentsCount // ignore: cast_nullable_to_non_nullable
@@ -211,7 +224,7 @@ class __$$PostEntityImplCopyWithImpl<$Res>
       comments: null == comments
           ? _value._comments
           : comments // ignore: cast_nullable_to_non_nullable
-              as List<CommentEntity>,
+              as List<PostCommentEntity>,
     ));
   }
 }
@@ -224,11 +237,12 @@ class _$PostEntityImpl implements _PostEntity {
       required this.description,
       required this.createdAt,
       required this.likesCount,
+      required this.liked,
       required this.commentsCount,
       required final List<int> likedBy,
       required this.user,
       required final List<String> images,
-      required final List<CommentEntity> comments})
+      required final List<PostCommentEntity> comments})
       : _likedBy = likedBy,
         _images = images,
         _comments = comments;
@@ -241,6 +255,8 @@ class _$PostEntityImpl implements _PostEntity {
   final String createdAt;
   @override
   final int likesCount;
+  @override
+  final bool liked;
   @override
   final int commentsCount;
   final List<int> _likedBy;
@@ -261,9 +277,9 @@ class _$PostEntityImpl implements _PostEntity {
     return EqualUnmodifiableListView(_images);
   }
 
-  final List<CommentEntity> _comments;
+  final List<PostCommentEntity> _comments;
   @override
-  List<CommentEntity> get comments {
+  List<PostCommentEntity> get comments {
     if (_comments is EqualUnmodifiableListView) return _comments;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_comments);
@@ -271,7 +287,7 @@ class _$PostEntityImpl implements _PostEntity {
 
   @override
   String toString() {
-    return 'PostEntity(id: $id, description: $description, createdAt: $createdAt, likesCount: $likesCount, commentsCount: $commentsCount, likedBy: $likedBy, user: $user, images: $images, comments: $comments)';
+    return 'PostEntity(id: $id, description: $description, createdAt: $createdAt, likesCount: $likesCount, liked: $liked, commentsCount: $commentsCount, likedBy: $likedBy, user: $user, images: $images, comments: $comments)';
   }
 
   @override
@@ -286,6 +302,7 @@ class _$PostEntityImpl implements _PostEntity {
                 other.createdAt == createdAt) &&
             (identical(other.likesCount, likesCount) ||
                 other.likesCount == likesCount) &&
+            (identical(other.liked, liked) || other.liked == liked) &&
             (identical(other.commentsCount, commentsCount) ||
                 other.commentsCount == commentsCount) &&
             const DeepCollectionEquality().equals(other._likedBy, _likedBy) &&
@@ -301,6 +318,7 @@ class _$PostEntityImpl implements _PostEntity {
       description,
       createdAt,
       likesCount,
+      liked,
       commentsCount,
       const DeepCollectionEquality().hash(_likedBy),
       user,
@@ -322,11 +340,12 @@ abstract class _PostEntity implements PostEntity {
       required final String description,
       required final String createdAt,
       required final int likesCount,
+      required final bool liked,
       required final int commentsCount,
       required final List<int> likedBy,
       required final PostUserEntity user,
       required final List<String> images,
-      required final List<CommentEntity> comments}) = _$PostEntityImpl;
+      required final List<PostCommentEntity> comments}) = _$PostEntityImpl;
 
   @override
   int get id;
@@ -337,6 +356,8 @@ abstract class _PostEntity implements PostEntity {
   @override
   int get likesCount;
   @override
+  bool get liked;
+  @override
   int get commentsCount;
   @override
   List<int> get likedBy;
@@ -345,7 +366,7 @@ abstract class _PostEntity implements PostEntity {
   @override
   List<String> get images;
   @override
-  List<CommentEntity> get comments;
+  List<PostCommentEntity> get comments;
 
   /// Create a copy of PostEntity
   /// with the given fields replaced by the non-null parameter values.
@@ -521,24 +542,24 @@ abstract class _PostUserEntity implements PostUserEntity {
 }
 
 /// @nodoc
-mixin _$CommentEntity {
+mixin _$PostCommentEntity {
   int get id => throw _privateConstructorUsedError;
   String get content => throw _privateConstructorUsedError;
   String get createdAt => throw _privateConstructorUsedError;
   PostUserEntity get user => throw _privateConstructorUsedError;
 
-  /// Create a copy of CommentEntity
+  /// Create a copy of PostCommentEntity
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $CommentEntityCopyWith<CommentEntity> get copyWith =>
+  $PostCommentEntityCopyWith<PostCommentEntity> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $CommentEntityCopyWith<$Res> {
-  factory $CommentEntityCopyWith(
-          CommentEntity value, $Res Function(CommentEntity) then) =
-      _$CommentEntityCopyWithImpl<$Res, CommentEntity>;
+abstract class $PostCommentEntityCopyWith<$Res> {
+  factory $PostCommentEntityCopyWith(
+          PostCommentEntity value, $Res Function(PostCommentEntity) then) =
+      _$PostCommentEntityCopyWithImpl<$Res, PostCommentEntity>;
   @useResult
   $Res call({int id, String content, String createdAt, PostUserEntity user});
 
@@ -546,16 +567,16 @@ abstract class $CommentEntityCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$CommentEntityCopyWithImpl<$Res, $Val extends CommentEntity>
-    implements $CommentEntityCopyWith<$Res> {
-  _$CommentEntityCopyWithImpl(this._value, this._then);
+class _$PostCommentEntityCopyWithImpl<$Res, $Val extends PostCommentEntity>
+    implements $PostCommentEntityCopyWith<$Res> {
+  _$PostCommentEntityCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of CommentEntity
+  /// Create a copy of PostCommentEntity
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -585,7 +606,7 @@ class _$CommentEntityCopyWithImpl<$Res, $Val extends CommentEntity>
     ) as $Val);
   }
 
-  /// Create a copy of CommentEntity
+  /// Create a copy of PostCommentEntity
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -597,11 +618,11 @@ class _$CommentEntityCopyWithImpl<$Res, $Val extends CommentEntity>
 }
 
 /// @nodoc
-abstract class _$$CommentEntityImplCopyWith<$Res>
-    implements $CommentEntityCopyWith<$Res> {
-  factory _$$CommentEntityImplCopyWith(
-          _$CommentEntityImpl value, $Res Function(_$CommentEntityImpl) then) =
-      __$$CommentEntityImplCopyWithImpl<$Res>;
+abstract class _$$PostCommentEntityImplCopyWith<$Res>
+    implements $PostCommentEntityCopyWith<$Res> {
+  factory _$$PostCommentEntityImplCopyWith(_$PostCommentEntityImpl value,
+          $Res Function(_$PostCommentEntityImpl) then) =
+      __$$PostCommentEntityImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int id, String content, String createdAt, PostUserEntity user});
@@ -611,14 +632,14 @@ abstract class _$$CommentEntityImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$CommentEntityImplCopyWithImpl<$Res>
-    extends _$CommentEntityCopyWithImpl<$Res, _$CommentEntityImpl>
-    implements _$$CommentEntityImplCopyWith<$Res> {
-  __$$CommentEntityImplCopyWithImpl(
-      _$CommentEntityImpl _value, $Res Function(_$CommentEntityImpl) _then)
+class __$$PostCommentEntityImplCopyWithImpl<$Res>
+    extends _$PostCommentEntityCopyWithImpl<$Res, _$PostCommentEntityImpl>
+    implements _$$PostCommentEntityImplCopyWith<$Res> {
+  __$$PostCommentEntityImplCopyWithImpl(_$PostCommentEntityImpl _value,
+      $Res Function(_$PostCommentEntityImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of CommentEntity
+  /// Create a copy of PostCommentEntity
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -628,7 +649,7 @@ class __$$CommentEntityImplCopyWithImpl<$Res>
     Object? createdAt = null,
     Object? user = null,
   }) {
-    return _then(_$CommentEntityImpl(
+    return _then(_$PostCommentEntityImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -651,8 +672,8 @@ class __$$CommentEntityImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$CommentEntityImpl implements _CommentEntity {
-  const _$CommentEntityImpl(
+class _$PostCommentEntityImpl implements _PostCommentEntity {
+  const _$PostCommentEntityImpl(
       {required this.id,
       required this.content,
       required this.createdAt,
@@ -669,14 +690,14 @@ class _$CommentEntityImpl implements _CommentEntity {
 
   @override
   String toString() {
-    return 'CommentEntity(id: $id, content: $content, createdAt: $createdAt, user: $user)';
+    return 'PostCommentEntity(id: $id, content: $content, createdAt: $createdAt, user: $user)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CommentEntityImpl &&
+            other is _$PostCommentEntityImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.content, content) || other.content == content) &&
             (identical(other.createdAt, createdAt) ||
@@ -687,21 +708,22 @@ class _$CommentEntityImpl implements _CommentEntity {
   @override
   int get hashCode => Object.hash(runtimeType, id, content, createdAt, user);
 
-  /// Create a copy of CommentEntity
+  /// Create a copy of PostCommentEntity
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$CommentEntityImplCopyWith<_$CommentEntityImpl> get copyWith =>
-      __$$CommentEntityImplCopyWithImpl<_$CommentEntityImpl>(this, _$identity);
+  _$$PostCommentEntityImplCopyWith<_$PostCommentEntityImpl> get copyWith =>
+      __$$PostCommentEntityImplCopyWithImpl<_$PostCommentEntityImpl>(
+          this, _$identity);
 }
 
-abstract class _CommentEntity implements CommentEntity {
-  const factory _CommentEntity(
+abstract class _PostCommentEntity implements PostCommentEntity {
+  const factory _PostCommentEntity(
       {required final int id,
       required final String content,
       required final String createdAt,
-      required final PostUserEntity user}) = _$CommentEntityImpl;
+      required final PostUserEntity user}) = _$PostCommentEntityImpl;
 
   @override
   int get id;
@@ -712,10 +734,10 @@ abstract class _CommentEntity implements CommentEntity {
   @override
   PostUserEntity get user;
 
-  /// Create a copy of CommentEntity
+  /// Create a copy of PostCommentEntity
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$CommentEntityImplCopyWith<_$CommentEntityImpl> get copyWith =>
+  _$$PostCommentEntityImplCopyWith<_$PostCommentEntityImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

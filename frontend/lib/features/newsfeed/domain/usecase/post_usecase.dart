@@ -8,7 +8,7 @@ class PostUseCase {
 
   PostUseCase(this._postRepository);
 
-  Future<Either<DomainException,List<PostEntity>>> call(int? userId, int? offset, int? limit) async {
+  Future<Either<DomainException,List<PostEntity>>> call(int userId, int? offset, int? limit) async {
     try{
       final result = await _postRepository.fetchPosts(userId, offset, limit);
       return Right(result);

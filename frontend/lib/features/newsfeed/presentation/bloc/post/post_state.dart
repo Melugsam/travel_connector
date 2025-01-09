@@ -17,4 +17,5 @@ final class PostError extends PostState {
 }
 
 final class PostLoading extends PostState {}
+
 final class PostEmpty extends PostState {}

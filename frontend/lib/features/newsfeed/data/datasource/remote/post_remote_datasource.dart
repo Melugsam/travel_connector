@@ -11,7 +11,7 @@ class PostRemoteDataSource {
   PostRemoteDataSource(this._postApiService);
 
   Future<List<PostResponseModel>> fetchPosts (
-      int? userId, int? offset, int? limit) async {
+      int userId, int? offset, int? limit) async {
     try {
       final response = await _postApiService.fetchPosts(
         PostRequestModel(userId: userId, offset: offset, limit: limit),

@@ -9,11 +9,12 @@ class PostEntity with _$PostEntity {
     required String description,
     required String createdAt,
     required int likesCount,
+    required bool liked,
     required int commentsCount,
     required List<int> likedBy,
     required PostUserEntity user,
     required List<String> images,
-    required List<CommentEntity> comments,
+    required List<PostCommentEntity> comments,
   }) = _PostEntity;
 }
 
@@ -27,11 +28,11 @@ class PostUserEntity with _$PostUserEntity {
 }
 
 @freezed
-class CommentEntity with _$CommentEntity {
-  const factory CommentEntity({
+class PostCommentEntity with _$PostCommentEntity {
+  const factory PostCommentEntity({
     required int id,
     required String content,
     required String createdAt,
     required PostUserEntity user,
-  }) = _CommentEntity;
+  }) = _PostCommentEntity;
 }
