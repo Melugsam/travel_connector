@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:travel_connector/core/color/app_colors.dart';
-import 'package:travel_connector/core/widget/default_avatar_widget.dart';
+import 'package:travel_connector/core/widget/custom_default_avatar_widget.dart';
 import 'package:travel_connector/features/newsfeed/domain/entity/post_entity.dart';
 import 'package:intl/intl.dart';
 import 'package:travel_connector/features/newsfeed/presentation/bloc/post/post_bloc.dart';
@@ -45,7 +45,7 @@ class PostWidget extends StatelessWidget {
 
   Widget _buildHeader(BuildContext context) {
     return ListTile(
-      leading: DefaultAvatarWidget(
+      leading: CustomDefaultAvatarWidget(
         avatarUrl: post.user.avatar,
       ),
       title: Text(

@@ -78,26 +78,22 @@ class NewsfeedScreen extends StatelessWidget {
                           }
                           if (postState is PostEmpty) {
                             return SliverFillRemaining(
-                              child: Center(
-                                child: Text(
-                                    "Посты отсутствуют\nСоздайте пост используя кнопку в правом нижнем углу экрана"),
-                              ),
-                            );
-                          }
-                          if (postState is PostError) {
-                            return SliverFillRemaining(
-                              child: CustomDataReceiveErrorWidget(
-                                onTap: () {
-                                  context.read<PostBloc>().add(
-                                        FetchPostEvent(),
-                                      );
-                                },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                child: Center(
+                                  child: Text(
+                                    "Посты отсутствуют\nСоздайте пост используя кнопку в правом нижнем углу экрана",
+                                    style: Theme.of(context).textTheme.bodyLarge,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
                               ),
                             );
                           }
                           if (postState is PostSuccess) {
                             final postLikeBloc = context.read<PostLikeBloc>();
-                            final postWriteCommentBloc = context.read<PostWriteCommentBloc>();
+                            final postWriteCommentBloc =
+                                context.read<PostWriteCommentBloc>();
                             return SliverToBoxAdapter(
                               child: ListView.separated(
                                 shrinkWrap: true,
@@ -118,7 +114,13 @@ class NewsfeedScreen extends StatelessWidget {
                             );
                           }
                           return SliverFillRemaining(
-                            child: SizedBox.shrink(),
+                            child: CustomDataReceiveErrorWidget(
+                              onTap: () {
+                                context.read<PostBloc>().add(
+                                      FetchPostEvent(),
+                                    );
+                              },
+                            ),
                           );
                         },
                       ),

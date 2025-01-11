@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travel_connector/core/widget/custom_text_field.dart';
+import 'package:travel_connector/core/widget/custom_text_field_widget.dart';
 
 class AddCommentWidget extends StatefulWidget {
   final Function(String content) onAddComment;
@@ -20,7 +20,7 @@ class _AddCommentWidgetState extends State<AddCommentWidget> {
       child: Row(
         children: [
           Expanded(
-            child: CustomTextField(
+            child: CustomTextFieldWidget(
               controller: _controller,
               hintText: "Добавить комментарий...",
             )

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:travel_connector/core/color/app_colors.dart';
 
-class AuthTextFieldWidget extends StatefulWidget {
+class CustomTextLabeledForm extends StatefulWidget {
   final String title;
   final String hint;
   final bool isPassword;
   final TextEditingController controller;
   final String? Function(String?)? validator;
 
-  const AuthTextFieldWidget({
+  const CustomTextLabeledForm({
     super.key,
     required this.title,
     required this.hint,
@@ -18,10 +18,10 @@ class AuthTextFieldWidget extends StatefulWidget {
   });
 
   @override
-  State<AuthTextFieldWidget> createState() => _AuthTextFieldWidgetState();
+  State<CustomTextLabeledForm> createState() => _CustomTextLabeledFormState();
 }
 
-class _AuthTextFieldWidgetState extends State<AuthTextFieldWidget> {
+class _CustomTextLabeledFormState extends State<CustomTextLabeledForm> {
   bool _isObscured = false;
 
   @override
@@ -57,15 +57,15 @@ class _AuthTextFieldWidgetState extends State<AuthTextFieldWidget> {
                 borderSide: BorderSide.none),
             suffixIcon: widget.isPassword
                 ? IconButton(
-                    icon: Icon(
-                      _isObscured ? Icons.visibility : Icons.visibility_off,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _isObscured = !_isObscured;
-                      });
-                    },
-                  )
+              icon: Icon(
+                _isObscured ? Icons.visibility : Icons.visibility_off,
+              ),
+              onPressed: () {
+                setState(() {
+                  _isObscured = !_isObscured;
+                });
+              },
+            )
                 : null,
             hintText: widget.hint,
             hintStyle: TextStyle(

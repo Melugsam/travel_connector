@@ -3,7 +3,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from database import Base, engine
-from routers import auth, posts
+from routers import auth, posts, profile
 
 Base.metadata.create_all(bind=engine)
 
@@ -41,4 +41,5 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 app.include_router(auth.router, prefix="/auth")
 app.include_router(posts.router, prefix="/posts")
+app.include_router(profile.router, prefix="/profile")
 app.mount("/static", StaticFiles(directory="static"), name="static")

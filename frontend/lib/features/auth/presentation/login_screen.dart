@@ -6,9 +6,8 @@ import 'package:travel_connector/core/color/app_colors.dart';
 import 'package:travel_connector/core/manager/notification_manager.dart';
 import 'package:travel_connector/core/widget/custom_button_widget.dart';
 import 'package:travel_connector/core/widget/custom_circular_indicator_widget.dart';
+import 'package:travel_connector/core/widget/custom_text_labeled_form_widget.dart';
 import 'package:travel_connector/features/auth/presentation/bloc/login/login_bloc.dart';
-
-import 'widget/auth_text_field_widget.dart';
 
 class LoginScreen extends StatelessWidget {
   final emailController = TextEditingController();
@@ -26,7 +25,7 @@ class LoginScreen extends StatelessWidget {
           if (state is LoginSuccess) {
             context.pushReplacementNamed('newsfeed');
           }
-          if (state is LoginError){
+          if (state is LoginError) {
             getIt<NotificationManager>().showError(message: state.message);
           }
         },
@@ -58,7 +57,7 @@ class LoginScreen extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      AuthTextFieldWidget(
+                      CustomTextLabeledForm(
                         controller: emailController,
                         isPassword: false,
                         title: "Почта",
@@ -68,7 +67,7 @@ class LoginScreen extends StatelessWidget {
                       SizedBox(
                         height: 8,
                       ),
-                      AuthTextFieldWidget(
+                      CustomTextLabeledForm(
                         controller: passwordController,
                         isPassword: true,
                         title: "Пароль",
@@ -126,6 +125,7 @@ class LoginScreen extends StatelessWidget {
                         "Регистрация",
                         style: theme.textTheme.bodyMedium!.copyWith(
                           fontWeight: FontWeight.w700,
+                          color: AppColors.secondary,
                         ),
                       ),
                     ),

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:travel_connector/core/color/app_colors.dart';
 
-class CustomTextField extends StatelessWidget {
+class CustomTextFieldWidget extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
-  const CustomTextField({super.key, required this.controller, required this.hintText});
+  const CustomTextFieldWidget({super.key, required this.controller, required this.hintText});
 
   @override
   Widget build(BuildContext context) {

@@ -44,6 +44,18 @@ import 'package:travel_connector/features/newsfeed/domain/usecase/post_comment_u
 import 'package:travel_connector/features/newsfeed/domain/usecase/post_write_comment_usecase.dart';
 import 'package:travel_connector/features/newsfeed/domain/usecase/post_like_usecase.dart';
 import 'package:travel_connector/features/newsfeed/domain/usecase/post_usecase.dart';
+import 'package:travel_connector/features/profile/data/datasource/remote/profile_edit_remote_datasource.dart';
+import 'package:travel_connector/features/profile/data/datasource/remote/profile_remote_datasource.dart';
+import 'package:travel_connector/features/profile/data/mapper/profile_edit_mapper.dart';
+import 'package:travel_connector/features/profile/data/mapper/profile_mapper.dart';
+import 'package:travel_connector/features/profile/data/repository/profile_edit_repository_impl.dart';
+import 'package:travel_connector/features/profile/data/repository/profile_repository_impl.dart';
+import 'package:travel_connector/features/profile/data/service/profile_api_service.dart';
+import 'package:travel_connector/features/profile/data/service/profile_edit_api_service.dart';
+import 'package:travel_connector/features/profile/domain/repository/profile_edit_repository.dart';
+import 'package:travel_connector/features/profile/domain/repository/profile_repository.dart';
+import 'package:travel_connector/features/profile/domain/usecase/profile_edit_usecase.dart';
+import 'package:travel_connector/features/profile/domain/usecase/profile_usecase.dart';
 
 final getIt = GetIt.instance;
 
@@ -246,6 +258,59 @@ Future<void> init() async {
   getIt.registerLazySingleton(
         () => PostCommentUseCase(
       getIt<PostCommentRepository>(),
+    ),
+  );
+
+  //// Profile
+  // fetchProfile
+  getIt.registerLazySingleton<ProfileMapper>(
+        () => ProfileMapper(),
+  );
+  getIt.registerLazySingleton<ProfileApiService>(
+        () => ProfileApiService(
+      getIt<Dio>(),
+    ),
+  );
+  getIt.registerLazySingleton<ProfileRemoteDataSource>(
+        () => ProfileRemoteDataSource(
+      getIt<ProfileApiService>(),
+    ),
+  );
+  getIt.registerLazySingleton<ProfileRepository>(
+        () => ProfileRepositoryImpl(
+      getIt<ProfileRemoteDataSource>(),
+      getIt<ProfileMapper>(),
+    ),
+  );
+  getIt.registerLazySingleton(
+        () => ProfileUseCase(
+      getIt<ProfileRepository>(),
+    ),
+  );
+
+  // executeEdit
+  getIt.registerLazySingleton<ProfileEditMapper>(
+        () => ProfileEditMapper(),
+  );
+  getIt.registerLazySingleton<ProfileEditApiService>(
+        () => ProfileEditApiService(
+      getIt<Dio>(),
+    ),
+  );
+  getIt.registerLazySingleton<ProfileEditRemoteDataSource>(
+        () => ProfileEditRemoteDataSource(
+      getIt<ProfileEditApiService>(),
+    ),
+  );
+  getIt.registerLazySingleton<ProfileEditRepository>(
+        () => ProfileEditRepositoryImpl(
+      getIt<ProfileEditRemoteDataSource>(),
+      getIt<ProfileEditMapper>(),
+    ),
+  );
+  getIt.registerLazySingleton(
+        () => ProfileEditUseCase(
+      getIt<ProfileEditRepository>(),
     ),
   );
 }

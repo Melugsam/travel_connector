@@ -8,6 +8,9 @@ import 'package:travel_connector/features/newsfeed/presentation/bloc/post_write_
 import 'package:travel_connector/features/newsfeed/presentation/bloc/post_like/post_like_bloc.dart';
 import 'package:travel_connector/features/newsfeed/presentation/comments_screen.dart';
 import 'package:travel_connector/features/newsfeed/presentation/newsfeed_screen.dart';
+import 'package:travel_connector/features/profile/presentation/edit_profile_screen.dart';
+import 'package:travel_connector/features/profile/presentation/profile_screen.dart';
+import 'package:travel_connector/features/search/presentation/search_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -50,6 +53,47 @@ final GoRouter route = GoRouter(
                     return CommentsScreen(
                       post: post,
                       postWriteCommentBloc: postWriteCommentBloc,
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/search',
+              name: "search",
+              pageBuilder: (context, state) => const NoTransitionPage(
+                child: SearchScreen(),
+              ),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/profile',
+              name: "profile",
+              pageBuilder: (context, state) => const NoTransitionPage(
+                child: ProfileScreen(),
+              ),
+              routes: [
+                GoRoute(
+                  path: '/edit',
+                  name: "edit",
+                  builder: (context, state) {
+                    final extra = state.extra as Map<String, dynamic>;
+                    final String currentName = extra["currentName"] as String;
+                    final String currentProfileDescription =
+                        extra["currentProfileDescription"] as String;
+                    final String? currentAvatarUrl =
+                        extra["currentAvatarUrl"] as String?;
+                    return EditProfileScreen(
+                      currentName: currentName,
+                      currentProfileDescription: currentProfileDescription,
+                      currentAvatarUrl: currentAvatarUrl,
                     );
                   },
                 ),

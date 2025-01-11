@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_connector/core/color/app_colors.dart';
-import 'package:travel_connector/core/widget/default_avatar_widget.dart';
+import 'package:travel_connector/core/widget/custom_default_avatar_widget.dart';
 import 'package:travel_connector/features/newsfeed/domain/entity/post_entity.dart';
 import 'package:intl/intl.dart';
 
@@ -14,7 +14,7 @@ class CommentWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: ListTile(
-        leading: DefaultAvatarWidget(
+        leading: CustomDefaultAvatarWidget(
           avatarUrl: comment.user.avatar,
         ),
         subtitle: Column(

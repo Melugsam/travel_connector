@@ -1,7 +1,14 @@
 from database import Base
-from sqlalchemy import ARRAY, JSON, Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy import ARRAY, JSON, Column, Integer, String, ForeignKey, DateTime, Table
 from sqlalchemy.orm import relationship
 from datetime import datetime
+
+class Follower(Base):
+    __tablename__ = 'followers'
+
+    follower_id = Column(Integer, ForeignKey('users.id'), primary_key=True)
+    followed_id = Column(Integer, ForeignKey('users.id'), primary_key=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
 
 class User(Base):
     __tablename__ = "users"
@@ -11,8 +18,17 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     avatar = Column(String, nullable=True)
     name = Column(String, nullable=True)
+    profileDescription = Column(String, nullable=True)
 
     posts = relationship("Post", back_populates="user")
+
+    followers = relationship(
+        'User',
+        secondary='followers',
+        primaryjoin=id == Follower.followed_id,
+        secondaryjoin=id == Follower.follower_id,
+        backref='following',
+    )
 
 class Comment(Base):
     __tablename__ = "comments"

@@ -4,13 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:travel_connector/core/injector/di.dart';
 import 'package:travel_connector/core/color/app_colors.dart';
 import 'package:travel_connector/core/manager/notification_manager.dart';
-import 'package:travel_connector/core/service/local_database.dart';
 import 'package:travel_connector/core/widget/custom_button_widget.dart';
 import 'package:travel_connector/core/widget/custom_circular_indicator_widget.dart';
+import 'package:travel_connector/core/widget/custom_text_labeled_form_widget.dart';
 import 'package:travel_connector/features/auth/domain/usecase/register_usecase.dart';
 import 'package:travel_connector/features/auth/presentation/bloc/register/register_bloc.dart';
-
-import 'widget/auth_text_field_widget.dart';
 
 class RegisterScreen extends StatelessWidget {
   final usernameController = TextEditingController();
@@ -63,28 +61,28 @@ class RegisterScreen extends StatelessWidget {
                     spacing: 16,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      AuthTextFieldWidget(
+                      CustomTextLabeledForm(
                         controller: usernameController,
                         isPassword: false,
                         title: "Имя пользователя",
                         hint: "Введите имя пользователя",
                         validator: (p0) {},
                       ),
-                      AuthTextFieldWidget(
+                      CustomTextLabeledForm(
                         controller: emailController,
                         isPassword: false,
                         title: "Почта",
                         hint: "Введите почту",
                         validator: (p0) {},
                       ),
-                      AuthTextFieldWidget(
+                      CustomTextLabeledForm(
                         controller: passwordController,
                         isPassword: true,
                         title: "Пароль",
                         hint: "Введите пароль",
                         validator: (p0) {},
                       ),
-                      AuthTextFieldWidget(
+                      CustomTextLabeledForm(
                         controller: confirmPasswordController,
                         isPassword: true,
                         title: "Подтвердите пароль",
@@ -135,6 +133,7 @@ class RegisterScreen extends StatelessWidget {
                         "Войти",
                         style: theme.textTheme.bodyMedium!.copyWith(
                           fontWeight: FontWeight.w700,
+                          color: AppColors.secondary,
                         ),
                       ),
                     ),

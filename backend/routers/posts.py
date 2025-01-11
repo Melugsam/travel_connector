@@ -9,19 +9,17 @@ from schemas import AddCommentSchema, CommentResponseSchema, CommentSchema, GetP
 
 router = APIRouter()
 
-@router.post("", response_model=List[PostSchema])
-def get_posts(request: GetPostsRequest, db: Session = Depends(get_db)):
+@router.post("")
+def get_posts(postRequest: PostSchema, db: Session = Depends(get_db)):
     posts = db.query(Post).options(
-        joinedload(Post.user),
-        joinedload(Post.images),
-        joinedload(Post.comments)
+        joinedload(Post.user).joinedload(User.followers),  # Загрузка подписчиков
+        joinedload(Post.comments).joinedload(Comment.user)
     ).all()
 
     result = []
     for post in posts:
-        comments = []
-        for comment in post.comments:
-            comments.append({
+        comments = [
+            {
                 "id": comment.id,
                 "content": comment.content,
                 "created_at": comment.created_at.isoformat() if comment.created_at else None,
@@ -29,33 +27,43 @@ def get_posts(request: GetPostsRequest, db: Session = Depends(get_db)):
                     "id": comment.user.id,
                     "name": comment.user.name,
                     "avatar": comment.user.avatar,
+                    "followers": [
+                        {"id": follower.id, "name": follower.name, "avatar": follower.avatar}
+                        for follower in comment.user.followers
+                    ] if comment.user and comment.user.followers else [],
                 } if comment.user else None,
-            })
+            }
+            for comment in post.comments
+        ]
 
-        liked = request.user_id in (post.liked_by or [])
+        liked = postRequest.user_id in (post.liked_by or [])
 
-        post_data = {
+        result.append({
             "id": post.id,
             "description": post.description,
             "created_at": post.created_at.isoformat() if post.created_at else None,
             "likes_count": post.likes_count,
             "comments_count": post.comments_count,
             "liked_by": post.liked_by or [],
-            "liked": liked,  
+            "liked": liked,
             "user": {
                 "id": post.user.id,
                 "name": post.user.name,
                 "avatar": post.user.avatar,
-            } if post.user else None,
+                "followers": [
+                    {"id": follower.id, "name": follower.name, "avatar": follower.avatar}
+                    for follower in post.user.followers
+                ] if post.user.followers else [],
+            },
             "images": [{"url": img.url} for img in post.images],
             "comments": comments,
-        }
-        result.append(post_data)
+        })
 
     return result
 
 
-@router.post("/create", response_model=PostSchema)
+
+@router.post("/create")
 def create_post(post: PostCreateSchema, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.id == post.user_id).first()
     if not user:
@@ -75,23 +83,8 @@ def create_post(post: PostCreateSchema, db: Session = Depends(get_db)):
         db.bulk_save_objects(images)
     db.commit()
 
-    response_data = {
-        "id": new_post.id,
-        "description": new_post.description,
-        "created_at": new_post.created_at.isoformat(),
-        "likes_count": new_post.likes_count,
-        "comments_count": new_post.comments_count,
-        "liked_by": new_post.liked_by or [],
-        "user": {
-            "id": user.id,
-            "name": user.name,
-            "avatar": user.avatar,
-        },
-        "images": [{"url": img.url} for img in new_post.images],
-        "comments": [],
-    }
+    return {"message": "Пост успешно добавлен"}
 
-    return response_data
 
 @router.post("/like")
 def like_post(like_data: LikePostSchema, db: Session = Depends(get_db)):

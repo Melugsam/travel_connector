@@ -16,7 +16,7 @@ class UserLogin(BaseModel):
     email: EmailStr
     password: str
 
-class UserResponse(BaseModel):
+class  UserResponse(BaseModel):
     id: int
     email: str
     name: str 
@@ -24,6 +24,13 @@ class UserResponse(BaseModel):
     class Config:
         from_attributes = True
 
+class FollowerSchema(BaseModel):
+    id: int
+    name: str
+    avatar: Optional[str]
+
+    class Config:
+        from_attributes = True
 
 class UserOut(BaseModel):
     id: int
@@ -42,6 +49,9 @@ class UserSchema(BaseModel):
     id: int
     name: str
     avatar: Optional[str]
+    followers: List[dict]
+    following: List[dict]
+    profileDescription: str
 
     class Config:
         from_attributes = True
@@ -61,16 +71,9 @@ class AddCommentSchema(BaseModel):
     content: str
 
 class PostSchema(BaseModel):
-    id: int
-    description: Optional[str]
-    created_at: str  
-    likes_count: int
-    comments_count: int
-    liked_by: List[int] 
-    user: UserSchema
-    liked: bool
-    images: List[PostImageSchema]
-    comments: List[CommentResponseSchema]
+    user_id: int
+    offset: Optional[int]
+    limit: Optional[int]
 
     class Config:
         from_attributes = True
@@ -105,3 +108,16 @@ class CommentSchema(BaseModel):
 
 class PostIdSchema(BaseModel):
     post_id: int
+
+class FollowUserSchema(BaseModel):
+    user_id: int
+    target_user_id: int
+
+class ProfileSchema(BaseModel):
+    user_id: int
+    target_user_id: int
+
+class UserUpdateSchema(BaseModel):
+    user_id: int
+    name: str
+    profileDescription: Optional[str] = None
