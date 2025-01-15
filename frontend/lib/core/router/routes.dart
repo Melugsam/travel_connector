@@ -5,7 +5,6 @@ import 'package:travel_connector/features/auth/presentation/register_screen.dart
 import 'package:travel_connector/features/navigation/presentation/navigation_screen.dart';
 import 'package:travel_connector/features/newsfeed/domain/entity/post_entity.dart';
 import 'package:travel_connector/features/newsfeed/presentation/bloc/post_write_comment/post_write_comment_bloc.dart';
-import 'package:travel_connector/features/newsfeed/presentation/bloc/post_like/post_like_bloc.dart';
 import 'package:travel_connector/features/newsfeed/presentation/comments_screen.dart';
 import 'package:travel_connector/features/newsfeed/presentation/newsfeed_screen.dart';
 import 'package:travel_connector/features/profile/presentation/edit_profile_screen.dart';
@@ -46,13 +45,9 @@ final GoRouter route = GoRouter(
                   path: '/comments',
                   name: 'comments',
                   builder: (context, state) {
-                    final extra = state.extra as Map<String, dynamic>;
-                    final PostEntity post = extra["post"] as PostEntity;
-                    final PostWriteCommentBloc postWriteCommentBloc =
-                        extra["postWriteCommentBloc"] as PostWriteCommentBloc;
+                    final PostEntity post = state.extra as PostEntity;
                     return CommentsScreen(
                       post: post,
-                      postWriteCommentBloc: postWriteCommentBloc,
                     );
                   },
                 ),
@@ -76,9 +71,12 @@ final GoRouter route = GoRouter(
             GoRoute(
               path: '/profile',
               name: "profile",
-              pageBuilder: (context, state) => const NoTransitionPage(
-                child: ProfileScreen(),
-              ),
+              builder: (context, state) {
+                final targetUserId = state.extra as int?;
+                return ProfileScreen(
+                  targetUserId: targetUserId,
+                );
+              },
               routes: [
                 GoRoute(
                   path: '/edit',

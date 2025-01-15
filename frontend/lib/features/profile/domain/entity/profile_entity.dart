@@ -8,6 +8,7 @@ class ProfileEntity with _$ProfileEntity {
   const factory ProfileEntity({
     required int id,
     required String name,
+    required String description,
     String? avatar,
     required List<PostUserEntity> followers,
     required List<PostUserEntity> following,

@@ -14,18 +14,13 @@ import 'widget/post_widget.dart';
 
 class CommentsScreen extends StatelessWidget {
   final PostEntity post;
-  final PostWriteCommentBloc postWriteCommentBloc;
 
-  const CommentsScreen(
-      {super.key, required this.post, required this.postWriteCommentBloc});
+  const CommentsScreen({super.key, required this.post});
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider.value(
-          value: postWriteCommentBloc,
-        ),
         BlocProvider(
           create: (context) => PostCommentBloc(
             getIt(),
@@ -55,8 +50,7 @@ class CommentsScreen extends StatelessWidget {
             children: [
               PostWidget(
                 post: post,
-                postLikeBloc: null,
-                postWriteCommentBloc: null,
+                showDetails: false,
               ),
               Divider(
                 thickness: 4,
@@ -104,12 +98,12 @@ class CommentsScreen extends StatelessWidget {
                   }
                   return AddCommentWidget(
                     onAddComment: (content) {
-                      postWriteCommentBloc.add(
-                        ExecuteWriteCommentEvent(
-                          postId: post.id,
-                          content: content,
-                        ),
-                      );
+                      context.read<PostWriteCommentBloc>().add(
+                            ExecuteWriteCommentEvent(
+                              postId: post.id,
+                              content: content,
+                            ),
+                          );
                     },
                   );
                 },

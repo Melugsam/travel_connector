@@ -18,7 +18,7 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     avatar = Column(String, nullable=True)
     name = Column(String, nullable=True)
-    profileDescription = Column(String, nullable=True)
+    profile_description = Column(String, nullable=True)
 
     posts = relationship("Post", back_populates="user")
 

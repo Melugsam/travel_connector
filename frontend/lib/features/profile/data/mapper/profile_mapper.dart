@@ -8,6 +8,7 @@ class ProfileMapper {
       id: model.id,
       name: model.name,
       avatar: model.avatar,
+      description: model.description,
       followers: model.followers
           .map(
             (e) => PostUserEntity(

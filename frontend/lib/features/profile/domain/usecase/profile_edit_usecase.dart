@@ -11,7 +11,7 @@ class ProfileEditUseCase {
   ProfileEditUseCase(this._profileEditUseCase);
 
   Future<Either<DomainException, ProfileEditEntity>> call(
-      int userId, String name, String description, File avatarFile) async {
+      int userId, String? name, String? description, File? avatarFile) async {
     try {
       final result = await _profileEditUseCase.executeEdit(
         userId,

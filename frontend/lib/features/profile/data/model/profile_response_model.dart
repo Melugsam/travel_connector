@@ -7,6 +7,8 @@ part 'profile_response_model.g.dart';
 class ProfileResponseModel {
   final int id;
   final String name;
+  @JsonKey(name: 'profile_description')
+  final String description;
   final String? avatar;
   final List<UserResponseModel> followers;
   final List<UserResponseModel> following;
@@ -18,6 +20,7 @@ class ProfileResponseModel {
   ProfileResponseModel({
     required this.id,
     required this.name,
+    required this.description,
     required this.avatar,
     required this.followers,
     required this.following,

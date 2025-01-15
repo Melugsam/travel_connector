@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$ProfileEntity {
   int get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
+  String get description => throw _privateConstructorUsedError;
   String? get avatar => throw _privateConstructorUsedError;
   List<PostUserEntity> get followers => throw _privateConstructorUsedError;
   List<PostUserEntity> get following => throw _privateConstructorUsedError;
@@ -40,6 +41,7 @@ abstract class $ProfileEntityCopyWith<$Res> {
   $Res call(
       {int id,
       String name,
+      String description,
       String? avatar,
       List<PostUserEntity> followers,
       List<PostUserEntity> following,
@@ -64,6 +66,7 @@ class _$ProfileEntityCopyWithImpl<$Res, $Val extends ProfileEntity>
   $Res call({
     Object? id = null,
     Object? name = null,
+    Object? description = null,
     Object? avatar = freezed,
     Object? followers = null,
     Object? following = null,
@@ -78,6 +81,10 @@ class _$ProfileEntityCopyWithImpl<$Res, $Val extends ProfileEntity>
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      description: null == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
               as String,
       avatar: freezed == avatar
           ? _value.avatar
@@ -114,6 +121,7 @@ abstract class _$$ProfileEntityImplCopyWith<$Res>
   $Res call(
       {int id,
       String name,
+      String description,
       String? avatar,
       List<PostUserEntity> followers,
       List<PostUserEntity> following,
@@ -136,6 +144,7 @@ class __$$ProfileEntityImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? name = null,
+    Object? description = null,
     Object? avatar = freezed,
     Object? followers = null,
     Object? following = null,
@@ -150,6 +159,10 @@ class __$$ProfileEntityImplCopyWithImpl<$Res>
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      description: null == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
               as String,
       avatar: freezed == avatar
           ? _value.avatar
@@ -181,6 +194,7 @@ class _$ProfileEntityImpl implements _ProfileEntity {
   const _$ProfileEntityImpl(
       {required this.id,
       required this.name,
+      required this.description,
       this.avatar,
       required final List<PostUserEntity> followers,
       required final List<PostUserEntity> following,
@@ -193,6 +207,8 @@ class _$ProfileEntityImpl implements _ProfileEntity {
   final int id;
   @override
   final String name;
+  @override
+  final String description;
   @override
   final String? avatar;
   final List<PostUserEntity> _followers;
@@ -218,7 +234,7 @@ class _$ProfileEntityImpl implements _ProfileEntity {
 
   @override
   String toString() {
-    return 'ProfileEntity(id: $id, name: $name, avatar: $avatar, followers: $followers, following: $following, isCurrentUser: $isCurrentUser, currentUserFollowing: $currentUserFollowing)';
+    return 'ProfileEntity(id: $id, name: $name, description: $description, avatar: $avatar, followers: $followers, following: $following, isCurrentUser: $isCurrentUser, currentUserFollowing: $currentUserFollowing)';
   }
 
   @override
@@ -228,6 +244,8 @@ class _$ProfileEntityImpl implements _ProfileEntity {
             other is _$ProfileEntityImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
             (identical(other.avatar, avatar) || other.avatar == avatar) &&
             const DeepCollectionEquality()
                 .equals(other._followers, _followers) &&
@@ -244,6 +262,7 @@ class _$ProfileEntityImpl implements _ProfileEntity {
       runtimeType,
       id,
       name,
+      description,
       avatar,
       const DeepCollectionEquality().hash(_followers),
       const DeepCollectionEquality().hash(_following),
@@ -263,6 +282,7 @@ abstract class _ProfileEntity implements ProfileEntity {
   const factory _ProfileEntity(
       {required final int id,
       required final String name,
+      required final String description,
       final String? avatar,
       required final List<PostUserEntity> followers,
       required final List<PostUserEntity> following,
@@ -273,6 +293,8 @@ abstract class _ProfileEntity implements ProfileEntity {
   int get id;
   @override
   String get name;
+  @override
+  String get description;
   @override
   String? get avatar;
   @override

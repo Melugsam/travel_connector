@@ -16,7 +16,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       emit(PostLoading());
       final userId = await _userManager.getUserId();
       final result = await _postUseCase(
-        userId,
+        event.targetUserId??userId,
         event.offset,
         event.limit,
       );

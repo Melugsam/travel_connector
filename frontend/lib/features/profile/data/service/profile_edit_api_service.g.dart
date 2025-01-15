@@ -18,16 +18,42 @@ class _ProfileEditApiService implements ProfileEditApiService {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<ProfileEditResponseModel> fetchProfileEdit(
-    ProfileEditRequestModel request,
+  Future<ProfileEditResponseModel> executeProfileEdit(
+    int userId,
+    String? name,
+    String? description,
+    File? avatarFile,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(request.toJson());
+    final _data = FormData();
+    _data.fields.add(MapEntry('user_id', userId.toString()));
+    if (name != null) {
+      _data.fields.add(MapEntry('name', name));
+    }
+    if (description != null) {
+      _data.fields.add(MapEntry('profile_description', description));
+    }
+    if (avatarFile != null) {
+      _data.files.add(
+        MapEntry(
+          'avatar',
+          MultipartFile.fromFileSync(
+            avatarFile.path,
+            filename: avatarFile.path.split(Platform.pathSeparator).last,
+          ),
+        ),
+      );
+    }
     final _options = _setStreamType<ProfileEditResponseModel>(
-      Options(method: 'POST', headers: _headers, extra: _extra)
+      Options(
+        method: 'POST',
+        headers: _headers,
+        extra: _extra,
+        contentType: 'multipart/form-data',
+      )
           .compose(
             _dio.options,
             '/profile/edit',

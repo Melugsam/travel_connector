@@ -11,6 +11,7 @@ ProfileResponseModel _$ProfileResponseModelFromJson(
     ProfileResponseModel(
       id: (json['id'] as num).toInt(),
       name: json['name'] as String,
+      description: json['profile_description'] as String,
       avatar: json['avatar'] as String?,
       followers: (json['followers'] as List<dynamic>)
           .map((e) => UserResponseModel.fromJson(e as Map<String, dynamic>))
@@ -27,6 +28,7 @@ Map<String, dynamic> _$ProfileResponseModelToJson(
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
+      'profile_description': instance.description,
       'avatar': instance.avatar,
       'followers': instance.followers.map((e) => e.toJson()).toList(),
       'following': instance.following.map((e) => e.toJson()).toList(),

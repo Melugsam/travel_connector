@@ -1,4 +1,4 @@
-import 'package:travel_connector/core/model/server_error_model.dart';
+import 'package:travel_connector/core/network/server_error_model.dart';
 
 abstract class DataException implements Exception {
   final String message;

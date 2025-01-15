@@ -1,9 +1,9 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LocalDatabase {
+class LocalDatabaseService {
   final SharedPreferences _sharedPreferences;
 
-  LocalDatabase(this._sharedPreferences);
+  LocalDatabaseService(this._sharedPreferences);
 
   T? read<T>(String key) {
     return _sharedPreferences.get(key) as T?;

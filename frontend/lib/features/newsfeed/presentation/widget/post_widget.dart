@@ -12,14 +12,12 @@ import 'package:travel_connector/features/newsfeed/presentation/bloc/post_like/p
 
 class PostWidget extends StatelessWidget {
   final PostEntity post;
-  final PostLikeBloc? postLikeBloc;
-  final PostWriteCommentBloc? postWriteCommentBloc;
+  final bool showDetails;
 
   const PostWidget({
     super.key,
     required this.post,
-    required this.postLikeBloc,
-    required this.postWriteCommentBloc,
+    required this.showDetails,
   });
 
   @override
@@ -33,7 +31,7 @@ class PostWidget extends StatelessWidget {
           _buildHeader(context),
           _buildDescription(context),
           if (post.images.isNotEmpty) _buildImages(context),
-          postLikeBloc != null && postWriteCommentBloc != null
+          showDetails
               ? _buildFooter(context)
               : SizedBox(
                   height: 4,
@@ -106,7 +104,9 @@ class PostWidget extends StatelessWidget {
           children: [
             LikeButtonWidget(
               onTap: () {
-                postLikeBloc!.add(ExecuteLikeEvent(postId: post.id));
+                context
+                    .read<PostLikeBloc>()
+                    .add(ExecuteLikeEvent(postId: post.id));
               },
               iconData: Icons.thumb_up_alt_outlined,
               initialCount: post.likesCount,
@@ -114,10 +114,10 @@ class PostWidget extends StatelessWidget {
             ),
             ActionButtonWidget(
               onTap: () {
-                context.pushNamed('comments', extra: {
-                  'post': post,
-                  'postWriteCommentBloc': postWriteCommentBloc,
-                }).then(
+                context.pushNamed(
+                  'comments',
+                  extra: post
+                ).then(
                   (value) {
                     if (context.mounted) {
                       context.read<PostBloc>().add(FetchPostEvent());

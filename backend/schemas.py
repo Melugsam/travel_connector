@@ -51,7 +51,7 @@ class UserSchema(BaseModel):
     avatar: Optional[str]
     followers: List[dict]
     following: List[dict]
-    profileDescription: str
+    profile_description: str
 
     class Config:
         from_attributes = True
@@ -120,4 +120,4 @@ class ProfileSchema(BaseModel):
 class UserUpdateSchema(BaseModel):
     user_id: int
     name: str
-    profileDescription: Optional[str] = None
+    profile_description: Optional[str] = None

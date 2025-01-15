@@ -9,20 +9,21 @@ final ThemeData lightTheme = ThemeData(
   scaffoldBackgroundColor: AppColors.white,
   dividerTheme: const DividerThemeData(color: AppColors.dividerColor),
   dialogBackgroundColor: AppColors.white,
+  canvasColor: AppColors.white,
   textTheme: TextTheme(
     bodyLarge: TextStyle(color: AppColors.black, fontSize: 16),
     bodyMedium: TextStyle(color: AppColors.black, fontSize: 14),
     bodySmall: TextStyle(color: AppColors.black, fontSize: 12),
   ),
-  textSelectionTheme: TextSelectionThemeData(
-    cursorColor: AppColors.primary
-  ),
+  textSelectionTheme: TextSelectionThemeData(cursorColor: AppColors.primary),
   listTileTheme: ListTileThemeData(
     contentPadding: EdgeInsets.zero,
     minLeadingWidth: 0,
     minTileHeight: 0,
   ),
   appBarTheme: const AppBarTheme(
+    elevation: 0,
+    scrolledUnderElevation: 0,
     color: AppColors.white,
     titleTextStyle: TextStyle(
       color: AppColors.darkGrey,

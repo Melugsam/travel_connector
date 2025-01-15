@@ -9,18 +9,18 @@ import 'package:travel_connector/features/profile/domain/repository/profile_edit
 
 class ProfileEditRepositoryImpl implements ProfileEditRepository {
   final ProfileEditMapper _profileMapper;
-  final ProfileEditRemoteDataSource _profileRemoteDataSource;
+  final ProfileEditRemoteDataSource _profileEditRemoteDataSource;
 
   ProfileEditRepositoryImpl(
-      this._profileRemoteDataSource,
+      this._profileEditRemoteDataSource,
       this._profileMapper,
       );
 
   @override
   Future<ProfileEditEntity> executeEdit(
-      int userId, String name, String description, File avatarFile) async {
+      int userId, String? name, String? description, File? avatarFile) async {
     try {
-      final response = await _profileRemoteDataSource.executeEdit(
+      final response = await _profileEditRemoteDataSource.executeEdit(
           userId,
           name,
         description,

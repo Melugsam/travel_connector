@@ -5,7 +5,7 @@ import 'package:travel_connector/core/widget/custom_default_avatar_widget.dart';
 class ProfileHeaderWidget extends StatelessWidget {
   final String name;
   final String? avatarUrl;
-  final String bio;
+  final String description;
   final bool isFollowing;
   final bool isCurrentUser;
   final int followersCount;
@@ -15,7 +15,7 @@ class ProfileHeaderWidget extends StatelessWidget {
     super.key,
     required this.name,
     this.avatarUrl,
-    required this.bio,
+    required this.description,
     required this.isFollowing,
     required this.followersCount,
     required this.isCurrentUser,
@@ -45,14 +45,22 @@ class ProfileHeaderWidget extends StatelessWidget {
           const SizedBox(
             height: 8,
           ),
-          Text(
-            bio,
-            style: Theme.of(context).textTheme.bodyMedium,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(
-            height: 16,
-          ),
+          description.isNotEmpty
+              ? Column(
+                  children: [
+                    Text(
+                      description,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                  ],
+                )
+              : SizedBox(
+                  height: 8,
+                ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18.0),
             child: Row(

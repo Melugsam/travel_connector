@@ -49,7 +49,7 @@ def get_user_profile(data: ProfileSchema, db: Session = Depends(get_db)):
         'followers':followers,
         'following':following,
         "is_current_user": is_current_user,
-        'profileDescription':user.profileDescription,
+        'profile_description':user.profile_description,
         "current_user_following":  current_user_following
     }
 
@@ -89,7 +89,7 @@ def follow_user(follow_data: FollowUserSchema, db: Session = Depends(get_db)):
 def change_profile(
     user_id: int = Form(...),
     name: str = Form(None),
-    profileDescription: str = Form(None),
+    profile_description: str = Form(None),
     avatar: UploadFile = File(None),
     db: Session = Depends(get_db)
 ):
@@ -99,8 +99,8 @@ def change_profile(
 
     if name:
         user.name = name
-    if profileDescription:
-        user.profileDescription = profileDescription
+    if profile_description:
+        user.profile_description = profile_description
     if avatar:
         upload_dir = "static/avatars"
         os.makedirs(upload_dir, exist_ok=True)

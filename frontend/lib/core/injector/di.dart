@@ -5,7 +5,7 @@ import 'package:travel_connector/core/manager/notification_manager.dart';
 import 'package:travel_connector/core/manager/session_manager.dart';
 import 'package:travel_connector/core/manager/user_manager.dart';
 import 'package:travel_connector/core/network/dio_client.dart';
-import 'package:travel_connector/core/service/local_database.dart';
+import 'package:travel_connector/core/service/local_database_service.dart';
 import 'package:travel_connector/core/service/logging_service.dart';
 import 'package:travel_connector/core/service/notification_service.dart';
 import 'package:travel_connector/features/app/presentation/bloc/session_bloc.dart';
@@ -56,6 +56,18 @@ import 'package:travel_connector/features/profile/domain/repository/profile_edit
 import 'package:travel_connector/features/profile/domain/repository/profile_repository.dart';
 import 'package:travel_connector/features/profile/domain/usecase/profile_edit_usecase.dart';
 import 'package:travel_connector/features/profile/domain/usecase/profile_usecase.dart';
+import 'package:travel_connector/features/search/data/datasource/remote/places_remote_datasource.dart';
+import 'package:travel_connector/features/search/data/datasource/remote/weather_remote_datasource.dart';
+import 'package:travel_connector/features/search/data/mapper/places_mapper.dart';
+import 'package:travel_connector/features/search/data/mapper/weather_mapper.dart';
+import 'package:travel_connector/features/search/data/repository/places_repository_impl.dart';
+import 'package:travel_connector/features/search/data/repository/weather_repository_impl.dart';
+import 'package:travel_connector/features/search/data/service/places_api_service.dart';
+import 'package:travel_connector/features/search/data/service/weather_api_service.dart';
+import 'package:travel_connector/features/search/domain/repository/places_repository.dart';
+import 'package:travel_connector/features/search/domain/repository/weather_repository.dart';
+import 'package:travel_connector/features/search/domain/usecase/places_usecase.dart';
+import 'package:travel_connector/features/search/domain/usecase/weather_usecase.dart';
 
 final getIt = GetIt.instance;
 
@@ -67,8 +79,8 @@ Future<void> init() async {
   final SharedPreferences sharedPreferences =
       await SharedPreferences.getInstance();
   getIt.registerLazySingleton(() => sharedPreferences);
-  getIt.registerLazySingleton<LocalDatabase>(
-    () => LocalDatabase(sharedPreferences),
+  getIt.registerLazySingleton<LocalDatabaseService>(
+    () => LocalDatabaseService(sharedPreferences),
   );
 
   // Session
@@ -84,7 +96,7 @@ Future<void> init() async {
   // UserManager
   getIt.registerLazySingleton<UserManager>(
     () => UserManager(
-      getIt<LocalDatabase>(),
+      getIt<LocalDatabaseService>(),
       getIt<SessionManager>(),
     ),
   );
@@ -262,7 +274,7 @@ Future<void> init() async {
   );
 
   //// Profile
-  // fetchProfile
+  // FetchProfile
   getIt.registerLazySingleton<ProfileMapper>(
         () => ProfileMapper(),
   );
@@ -288,7 +300,7 @@ Future<void> init() async {
     ),
   );
 
-  // executeEdit
+  // ExecuteEdit
   getIt.registerLazySingleton<ProfileEditMapper>(
         () => ProfileEditMapper(),
   );
@@ -311,6 +323,59 @@ Future<void> init() async {
   getIt.registerLazySingleton(
         () => ProfileEditUseCase(
       getIt<ProfileEditRepository>(),
+    ),
+  );
+
+  //// Search
+  // Weather
+  getIt.registerLazySingleton<WeatherMapper>(
+        () => WeatherMapper(),
+  );
+  getIt.registerLazySingleton<WeatherApiService>(
+        () => WeatherApiService(
+      getIt<Dio>(),
+    ),
+  );
+  getIt.registerLazySingleton<WeatherRemoteDataSource>(
+        () => WeatherRemoteDataSource(
+      getIt<WeatherApiService>(),
+    ),
+  );
+  getIt.registerLazySingleton<WeatherRepository>(
+        () => WeatherRepositoryImpl(
+      getIt<WeatherRemoteDataSource>(),
+      getIt<WeatherMapper>(),
+    ),
+  );
+  getIt.registerLazySingleton(
+        () => WeatherUseCase(
+      getIt<WeatherRepository>(),
+    ),
+  );
+
+  // Places
+  getIt.registerLazySingleton<PlacesMapper>(
+        () => PlacesMapper(),
+  );
+  getIt.registerLazySingleton<PlacesApiService>(
+        () => PlacesApiService(
+      getIt<Dio>(),
+    ),
+  );
+  getIt.registerLazySingleton<PlacesRemoteDataSource>(
+        () => PlacesRemoteDataSource(
+      getIt<PlacesApiService>(),
+    ),
+  );
+  getIt.registerLazySingleton<PlacesRepository>(
+        () => PlacesRepositoryImpl(
+      getIt<PlacesRemoteDataSource>(),
+      getIt<PlacesMapper>(),
+    ),
+  );
+  getIt.registerLazySingleton(
+        () => PlacesUseCase(
+      getIt<PlacesRepository>(),
     ),
   );
 }

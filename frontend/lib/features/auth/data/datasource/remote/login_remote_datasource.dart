@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:travel_connector/core/exception/data_exception.dart';
-import 'package:travel_connector/core/model/server_error_model.dart';
+import 'package:travel_connector/core/network/server_error_model.dart';
 import 'package:travel_connector/features/auth/data/model/auth_response_model.dart';
 import 'package:travel_connector/features/auth/data/model/login_request_model.dart';
 import 'package:travel_connector/features/auth/data/service/login_api_service.dart';
