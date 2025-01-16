@@ -5,9 +5,9 @@ sealed class CityState {}
 final class CityInitial extends CityState {}
 
 final class CitySuccess extends CityState {
-  final List<CityEntity> city;
+  final List<CityEntity> cities;
 
-  CitySuccess({required this.city});
+  CitySuccess({required this.cities});
 }
 
 final class CityError extends CityState {

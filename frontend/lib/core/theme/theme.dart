@@ -16,6 +16,13 @@ final ThemeData lightTheme = ThemeData(
     bodySmall: TextStyle(color: AppColors.black, fontSize: 12),
   ),
   textSelectionTheme: TextSelectionThemeData(cursorColor: AppColors.primary),
+  tabBarTheme: TabBarTheme(
+    indicatorColor: AppColors.primary,
+    labelColor: AppColors.primary,
+    unselectedLabelColor: AppColors.black,
+    dividerColor: Colors.transparent,
+    dividerHeight: 0,
+  ),
   listTileTheme: ListTileThemeData(
     contentPadding: EdgeInsets.zero,
     minLeadingWidth: 0,

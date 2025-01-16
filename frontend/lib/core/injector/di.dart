@@ -56,16 +56,22 @@ import 'package:travel_connector/features/profile/domain/repository/profile_edit
 import 'package:travel_connector/features/profile/domain/repository/profile_repository.dart';
 import 'package:travel_connector/features/profile/domain/usecase/profile_edit_usecase.dart';
 import 'package:travel_connector/features/profile/domain/usecase/profile_usecase.dart';
+import 'package:travel_connector/features/search/data/datasource/remote/city_remote_datasource.dart';
 import 'package:travel_connector/features/search/data/datasource/remote/places_remote_datasource.dart';
 import 'package:travel_connector/features/search/data/datasource/remote/weather_remote_datasource.dart';
+import 'package:travel_connector/features/search/data/mapper/city_mapper.dart';
 import 'package:travel_connector/features/search/data/mapper/places_mapper.dart';
 import 'package:travel_connector/features/search/data/mapper/weather_mapper.dart';
+import 'package:travel_connector/features/search/data/repository/city_repository_impl.dart';
 import 'package:travel_connector/features/search/data/repository/places_repository_impl.dart';
 import 'package:travel_connector/features/search/data/repository/weather_repository_impl.dart';
+import 'package:travel_connector/features/search/data/service/city_api_service.dart';
 import 'package:travel_connector/features/search/data/service/places_api_service.dart';
 import 'package:travel_connector/features/search/data/service/weather_api_service.dart';
+import 'package:travel_connector/features/search/domain/repository/city_repository.dart';
 import 'package:travel_connector/features/search/domain/repository/places_repository.dart';
 import 'package:travel_connector/features/search/domain/repository/weather_repository.dart';
+import 'package:travel_connector/features/search/domain/usecase/city_usecase.dart';
 import 'package:travel_connector/features/search/domain/usecase/places_usecase.dart';
 import 'package:travel_connector/features/search/domain/usecase/weather_usecase.dart';
 
@@ -113,7 +119,12 @@ Future<void> init() async {
 
   // Dio
   getIt.registerLazySingleton<Dio>(
-    () => DioClient().createDio(),
+    () => DioClient().createDio(withAccess: true),
+      instanceName: "dioWithAccess"
+  );
+  getIt.registerLazySingleton<Dio>(
+          () => DioClient().createDio(withAccess: false),
+      instanceName: "dioWithoutAccess"
   );
 
   //// Auth
@@ -123,7 +134,7 @@ Future<void> init() async {
   // Login
   getIt.registerLazySingleton<LoginApiService>(
     () => LoginApiService(
-      getIt<Dio>(),
+      getIt<Dio>(instanceName: 'dioWithAccess'),
     ),
   );
   getIt.registerLazySingleton<LoginRemoteDataSource>(
@@ -147,7 +158,7 @@ Future<void> init() async {
   // Register
   getIt.registerLazySingleton<RegisterApiService>(
     () => RegisterApiService(
-      getIt<Dio>(),
+      getIt<Dio>(instanceName: 'dioWithAccess'),
     ),
   );
   getIt.registerLazySingleton<RegisterRemoteDataSource>(
@@ -175,7 +186,7 @@ Future<void> init() async {
   );
   getIt.registerLazySingleton<PostApiService>(
     () => PostApiService(
-      getIt<Dio>(),
+      getIt<Dio>(instanceName: 'dioWithAccess'),
     ),
   );
   getIt.registerLazySingleton<PostRemoteDataSource>(
@@ -201,7 +212,7 @@ Future<void> init() async {
   );
   getIt.registerLazySingleton<PostLikeApiService>(
         () => PostLikeApiService(
-      getIt<Dio>(),
+      getIt<Dio>(instanceName: 'dioWithAccess'),
     ),
   );
   getIt.registerLazySingleton<PostLikeRemoteDataSource>(
@@ -227,7 +238,7 @@ Future<void> init() async {
   );
   getIt.registerLazySingleton<PostWriteCommentApiService>(
         () => PostWriteCommentApiService(
-      getIt<Dio>(),
+      getIt<Dio>(instanceName: 'dioWithAccess'),
     ),
   );
   getIt.registerLazySingleton<PostWriteCommentRemoteDataSource>(
@@ -253,7 +264,7 @@ Future<void> init() async {
   );
   getIt.registerLazySingleton<PostCommentApiService>(
         () => PostCommentApiService(
-      getIt<Dio>(),
+      getIt<Dio>(instanceName: 'dioWithAccess'),
     ),
   );
   getIt.registerLazySingleton<PostCommentRemoteDataSource>(
@@ -280,7 +291,7 @@ Future<void> init() async {
   );
   getIt.registerLazySingleton<ProfileApiService>(
         () => ProfileApiService(
-      getIt<Dio>(),
+      getIt<Dio>(instanceName: 'dioWithAccess'),
     ),
   );
   getIt.registerLazySingleton<ProfileRemoteDataSource>(
@@ -306,7 +317,7 @@ Future<void> init() async {
   );
   getIt.registerLazySingleton<ProfileEditApiService>(
         () => ProfileEditApiService(
-      getIt<Dio>(),
+      getIt<Dio>(instanceName: 'dioWithAccess'),
     ),
   );
   getIt.registerLazySingleton<ProfileEditRemoteDataSource>(
@@ -333,7 +344,7 @@ Future<void> init() async {
   );
   getIt.registerLazySingleton<WeatherApiService>(
         () => WeatherApiService(
-      getIt<Dio>(),
+      getIt<Dio>(instanceName: 'dioWithoutAccess'),
     ),
   );
   getIt.registerLazySingleton<WeatherRemoteDataSource>(
@@ -359,7 +370,7 @@ Future<void> init() async {
   );
   getIt.registerLazySingleton<PlacesApiService>(
         () => PlacesApiService(
-      getIt<Dio>(),
+      getIt<Dio>(instanceName: 'dioWithoutAccess'),
     ),
   );
   getIt.registerLazySingleton<PlacesRemoteDataSource>(
@@ -376,6 +387,32 @@ Future<void> init() async {
   getIt.registerLazySingleton(
         () => PlacesUseCase(
       getIt<PlacesRepository>(),
+    ),
+  );
+
+  // Places
+  getIt.registerLazySingleton<CityMapper>(
+        () => CityMapper(),
+  );
+  getIt.registerLazySingleton<CityApiService>(
+        () => CityApiService(
+      getIt<Dio>(instanceName: 'dioWithoutAccess'),
+    ),
+  );
+  getIt.registerLazySingleton<CityRemoteDataSource>(
+        () => CityRemoteDataSource(
+      getIt<CityApiService>(),
+    ),
+  );
+  getIt.registerLazySingleton<CityRepository>(
+        () => CityRepositoryImpl(
+      getIt<CityRemoteDataSource>(),
+      getIt<CityMapper>(),
+    ),
+  );
+  getIt.registerLazySingleton(
+        () => CityUseCase(
+      getIt<CityRepository>(),
     ),
   );
 }

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:travel_connector/core/injector/di.dart';
+import 'package:travel_connector/core/manager/user_manager.dart';
 import 'package:travel_connector/features/auth/presentation/login_screen.dart';
 import 'package:travel_connector/features/auth/presentation/register_screen.dart';
 import 'package:travel_connector/features/navigation/presentation/navigation_screen.dart';
 import 'package:travel_connector/features/newsfeed/domain/entity/post_entity.dart';
-import 'package:travel_connector/features/newsfeed/presentation/bloc/post_write_comment/post_write_comment_bloc.dart';
 import 'package:travel_connector/features/newsfeed/presentation/comments_screen.dart';
 import 'package:travel_connector/features/newsfeed/presentation/newsfeed_screen.dart';
 import 'package:travel_connector/features/profile/presentation/edit_profile_screen.dart';
@@ -15,7 +16,7 @@ final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
 final GoRouter route = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: "/",
+  initialLocation: "/newsfeed",
   debugLogDiagnostics: true,
   routes: [
     GoRoute(

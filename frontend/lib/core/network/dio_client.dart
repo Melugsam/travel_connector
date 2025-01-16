@@ -5,12 +5,14 @@ class DioClient {
 
   DioClient();
 
-  Dio createDio() {
+  Dio createDio({bool withAccess = true}) {
     final dio = Dio();
 
+    if (withAccess){
     dio.interceptors.add(
-      AccessInterceptor(),
-    );
+        AccessInterceptor(),
+      );
+    }
     dio.interceptors.add(
       LogInterceptor(
         responseBody: true,
