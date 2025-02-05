@@ -14,7 +14,11 @@ class HotelMapper {
               count: hotel.bubbleRating.count,
               rating: hotel.bubbleRating.rating,
             ),
-            photos: hotel.cardPhotos.map((photo) => photo.urlTemplate).toList(),
+            photos: hotel.cardPhotos
+                .map(
+                  (photo) => photo.urlTemplate,
+                )
+                .toList(),
           ),
         )
         .toList();

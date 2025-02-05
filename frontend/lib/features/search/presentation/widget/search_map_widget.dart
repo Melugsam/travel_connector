@@ -3,11 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:travel_connector/core/color/app_colors.dart';
-import 'package:travel_connector/core/constant/api_keys.dart';
+import 'package:travel_connector/core/constant/url.dart';
 import 'package:travel_connector/core/widget/custom_button_widget.dart';
 import 'package:travel_connector/core/widget/custom_circular_indicator_widget.dart';
 import 'package:travel_connector/core/widget/custom_text_field_widget.dart';
 import 'package:travel_connector/features/search/presentation/bloc/city/city_bloc.dart';
+import 'package:travel_connector/features/search/presentation/bloc/hotel/hotel_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SearchMapWidget extends StatefulWidget {
@@ -38,8 +39,7 @@ class _SearchMapWidgetState extends State<SearchMapWidget> {
           ),
           children: [
             TileLayer(
-              urlTemplate:
-                  'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}@2x.png?api_key=$mapApiKey',
+              urlTemplate: stadiaMapsUrl,
             ),
             MarkerLayer(
               markers: [
@@ -61,19 +61,23 @@ class _SearchMapWidgetState extends State<SearchMapWidget> {
                 TextSourceAttribution(
                   textStyle: const TextStyle(fontSize: 16),
                   'Stadia Maps',
-                  onTap: () => launchUrl(Uri.parse('https://stadiamaps.com/')),
+                  onTap: () => launchUrl(
+                    Uri.parse('https://stadiamaps.com/'),
+                  ),
                 ),
                 TextSourceAttribution(
                   textStyle: const TextStyle(fontSize: 16),
                   'OpenMapTiles',
-                  onTap: () =>
-                      launchUrl(Uri.parse('https://openmaptiles.org/')),
+                  onTap: () => launchUrl(
+                    Uri.parse('https://openmaptiles.org/'),
+                  ),
                 ),
                 TextSourceAttribution(
                   textStyle: const TextStyle(fontSize: 16),
                   'OpenStreetMap',
                   onTap: () => launchUrl(
-                      Uri.parse('https://www.openstreetmap.org/copyright')),
+                    Uri.parse('https://www.openstreetmap.org/copyright'),
+                  ),
                 ),
               ],
             ),
@@ -167,7 +171,14 @@ class _SearchMapWidgetState extends State<SearchMapWidget> {
               ),
               CustomButtonWidget(
                 text: "Найти",
-                onPressed: () {},
+                onPressed: () {
+                  context.read<HotelBloc>().add(
+                        FetchHotelEvent(
+                          latitude: _mapPoint.latitude,
+                          longitude: _mapPoint.longitude,
+                        ),
+                      );
+                },
               ),
             ],
           ),

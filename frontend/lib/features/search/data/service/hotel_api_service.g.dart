@@ -29,7 +29,12 @@ class _HotelApiService implements HotelApiService {
     String apiHost,
   ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'latitude': latitude,
+      r'longitude': longitude,
+      r'checkIn': checkIn,
+      r'checkOut': checkOut,
+    };
     final _headers = <String, dynamic>{
       r'x-rapidapi-key': apiKey,
       r'x-rapidapi-host': apiHost,
@@ -40,7 +45,7 @@ class _HotelApiService implements HotelApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/api/v1/hotels/searchHotelsByLocation?latitude=${latitude}&longitude=${longitude}&checkIn={checkIn}&checkOut={checkOut}&pageNumber=1&currencyCode=USD',
+            '/api/v1/hotels/searchHotelsByLocation?pageNumber=1&currencyCode=USD',
             queryParameters: queryParameters,
             data: _data,
           )

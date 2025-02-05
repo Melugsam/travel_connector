@@ -8,12 +8,12 @@ part 'hotel_api_service.g.dart';
 abstract class HotelApiService {
   factory HotelApiService(Dio dio, {String baseUrl}) = _HotelApiService;
 
-  @GET("/api/v1/hotels/searchHotelsByLocation?latitude={lat}&longitude={lon}&checkIn={checkIn}&checkOut={checkOut}&pageNumber=1&currencyCode=USD")
+  @GET("/api/v1/hotels/searchHotelsByLocation?pageNumber=1&currencyCode=USD")
   Future<HotelResponseModel> fetchHotel(
-      @Path("lat") double latitude,
-      @Path("lon") double longitude,
-      @Path("keyword") String checkIn,
-      @Path("keyword") String checkOut,
+      @Query("latitude") double latitude,
+      @Query("longitude") double longitude,
+      @Query("checkIn") String checkIn,
+      @Query("checkOut") String checkOut,
       @Header("x-rapidapi-key") String apiKey,
       @Header("x-rapidapi-host") String apiHost,
       );

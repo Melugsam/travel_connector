@@ -57,21 +57,27 @@ import 'package:travel_connector/features/profile/domain/repository/profile_repo
 import 'package:travel_connector/features/profile/domain/usecase/profile_edit_usecase.dart';
 import 'package:travel_connector/features/profile/domain/usecase/profile_usecase.dart';
 import 'package:travel_connector/features/search/data/datasource/remote/city_remote_datasource.dart';
+import 'package:travel_connector/features/search/data/datasource/remote/hotel_remote_datasource.dart';
 import 'package:travel_connector/features/search/data/datasource/remote/places_remote_datasource.dart';
 import 'package:travel_connector/features/search/data/datasource/remote/weather_remote_datasource.dart';
 import 'package:travel_connector/features/search/data/mapper/city_mapper.dart';
+import 'package:travel_connector/features/search/data/mapper/hotel_mapper.dart';
 import 'package:travel_connector/features/search/data/mapper/places_mapper.dart';
 import 'package:travel_connector/features/search/data/mapper/weather_mapper.dart';
 import 'package:travel_connector/features/search/data/repository/city_repository_impl.dart';
+import 'package:travel_connector/features/search/data/repository/hotel_repository_impl.dart';
 import 'package:travel_connector/features/search/data/repository/places_repository_impl.dart';
 import 'package:travel_connector/features/search/data/repository/weather_repository_impl.dart';
 import 'package:travel_connector/features/search/data/service/city_api_service.dart';
+import 'package:travel_connector/features/search/data/service/hotel_api_service.dart';
 import 'package:travel_connector/features/search/data/service/places_api_service.dart';
 import 'package:travel_connector/features/search/data/service/weather_api_service.dart';
 import 'package:travel_connector/features/search/domain/repository/city_repository.dart';
+import 'package:travel_connector/features/search/domain/repository/hotel_repository.dart';
 import 'package:travel_connector/features/search/domain/repository/places_repository.dart';
 import 'package:travel_connector/features/search/domain/repository/weather_repository.dart';
 import 'package:travel_connector/features/search/domain/usecase/city_usecase.dart';
+import 'package:travel_connector/features/search/domain/usecase/hotel_usecase.dart';
 import 'package:travel_connector/features/search/domain/usecase/places_usecase.dart';
 import 'package:travel_connector/features/search/domain/usecase/weather_usecase.dart';
 
@@ -390,7 +396,7 @@ Future<void> init() async {
     ),
   );
 
-  // Places
+  // City Prediction
   getIt.registerLazySingleton<CityMapper>(
         () => CityMapper(),
   );
@@ -413,6 +419,32 @@ Future<void> init() async {
   getIt.registerLazySingleton(
         () => CityUseCase(
       getIt<CityRepository>(),
+    ),
+  );
+
+  // Hotel
+  getIt.registerLazySingleton<HotelMapper>(
+        () => HotelMapper(),
+  );
+  getIt.registerLazySingleton<HotelApiService>(
+        () => HotelApiService(
+      getIt<Dio>(instanceName: 'dioWithoutAccess'),
+    ),
+  );
+  getIt.registerLazySingleton<HotelRemoteDataSource>(
+        () => HotelRemoteDataSource(
+      getIt<HotelApiService>(),
+    ),
+  );
+  getIt.registerLazySingleton<HotelRepository>(
+        () => HotelRepositoryImpl(
+      getIt<HotelRemoteDataSource>(),
+      getIt<HotelMapper>(),
+    ),
+  );
+  getIt.registerLazySingleton(
+        () => HotelUseCase(
+      getIt<HotelRepository>(),
     ),
   );
 }
