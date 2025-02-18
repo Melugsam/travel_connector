@@ -1,1 +1,1 @@
-const String userIdKey = 'userId';
+const String authTokenKey = 'authTokenKey';

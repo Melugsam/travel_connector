@@ -9,18 +9,10 @@ class PostWriteCommentUseCase {
   PostWriteCommentUseCase(this._postWriteCommentRepository);
 
   Future<Either<DomainException, PostWritePostCommentEntity>> call(
-      int userId, int postId, String content) async {
-    try {
-      final result = await _postWriteCommentRepository.executeComment(
-        userId,
-        postId,
-        content,
-      );
-      return Right(result);
-    } on DomainException catch (e) {
-      return Left(e);
-    } catch (e) {
-      return Left(GenericDomainException("Неизвестная ошибка"));
-    }
+      int postId, String content) async {
+    return await _postWriteCommentRepository.executeComment(
+      postId,
+      content,
+    );
   }
 }

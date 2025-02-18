@@ -5,9 +5,9 @@ sealed class RegisterState {}
 final class RegisterInitial extends RegisterState {}
 
 final class RegisterSuccess extends RegisterState {
-  final UserEntity userEntity;
+  final AccessEntity accessEntity;
 
-  RegisterSuccess({required this.userEntity});
+  RegisterSuccess({required this.accessEntity});
 }
 
 final class RegisterError extends RegisterState {

@@ -7,7 +7,6 @@ import 'package:travel_connector/core/widget/custom_default_avatar_widget.dart';
 import 'package:travel_connector/features/newsfeed/domain/entity/post_entity.dart';
 import 'package:intl/intl.dart';
 import 'package:travel_connector/features/newsfeed/presentation/bloc/post/post_bloc.dart';
-import 'package:travel_connector/features/newsfeed/presentation/bloc/post_write_comment/post_write_comment_bloc.dart';
 import 'package:travel_connector/features/newsfeed/presentation/bloc/post_like/post_like_bloc.dart';
 
 class PostWidget extends StatelessWidget {

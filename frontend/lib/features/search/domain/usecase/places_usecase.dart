@@ -13,17 +13,10 @@ class PlacesUseCase {
       double longitude,
       String keyword,
       ) async {
-    try {
-      final result = await _placesRepository.fetchPlaces(
-          latitude,
-          longitude,
-          keyword,
-      );
-      return Right(result);
-    } on DomainException catch (e) {
-      return Left(e);
-    } catch (e) {
-      return Left(GenericDomainException("Неизвестная ошибка"));
-    }
+    return await _placesRepository.fetchPlaces(
+      latitude,
+      longitude,
+      keyword,
+    );
   }
 }

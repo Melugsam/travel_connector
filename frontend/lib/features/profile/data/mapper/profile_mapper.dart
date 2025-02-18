@@ -8,7 +8,9 @@ class ProfileMapper {
       id: model.id,
       name: model.name,
       avatar: model.avatar,
-      description: model.description,
+      description: model.description??'',
+      isCurrentUser: model.isCurrentUser,
+      isFollowing: model.isFollowing,
       followers: model.followers
           .map(
             (e) => PostUserEntity(
@@ -27,8 +29,19 @@ class ProfileMapper {
             ),
           )
           .toList(),
-      currentUserFollowing: model.currentUserFollowing,
-      isCurrentUser: model.isCurrentUser,
+      posts: model.posts
+          .map(
+            (e) => ProfilePostEntity(
+              id: e.id,
+              description: e.description,
+              createdAt: e.createdAt,
+              likesCount: e.likesCount,
+              liked: e.liked,
+              commentsCount: e.commentsCount,
+              images: e.images,
+            ),
+          )
+          .toList(),
     );
   }
 }

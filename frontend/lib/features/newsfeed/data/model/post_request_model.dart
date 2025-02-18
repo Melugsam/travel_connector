@@ -4,12 +4,10 @@ part 'post_request_model.g.dart';
 
 @JsonSerializable()
 class PostRequestModel {
-  @JsonKey(name: 'user_id')
-  final int userId;
   final int? offset;
   final int? limit;
 
-  PostRequestModel({required this.userId, required this.offset, required this.limit});
+  PostRequestModel({required this.offset, required this.limit});
 
   Map<String, dynamic> toJson() => _$PostRequestModelToJson(this);
 

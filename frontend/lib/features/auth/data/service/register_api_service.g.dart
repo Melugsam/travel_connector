@@ -18,7 +18,9 @@ class _RegisterApiService implements RegisterApiService {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<AuthResponseModel> fetchRegister(RegisterRequestModel request) async {
+  Future<AuthResponseModel> executeRegister(
+    RegisterRequestModel request,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};

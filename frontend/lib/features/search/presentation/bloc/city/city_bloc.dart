@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
@@ -30,12 +32,12 @@ class CityBloc extends Bloc<CityEvent, CityState> {
 
   Future<void> _onFetchCityEvent(
       FetchCityEvent event, Emitter<CityState> emit) async {
-    if (event.keyword.isEmpty) {
+    if (event.cityName.isEmpty) {
       emit(CityInitial());
       return;
     }
     emit(CityLoading());
-    final result = await _cityUseCase(event.keyword);
+    final result = await _cityUseCase(event.cityName);
     result.fold(
       (l) => emit(
         CityError(message: l.message),

@@ -1,28 +1,25 @@
-import 'package:dio/dio.dart';
+import 'package:dartz/dartz.dart';
 import 'package:travel_connector/core/constant/api_keys.dart';
 import 'package:travel_connector/core/exception/data_exception.dart';
+import 'package:travel_connector/core/network/base_remote_datasource.dart';
+import 'package:travel_connector/core/service/logging_service.dart';
 import 'package:travel_connector/features/search/data/model/city_response_model.dart';
 import 'package:travel_connector/features/search/data/service/city_api_service.dart';
 
-class CityRemoteDataSource {
+class CityRemoteDataSource extends BaseRemoteDataSource {
   final CityApiService _cityApiService;
 
-  CityRemoteDataSource(this._cityApiService);
+  CityRemoteDataSource(LoggingService loggingService, this._cityApiService)
+      : super(loggingService: loggingService);
 
-  Future<CityResponseModel> fetchCity(
-    String input,
+  Future<Either<DataException, CityResponseModel>> fetchCity(
+    String cityName,
   ) async {
-    try {
-      final response = await _cityApiService.fetchCity(
-        input,
-        rapidApiKey,
-        cityApiHost,
-      );
-      return response;
-    } on DioException {
-      throw NetworkException();
-    } catch (e) {
-      throw GenericDataSourceException();
-    }
+    return safeApiCall(
+      () => _cityApiService.fetchCity(
+        cityName,
+        geoapifyApiKey,
+      ),
+    );
   }
 }

@@ -4,10 +4,10 @@ part 'city_response_model.g.dart';
 
 @JsonSerializable()
 class CityResponseModel {
-  final List<CityModel> data;
+  final List<FeatureModel> features;
 
   CityResponseModel({
-    required this.data,
+    required this.features,
   });
 
   factory CityResponseModel.fromJson(Map<String, dynamic> json) =>
@@ -17,23 +17,38 @@ class CityResponseModel {
 }
 
 @JsonSerializable()
-class CityModel {
-  final String name;
-  final String countryCode;
-  final String stateCode;
-  final String latitude;
-  final String longitude;
+class FeatureModel {
+  final PropertiesModel properties;
 
-  CityModel({
-    required this.name,
-    required this.countryCode,
-    required this.stateCode,
-    required this.latitude,
-    required this.longitude,
+  FeatureModel({
+    required this.properties,
   });
 
-  factory CityModel.fromJson(Map<String, dynamic> json) =>
-      _$CityModelFromJson(json);
+  factory FeatureModel.fromJson(Map<String, dynamic> json) =>
+      _$FeatureModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$CityModelToJson(this);
+  Map<String, dynamic> toJson() => _$FeatureModelToJson(this);
+}
+
+@JsonSerializable()
+class PropertiesModel {
+  final String? city;
+  final String? country;
+  final double? lon;
+  final double? lat;
+  final String? region;
+
+
+  PropertiesModel({
+    required this.city,
+    required this.country,
+    required this.lon,
+    required this.lat,
+    required this.region,
+  });
+
+  factory PropertiesModel.fromJson(Map<String, dynamic> json) =>
+      _$PropertiesModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PropertiesModelToJson(this);
 }

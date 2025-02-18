@@ -5,9 +5,9 @@ sealed class LoginState {}
 final class LoginInitial extends LoginState {}
 
 final class LoginSuccess extends LoginState {
-  final UserEntity userEntity;
+  final AccessEntity accessEntity;
 
-  LoginSuccess({required this.userEntity});
+  LoginSuccess({required this.accessEntity});
 }
 
 final class LoginError extends LoginState {

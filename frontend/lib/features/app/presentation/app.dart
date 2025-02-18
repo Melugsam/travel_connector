@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:toastification/toastification.dart';
 import 'package:travel_connector/core/injector/di.dart';
 import 'package:travel_connector/core/router/routes.dart';
 import 'package:travel_connector/core/theme/theme.dart';
-import 'package:travel_connector/features/app/presentation/bloc/session_bloc.dart';
+import 'package:travel_connector/features/app/presentation/bloc/session/session_bloc.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -30,7 +29,13 @@ class App extends StatelessWidget {
             child: BlocListener<SessionBloc, SessionState>(
               listener: (context, state) {
                 if (state is SessionLogout){
-                  context.pushReplacementNamed('login');
+                  route.pushReplacementNamed('login');
+                }
+                if (state is SessionServerError){
+                  route.pushReplacementNamed('server-error');
+                }
+                if (state is SessionAuthenticated){
+                  route.pushReplacementNamed('newsfeed');
                 }
               },
               child: child!,

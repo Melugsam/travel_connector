@@ -1,31 +1,24 @@
-import 'package:dio/dio.dart';
+import 'package:dartz/dartz.dart';
 import 'package:travel_connector/core/exception/data_exception.dart';
-import 'package:travel_connector/core/network/server_error_model.dart';
+import 'package:travel_connector/core/network/base_remote_datasource.dart';
+import 'package:travel_connector/core/service/logging_service.dart';
 import 'package:travel_connector/features/newsfeed/data/model/post_like_request_model.dart';
 import 'package:travel_connector/features/newsfeed/data/model/post_like_response_model.dart';
 import 'package:travel_connector/features/newsfeed/data/service/post_like_api_service.dart';
 
-class PostLikeRemoteDataSource {
+class PostLikeRemoteDataSource extends BaseRemoteDataSource {
   final PostLikeApiService _postLikeApiService;
 
-  PostLikeRemoteDataSource(this._postLikeApiService);
+  PostLikeRemoteDataSource(
+      LoggingService loggingService, this._postLikeApiService)
+      : super(loggingService: loggingService);
 
-  Future<PostLikeResponseModel> executeLike (
-      int userId, int postId) async {
-    try {
-      final response = await _postLikeApiService.executeLike(
-        PostLikeRequestModel(userId: userId, postId: postId),
-      );
-      return response;
-    } on DioException catch (e) {
-      if (e.response != null) {
-        throw ServerException(
-          serverError: ServerErrorModel.fromJson(e.response!.data),
-        );
-      }
-      throw NetworkException();
-    } catch (e) {
-      throw GenericDataSourceException();
-    }
+  Future<Either<DataException, PostLikeResponseModel>> executeLike(
+      int postId) async {
+    return safeApiCall(
+      () => _postLikeApiService.executeLike(
+        PostLikeRequestModel(postId: postId),
+      ),
+    );
   }
 }

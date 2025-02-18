@@ -9,7 +9,6 @@ part of 'post_write_comment_request_model.dart';
 PostWriteCommentRequestModel _$PostWriteCommentRequestModelFromJson(
         Map<String, dynamic> json) =>
     PostWriteCommentRequestModel(
-      userId: (json['user_id'] as num).toInt(),
       postId: (json['post_id'] as num).toInt(),
       content: json['content'] as String,
     );
@@ -17,7 +16,6 @@ PostWriteCommentRequestModel _$PostWriteCommentRequestModelFromJson(
 Map<String, dynamic> _$PostWriteCommentRequestModelToJson(
         PostWriteCommentRequestModel instance) =>
     <String, dynamic>{
-      'user_id': instance.userId,
       'post_id': instance.postId,
       'content': instance.content,
     };

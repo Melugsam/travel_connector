@@ -19,7 +19,6 @@ class _ProfileEditApiService implements ProfileEditApiService {
 
   @override
   Future<ProfileEditResponseModel> executeProfileEdit(
-    int userId,
     String? name,
     String? description,
     File? avatarFile,
@@ -29,7 +28,6 @@ class _ProfileEditApiService implements ProfileEditApiService {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    _data.fields.add(MapEntry('user_id', userId.toString()));
     if (name != null) {
       _data.fields.add(MapEntry('name', name));
     }

@@ -4,10 +4,10 @@ part 'auth_response_model.g.dart';
 
 @JsonSerializable()
 class AuthResponseModel {
-  final int id;
-  final String email;
+  @JsonKey(name: 'access_token')
+  final String accessToken;
 
-  AuthResponseModel({required this.id, required this.email});
+  AuthResponseModel({required this.accessToken});
 
   factory AuthResponseModel.fromJson(
       Map<String, dynamic> json) =>

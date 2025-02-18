@@ -1,16 +1,18 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_connector/core/manager/notification_manager.dart';
-import 'package:travel_connector/core/manager/session_manager.dart';
-import 'package:travel_connector/core/manager/user_manager.dart';
+import 'package:travel_connector/core/manager/token_manager.dart';
+import 'package:travel_connector/core/network/api_error_handler.dart';
 import 'package:travel_connector/core/network/dio_client.dart';
 import 'package:travel_connector/core/service/local_database_service.dart';
 import 'package:travel_connector/core/service/logging_service.dart';
 import 'package:travel_connector/core/service/notification_service.dart';
-import 'package:travel_connector/features/app/presentation/bloc/session_bloc.dart';
+import 'package:travel_connector/features/app/presentation/bloc/session/session_bloc.dart';
 import 'package:travel_connector/features/auth/data/datasource/remote/login_remote_datasource.dart';
 import 'package:travel_connector/features/auth/data/datasource/remote/register_remote_datasource.dart';
+import 'package:travel_connector/features/auth/data/mapper/access_mapper.dart';
 import 'package:travel_connector/features/auth/data/mapper/user_mapper.dart';
 import 'package:travel_connector/features/auth/data/repository/login_repository_impl.dart';
 import 'package:travel_connector/features/auth/data/repository/register_repository_impl.dart';
@@ -44,6 +46,7 @@ import 'package:travel_connector/features/newsfeed/domain/usecase/post_comment_u
 import 'package:travel_connector/features/newsfeed/domain/usecase/post_write_comment_usecase.dart';
 import 'package:travel_connector/features/newsfeed/domain/usecase/post_like_usecase.dart';
 import 'package:travel_connector/features/newsfeed/domain/usecase/post_usecase.dart';
+import 'package:travel_connector/features/newsfeed/presentation/bloc/post/post_bloc.dart';
 import 'package:travel_connector/features/profile/data/datasource/remote/profile_edit_remote_datasource.dart';
 import 'package:travel_connector/features/profile/data/datasource/remote/profile_remote_datasource.dart';
 import 'package:travel_connector/features/profile/data/mapper/profile_edit_mapper.dart';
@@ -65,7 +68,6 @@ import 'package:travel_connector/features/search/data/mapper/hotel_mapper.dart';
 import 'package:travel_connector/features/search/data/mapper/places_mapper.dart';
 import 'package:travel_connector/features/search/data/mapper/weather_mapper.dart';
 import 'package:travel_connector/features/search/data/repository/city_repository_impl.dart';
-import 'package:travel_connector/features/search/data/repository/hotel_repository_impl.dart';
 import 'package:travel_connector/features/search/data/repository/places_repository_impl.dart';
 import 'package:travel_connector/features/search/data/repository/weather_repository_impl.dart';
 import 'package:travel_connector/features/search/data/service/city_api_service.dart';
@@ -87,29 +89,25 @@ Future<void> init() async {
   // Logger
   getIt.registerSingleton<LoggingService>(LoggingService.create());
 
+  // ErrorHandler
+  getIt.registerSingleton<ErrorHandler>(
+    ApiErrorHandler(
+      getIt<LoggingService>(),
+    ),
+  );
+
   // LocalDB
   final SharedPreferences sharedPreferences =
       await SharedPreferences.getInstance();
   getIt.registerLazySingleton(() => sharedPreferences);
+  getIt.registerLazySingleton<FlutterSecureStorage>(
+      () => FlutterSecureStorage());
   getIt.registerLazySingleton<LocalDatabaseService>(
     () => LocalDatabaseService(sharedPreferences),
   );
-
-  // Session
-  getIt.registerLazySingleton<SessionBloc>(
-    () => SessionBloc(),
-  );
-  getIt.registerLazySingleton<SessionManager>(
-    () => SessionManager(
-      getIt<SessionBloc>(),
-    ),
-  );
-
-  // UserManager
-  getIt.registerLazySingleton<UserManager>(
-    () => UserManager(
-      getIt<LocalDatabaseService>(),
-      getIt<SessionManager>(),
+  getIt.registerLazySingleton<TokenManager>(
+    () => TokenManager(
+      getIt<FlutterSecureStorage>(),
     ),
   );
 
@@ -123,19 +121,35 @@ Future<void> init() async {
     ),
   );
 
+  // Session
+  getIt.registerLazySingleton<SessionBloc>(
+        () => SessionBloc(
+      getIt<TokenManager>(),
+    ),
+  );
+
   // Dio
   getIt.registerLazySingleton<Dio>(
-    () => DioClient().createDio(withAccess: true),
-      instanceName: "dioWithAccess"
+    () => DioClient(
+      getIt<TokenManager>(),
+      getIt<SessionBloc>(),
+    ).createDio(withAccess: true),
+    instanceName: "dioWithAccess",
   );
   getIt.registerLazySingleton<Dio>(
-          () => DioClient().createDio(withAccess: false),
-      instanceName: "dioWithoutAccess"
+    () => DioClient(
+      getIt<TokenManager>(),
+      getIt<SessionBloc>(),
+    ).createDio(withAccess: false),
+    instanceName: "dioWithoutAccess",
   );
 
   //// Auth
   getIt.registerLazySingleton<UserMapper>(
     () => UserMapper(),
+  );
+  getIt.registerLazySingleton<AccessMapper>(
+    () => AccessMapper(),
   );
   // Login
   getIt.registerLazySingleton<LoginApiService>(
@@ -145,14 +159,15 @@ Future<void> init() async {
   );
   getIt.registerLazySingleton<LoginRemoteDataSource>(
     () => LoginRemoteDataSource(
+      getIt<LoggingService>(),
       getIt<LoginApiService>(),
     ),
   );
   getIt.registerLazySingleton<LoginRepository>(
     () => LoginRepositoryImpl(
-      getIt<LoggingService>(),
       getIt<LoginRemoteDataSource>(),
-      getIt<UserMapper>(),
+      getIt<AccessMapper>(),
+      getIt<ErrorHandler>(),
     ),
   );
   getIt.registerLazySingleton(
@@ -169,14 +184,15 @@ Future<void> init() async {
   );
   getIt.registerLazySingleton<RegisterRemoteDataSource>(
     () => RegisterRemoteDataSource(
+      getIt<LoggingService>(),
       getIt<RegisterApiService>(),
     ),
   );
   getIt.registerLazySingleton<RegisterRepository>(
     () => RegisterRepositoryImpl(
-      getIt<LoggingService>(),
       getIt<RegisterRemoteDataSource>(),
-      getIt<UserMapper>(),
+      getIt<AccessMapper>(),
+      getIt<ErrorHandler>(),
     ),
   );
   getIt.registerLazySingleton(
@@ -197,6 +213,7 @@ Future<void> init() async {
   );
   getIt.registerLazySingleton<PostRemoteDataSource>(
     () => PostRemoteDataSource(
+      getIt<LoggingService>(),
       getIt<PostApiService>(),
     ),
   );
@@ -204,6 +221,7 @@ Future<void> init() async {
     () => PostRepositoryImpl(
       getIt<PostRemoteDataSource>(),
       getIt<PostMapper>(),
+      getIt<ErrorHandler>(),
     ),
   );
   getIt.registerLazySingleton(
@@ -214,78 +232,84 @@ Future<void> init() async {
 
   // Like
   getIt.registerLazySingleton<PostLikeMapper>(
-        () => PostLikeMapper(),
+    () => PostLikeMapper(),
   );
   getIt.registerLazySingleton<PostLikeApiService>(
-        () => PostLikeApiService(
+    () => PostLikeApiService(
       getIt<Dio>(instanceName: 'dioWithAccess'),
     ),
   );
   getIt.registerLazySingleton<PostLikeRemoteDataSource>(
-        () => PostLikeRemoteDataSource(
+    () => PostLikeRemoteDataSource(
+      getIt<LoggingService>(),
       getIt<PostLikeApiService>(),
     ),
   );
   getIt.registerLazySingleton<PostLikeRepository>(
-        () => PostLikeRepositoryImpl(
+    () => PostLikeRepositoryImpl(
       getIt<PostLikeRemoteDataSource>(),
       getIt<PostLikeMapper>(),
+      getIt<ErrorHandler>(),
     ),
   );
   getIt.registerLazySingleton(
-        () => PostLikeUseCase(
+    () => PostLikeUseCase(
       getIt<PostLikeRepository>(),
     ),
   );
 
   // WriteComment
   getIt.registerLazySingleton<PostWriteCommentMapper>(
-        () => PostWriteCommentMapper(),
+    () => PostWriteCommentMapper(),
   );
   getIt.registerLazySingleton<PostWriteCommentApiService>(
-        () => PostWriteCommentApiService(
+    () => PostWriteCommentApiService(
       getIt<Dio>(instanceName: 'dioWithAccess'),
     ),
   );
   getIt.registerLazySingleton<PostWriteCommentRemoteDataSource>(
-        () => PostWriteCommentRemoteDataSource(
+    () => PostWriteCommentRemoteDataSource(
+      getIt<LoggingService>(),
       getIt<PostWriteCommentApiService>(),
     ),
   );
   getIt.registerLazySingleton<PostWriteCommentRepository>(
-        () => PostWriteCommentRepositoryImpl(
+    () => PostWriteCommentRepositoryImpl(
       getIt<PostWriteCommentRemoteDataSource>(),
       getIt<PostWriteCommentMapper>(),
+      getIt<ErrorHandler>(),
     ),
   );
   getIt.registerLazySingleton(
-        () => PostWriteCommentUseCase(
+    () => PostWriteCommentUseCase(
       getIt<PostWriteCommentRepository>(),
     ),
   );
 
   // FetchComment
   getIt.registerLazySingleton<PostCommentMapper>(
-        () => PostCommentMapper(),
+    () => PostCommentMapper(),
   );
   getIt.registerLazySingleton<PostCommentApiService>(
-        () => PostCommentApiService(
+    () => PostCommentApiService(
       getIt<Dio>(instanceName: 'dioWithAccess'),
     ),
   );
   getIt.registerLazySingleton<PostCommentRemoteDataSource>(
-        () => PostCommentRemoteDataSource(
+    () => PostCommentRemoteDataSource(
+      getIt<LoggingService>(),
       getIt<PostCommentApiService>(),
     ),
   );
   getIt.registerLazySingleton<PostCommentRepository>(
-        () => PostCommentRepositoryImpl(
+    () => PostCommentRepositoryImpl(
       getIt<PostCommentRemoteDataSource>(),
       getIt<PostCommentMapper>(),
+      getIt<ErrorHandler>(),
     ),
   );
   getIt.registerLazySingleton(
-        () => PostCommentUseCase(
+    () => PostCommentUseCase(
       getIt<PostCommentRepository>(),
     ),
   );
@@ -293,52 +317,56 @@ Future<void> init() async {
   //// Profile
   // FetchProfile
   getIt.registerLazySingleton<ProfileMapper>(
-        () => ProfileMapper(),
+    () => ProfileMapper(),
   );
   getIt.registerLazySingleton<ProfileApiService>(
-        () => ProfileApiService(
+    () => ProfileApiService(
       getIt<Dio>(instanceName: 'dioWithAccess'),
     ),
   );
   getIt.registerLazySingleton<ProfileRemoteDataSource>(
-        () => ProfileRemoteDataSource(
+    () => ProfileRemoteDataSource(
+      getIt<LoggingService>(),
       getIt<ProfileApiService>(),
     ),
   );
   getIt.registerLazySingleton<ProfileRepository>(
-        () => ProfileRepositoryImpl(
+    () => ProfileRepositoryImpl(
       getIt<ProfileRemoteDataSource>(),
       getIt<ProfileMapper>(),
+      getIt<ErrorHandler>(),
     ),
   );
-  getIt.registerLazySingleton(
-        () => ProfileUseCase(
+  getIt.registerLazySingleton<ProfileUseCase>(
+    () => ProfileUseCase(
       getIt<ProfileRepository>(),
     ),
   );
 
   // ExecuteEdit
   getIt.registerLazySingleton<ProfileEditMapper>(
-        () => ProfileEditMapper(),
+    () => ProfileEditMapper(),
   );
   getIt.registerLazySingleton<ProfileEditApiService>(
-        () => ProfileEditApiService(
+    () => ProfileEditApiService(
       getIt<Dio>(instanceName: 'dioWithAccess'),
     ),
   );
   getIt.registerLazySingleton<ProfileEditRemoteDataSource>(
-        () => ProfileEditRemoteDataSource(
+    () => ProfileEditRemoteDataSource(
+      getIt<LoggingService>(),
       getIt<ProfileEditApiService>(),
     ),
   );
   getIt.registerLazySingleton<ProfileEditRepository>(
-        () => ProfileEditRepositoryImpl(
+    () => ProfileEditRepositoryImpl(
       getIt<ProfileEditRemoteDataSource>(),
       getIt<ProfileEditMapper>(),
+      getIt<ErrorHandler>(),
     ),
   );
   getIt.registerLazySingleton(
-        () => ProfileEditUseCase(
+    () => ProfileEditUseCase(
       getIt<ProfileEditRepository>(),
     ),
   );
@@ -346,105 +374,113 @@ Future<void> init() async {
   //// Search
   // Weather
   getIt.registerLazySingleton<WeatherMapper>(
-        () => WeatherMapper(),
+    () => WeatherMapper(),
   );
   getIt.registerLazySingleton<WeatherApiService>(
-        () => WeatherApiService(
+    () => WeatherApiService(
       getIt<Dio>(instanceName: 'dioWithoutAccess'),
     ),
   );
   getIt.registerLazySingleton<WeatherRemoteDataSource>(
-        () => WeatherRemoteDataSource(
+    () => WeatherRemoteDataSource(
+      getIt<LoggingService>(),
       getIt<WeatherApiService>(),
     ),
   );
   getIt.registerLazySingleton<WeatherRepository>(
-        () => WeatherRepositoryImpl(
+    () => WeatherRepositoryImpl(
       getIt<WeatherRemoteDataSource>(),
       getIt<WeatherMapper>(),
+      getIt<ErrorHandler>(),
     ),
   );
   getIt.registerLazySingleton(
-        () => WeatherUseCase(
+    () => WeatherUseCase(
       getIt<WeatherRepository>(),
     ),
   );
 
   // Places
   getIt.registerLazySingleton<PlacesMapper>(
-        () => PlacesMapper(),
+    () => PlacesMapper(),
   );
   getIt.registerLazySingleton<PlacesApiService>(
-        () => PlacesApiService(
+    () => PlacesApiService(
       getIt<Dio>(instanceName: 'dioWithoutAccess'),
     ),
   );
   getIt.registerLazySingleton<PlacesRemoteDataSource>(
-        () => PlacesRemoteDataSource(
+    () => PlacesRemoteDataSource(
+      getIt<LoggingService>(),
       getIt<PlacesApiService>(),
     ),
   );
   getIt.registerLazySingleton<PlacesRepository>(
-        () => PlacesRepositoryImpl(
+    () => PlacesRepositoryImpl(
       getIt<PlacesRemoteDataSource>(),
       getIt<PlacesMapper>(),
+      getIt<ErrorHandler>(),
     ),
   );
   getIt.registerLazySingleton(
-        () => PlacesUseCase(
+    () => PlacesUseCase(
       getIt<PlacesRepository>(),
     ),
   );
 
   // City Prediction
   getIt.registerLazySingleton<CityMapper>(
-        () => CityMapper(),
+    () => CityMapper(),
   );
   getIt.registerLazySingleton<CityApiService>(
-        () => CityApiService(
+    () => CityApiService(
       getIt<Dio>(instanceName: 'dioWithoutAccess'),
     ),
   );
   getIt.registerLazySingleton<CityRemoteDataSource>(
-        () => CityRemoteDataSource(
+    () => CityRemoteDataSource(
+      getIt<LoggingService>(),
       getIt<CityApiService>(),
     ),
   );
   getIt.registerLazySingleton<CityRepository>(
-        () => CityRepositoryImpl(
+    () => CityRepositoryImpl(
       getIt<CityRemoteDataSource>(),
       getIt<CityMapper>(),
+      getIt<ErrorHandler>(),
     ),
   );
   getIt.registerLazySingleton(
-        () => CityUseCase(
+    () => CityUseCase(
       getIt<CityRepository>(),
     ),
   );
 
   // Hotel
   getIt.registerLazySingleton<HotelMapper>(
-        () => HotelMapper(),
+    () => HotelMapper(),
   );
   getIt.registerLazySingleton<HotelApiService>(
-        () => HotelApiService(
+    () => HotelApiService(
       getIt<Dio>(instanceName: 'dioWithoutAccess'),
     ),
   );
   getIt.registerLazySingleton<HotelRemoteDataSource>(
-        () => HotelRemoteDataSource(
+    () => HotelRemoteDataSource(
+      getIt<LoggingService>(),
       getIt<HotelApiService>(),
     ),
   );
-  getIt.registerLazySingleton<HotelRepository>(
-        () => HotelRepositoryImpl(
-      getIt<HotelRemoteDataSource>(),
-      getIt<HotelMapper>(),
-    ),
-  );
+  // getIt.registerLazySingleton<HotelRepository>(
+  //       () => HotelRepositoryImpl(
+  //     getIt<HotelRemoteDataSource>(),
+  //     getIt<HotelMapper>(),
+  //   ),
+  // );
   getIt.registerLazySingleton(
-        () => HotelUseCase(
+    () => HotelUseCase(
       getIt<HotelRepository>(),
     ),
   );
+
 }

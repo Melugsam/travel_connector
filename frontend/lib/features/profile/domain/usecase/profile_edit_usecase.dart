@@ -11,21 +11,11 @@ class ProfileEditUseCase {
   ProfileEditUseCase(this._profileEditUseCase);
 
   Future<Either<DomainException, ProfileEditEntity>> call(
-      int userId, String? name, String? description, File? avatarFile) async {
-    try {
-      final result = await _profileEditUseCase.executeEdit(
-        userId,
-        name,
-        description,
-        avatarFile,
-      );
-      return Right(result);
-    } on DomainException catch (e) {
-      return Left(e);
-    } catch (e) {
-      return Left(
-        GenericDomainException("Неизвестная ошибка"),
-      );
-    }
+      String? name, String? description, File? avatarFile) async {
+    return await _profileEditUseCase.executeEdit(
+      name,
+      description,
+      avatarFile,
+    );
   }
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: body_might_complete_normally_nullable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -7,6 +9,7 @@ import 'package:travel_connector/core/manager/notification_manager.dart';
 import 'package:travel_connector/core/widget/custom_button_widget.dart';
 import 'package:travel_connector/core/widget/custom_circular_indicator_widget.dart';
 import 'package:travel_connector/core/widget/custom_text_labeled_form_widget.dart';
+import 'package:travel_connector/features/app/presentation/bloc/session/session_bloc.dart';
 import 'package:travel_connector/features/auth/domain/usecase/register_usecase.dart';
 import 'package:travel_connector/features/auth/presentation/bloc/register/register_bloc.dart';
 
@@ -26,8 +29,11 @@ class RegisterScreen extends StatelessWidget {
       child: BlocListener<RegisterBloc, RegisterState>(
         listener: (context, state) {
           if (state is RegisterSuccess) {
-            getIt<NotificationManager>()
-                .showSuccess(message: 'Успешная регистрация');
+            context.read<SessionBloc>().add(
+              LoginSessionEvent(
+                accessToken: state.accessEntity.accessToken,
+              ),
+            );
           }
           if (state is RegisterError) {
             getIt<NotificationManager>().showError(message: state.message);

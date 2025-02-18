@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:travel_connector/core/color/app_colors.dart';
 
 class CustomTextFieldWidget extends StatelessWidget {
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final String hintText;
   final bool border;
   final ValueChanged? onChanged;
 
   const CustomTextFieldWidget({
     super.key,
-    required this.controller,
+    this.controller,
     required this.hintText,
     this.border = true,
     this.onChanged,

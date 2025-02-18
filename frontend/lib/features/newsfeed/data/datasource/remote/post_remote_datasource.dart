@@ -1,31 +1,23 @@
-import 'package:dio/dio.dart';
+import 'package:dartz/dartz.dart';
 import 'package:travel_connector/core/exception/data_exception.dart';
-import 'package:travel_connector/core/network/server_error_model.dart';
+import 'package:travel_connector/core/network/base_remote_datasource.dart';
+import 'package:travel_connector/core/service/logging_service.dart';
 import 'package:travel_connector/features/newsfeed/data/model/post_request_model.dart';
 import 'package:travel_connector/features/newsfeed/data/model/post_response_model.dart';
 import 'package:travel_connector/features/newsfeed/data/service/post_api_service.dart';
 
-class PostRemoteDataSource {
+class PostRemoteDataSource extends BaseRemoteDataSource {
   final PostApiService _postApiService;
 
-  PostRemoteDataSource(this._postApiService);
+  PostRemoteDataSource(LoggingService loggingService, this._postApiService)
+      : super(loggingService: loggingService);
 
-  Future<List<PostResponseModel>> fetchPosts (
-      int userId, int? offset, int? limit) async {
-    try {
-      final response = await _postApiService.fetchPosts(
-        PostRequestModel(userId: userId, offset: offset, limit: limit),
-      );
-      return response;
-    } on DioException catch (e) {
-      if (e.response != null) {
-        throw ServerException(
-          serverError: ServerErrorModel.fromJson(e.response!.data),
-        );
-      }
-      throw NetworkException();
-    } catch (e) {
-      throw GenericDataSourceException();
-    }
+  Future<Either<DataException, List<PostResponseModel>>> fetchPosts(
+      int? offset, int? limit) async {
+    return safeApiCall(
+      () => _postApiService.fetchPosts(
+        PostRequestModel(offset: offset, limit: limit),
+      ),
+    );
   }
 }

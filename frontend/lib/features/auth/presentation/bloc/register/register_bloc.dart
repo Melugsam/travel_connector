@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:travel_connector/features/auth/domain/entity/user_entity.dart';
+import 'package:travel_connector/features/auth/domain/entity/access_entity.dart';
 import 'package:travel_connector/features/auth/domain/usecase/register_usecase.dart';
 
 part 'register_event.dart';
@@ -21,9 +21,9 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       final result =
           await _registerUseCase(event.name, event.email, event.password);
       result.fold(
-        (l) => emit(RegisterError(message: l.message)),
-        (r) => emit(
-          RegisterSuccess(userEntity: r),
+        (failure) => emit(RegisterError(message: failure.message)),
+        (accessEntity) => emit(
+          RegisterSuccess(accessEntity: accessEntity),
         ),
       );
     });

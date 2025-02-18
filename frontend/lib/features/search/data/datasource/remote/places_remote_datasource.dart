@@ -1,32 +1,32 @@
-import 'package:dio/dio.dart';
+import 'package:dartz/dartz.dart';
 import 'package:travel_connector/core/constant/api_keys.dart';
 import 'package:travel_connector/core/exception/data_exception.dart';
+import 'package:travel_connector/core/network/base_remote_datasource.dart';
+import 'package:travel_connector/core/service/logging_service.dart';
 import 'package:travel_connector/features/search/data/model/places_response_model.dart';
 import 'package:travel_connector/features/search/data/service/places_api_service.dart';
 
-class PlacesRemoteDataSource {
+class PlacesRemoteDataSource extends BaseRemoteDataSource {
   final PlacesApiService _placesApiService;
 
-  PlacesRemoteDataSource(this._placesApiService);
+  PlacesRemoteDataSource(LoggingService loggingService, this._placesApiService)
+      : super(
+          loggingService: loggingService,
+        );
 
-  Future<PlacesResponseModel> fetchPlaces(
+  Future<Either<DataException, PlacesResponseModel>> fetchPlaces(
     double latitude,
     double longitude,
     String keyword,
   ) async {
-    try {
-      final response = await _placesApiService.fetchPlaces(
+    return safeApiCall(
+      () => _placesApiService.fetchPlaces(
         latitude,
         longitude,
         keyword,
         rapidApiKey,
         placesApiHost,
-      );
-      return response;
-    } on DioException {
-      throw NetworkException();
-    } catch (e) {
-      throw GenericDataSourceException();
-    }
+      ),
+    );
   }
 }

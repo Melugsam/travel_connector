@@ -13,6 +13,21 @@ class ProfileEntity with _$ProfileEntity {
     required List<PostUserEntity> followers,
     required List<PostUserEntity> following,
     required bool isCurrentUser,
-    required bool currentUserFollowing,
+    required bool isFollowing,
+    required List<ProfilePostEntity> posts,
   }) = _ProfileEntity;
+}
+
+
+@freezed
+class ProfilePostEntity with _$ProfilePostEntity {
+  const factory ProfilePostEntity({
+    required int id,
+    required String description,
+    required String createdAt,
+    required int likesCount,
+    required bool liked,
+    required int commentsCount,
+    required List<String> images,
+  }) = _ProfilePostEntity;
 }

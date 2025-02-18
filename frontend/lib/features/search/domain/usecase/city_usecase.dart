@@ -11,15 +11,6 @@ class CityUseCase {
   Future<Either<DomainException, List<CityEntity>>> call(
       String keyword,
       ) async {
-    try {
-      final result = await _cityRepository.fetchCity(
-        keyword,
-      );
-      return Right(result);
-    } on DomainException catch (e) {
-      return Left(e);
-    } catch (e) {
-      return Left(GenericDomainException("Неизвестная ошибка"));
-    }
+    return _cityRepository.fetchCity(keyword);
   }
 }

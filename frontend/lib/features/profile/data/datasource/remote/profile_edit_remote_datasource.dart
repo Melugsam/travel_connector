@@ -1,35 +1,26 @@
 import 'dart:io';
-
-import 'package:dio/dio.dart';
+import 'package:dartz/dartz.dart';
 import 'package:travel_connector/core/exception/data_exception.dart';
-import 'package:travel_connector/core/network/server_error_model.dart';
+import 'package:travel_connector/core/network/base_remote_datasource.dart';
+import 'package:travel_connector/core/service/logging_service.dart';
 import 'package:travel_connector/features/profile/data/model/profile_edit_response_model.dart';
 import 'package:travel_connector/features/profile/data/service/profile_edit_api_service.dart';
 
-class ProfileEditRemoteDataSource {
+class ProfileEditRemoteDataSource extends BaseRemoteDataSource {
   final ProfileEditApiService _profileEditApiService;
 
-  ProfileEditRemoteDataSource(this._profileEditApiService);
+  ProfileEditRemoteDataSource(
+      LoggingService loggingService, this._profileEditApiService)
+      : super(loggingService: loggingService);
 
-  Future<ProfileEditResponseModel> executeEdit(
-      int userId, String? name, String? description, File? avatarFile) async {
-    try {
-      final response = await _profileEditApiService.executeProfileEdit(
-        userId,
+  Future<Either<DataException, ProfileEditResponseModel>> executeEdit(
+      String? name, String? description, File? avatarFile) async {
+    return safeApiCall(
+      () => _profileEditApiService.executeProfileEdit(
         name,
         description,
         avatarFile,
-      );
-      return response;
-    } on DioException catch (e) {
-      if (e.response != null) {
-        throw ServerException(
-          serverError: ServerErrorModel.fromJson(e.response!.data),
-        );
-      }
-      throw NetworkException();
-    } catch (e) {
-      throw GenericDataSourceException();
-    }
+      ),
+    );
   }
 }

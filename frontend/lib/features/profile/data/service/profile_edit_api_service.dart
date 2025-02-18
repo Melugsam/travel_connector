@@ -14,7 +14,6 @@ abstract class ProfileEditApiService {
   @MultiPart()
   @POST('/profile/edit')
   Future<ProfileEditResponseModel> executeProfileEdit(
-    @Part(name: 'user_id') int userId,
     @Part(name: 'name') String? name,
     @Part(name: 'profile_description') String? description,
     @Part(name: 'avatar') File? avatarFile,

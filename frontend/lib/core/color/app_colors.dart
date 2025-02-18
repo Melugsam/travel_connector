@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AppColors{
   static const Color primary = Color.fromRGBO(245, 110, 112,1);
   static const Color secondary = Color.fromRGBO(57, 152, 233,1);
-  static const Color success = Color.fromRGBO(5, 162, 63, 1.0);
+  static const Color success = Color.fromRGBO(52, 168, 70, 1.0);
   static const Color warning = Color.fromRGBO(232, 174, 51,1);
   static const Color error = Color.fromRGBO(221, 56, 62,1);
   static const Color black = Color.fromRGBO(50, 55, 65,1);

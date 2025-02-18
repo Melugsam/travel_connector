@@ -9,17 +9,9 @@ class PostLikeUseCase {
   PostLikeUseCase(this._postLikeRepository);
 
   Future<Either<DomainException, PostLikeEntity>> call(
-      int userId, int postId) async {
-    try {
-      final result = await _postLikeRepository.executeLike(
-        userId,
-        postId,
-      );
-      return Right(result);
-    } on DomainException catch (e) {
-      return Left(e);
-    } catch (e) {
-      return Left(GenericDomainException("Неизвестная ошибка"));
-    }
+      int postId) async {
+    return await _postLikeRepository.executeLike(
+      postId,
+    );
   }
 }

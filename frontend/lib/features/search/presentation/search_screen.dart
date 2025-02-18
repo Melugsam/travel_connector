@@ -4,7 +4,6 @@ import 'package:travel_connector/core/injector/di.dart';
 import 'package:travel_connector/features/search/presentation/bloc/city/city_bloc.dart';
 import 'package:travel_connector/features/search/presentation/bloc/hotel/hotel_bloc.dart';
 import 'package:travel_connector/features/search/presentation/hotel_screen.dart';
-import 'package:travel_connector/features/search/presentation/widget/hotel_widget.dart';
 import 'package:travel_connector/features/search/presentation/widget/search_map_widget.dart';
 
 class SearchScreen extends StatelessWidget {
@@ -30,7 +29,6 @@ class SearchScreen extends StatelessWidget {
           return DefaultTabController(
             length: 2,
             child: Scaffold(
-              resizeToAvoidBottomInset: false,
               appBar: AppBar(
                 title: Text("Поиск"),
                 bottom: TabBar(

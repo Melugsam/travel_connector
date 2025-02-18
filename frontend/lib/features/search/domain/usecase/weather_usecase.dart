@@ -12,16 +12,9 @@ class WeatherUseCase {
     double latitude,
     double longitude,
   ) async {
-    try {
-      final result = await _weatherRepository.fetchWeather(
+    return await _weatherRepository.fetchWeather(
         latitude,
         longitude
-      );
-      return Right(result);
-    } on DomainException catch (e) {
-      return Left(e);
-    } catch (e) {
-      return Left(GenericDomainException("Неизвестная ошибка"));
-    }
+    );
   }
 }

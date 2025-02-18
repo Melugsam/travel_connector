@@ -4,12 +4,10 @@ part 'profile_request_model.g.dart';
 
 @JsonSerializable()
 class ProfileRequestModel {
-  @JsonKey(name: 'user_id')
-  final int userId;
   @JsonKey(name: 'target_user_id')
-  final int targetUserId;
+  final int? targetUserId;
 
-  ProfileRequestModel({required this.userId, required this.targetUserId});
+  ProfileRequestModel({required this.targetUserId});
 
   Map<String, dynamic> toJson() => _$ProfileRequestModelToJson(this);
 

@@ -4,16 +4,13 @@ import 'package:go_router/go_router.dart';
 import 'package:travel_connector/core/injector/di.dart';
 import 'package:travel_connector/core/widget/custom_circular_indicator_widget.dart';
 import 'package:travel_connector/core/widget/custom_data_receive_error_widget.dart';
-import 'package:travel_connector/features/newsfeed/presentation/bloc/post/post_bloc.dart';
-import 'package:travel_connector/features/newsfeed/presentation/widget/post_widget.dart';
+import 'package:travel_connector/features/profile/presentation/bloc/profile/profile_bloc.dart';
 import 'package:travel_connector/features/profile/presentation/widget/profile_header_widget.dart';
 
-import 'bloc/profile/profile_bloc.dart';
-
 class ProfileScreen extends StatelessWidget {
-  final int? targetUserId;
+  final int? userId;
 
-  const ProfileScreen({super.key, this.targetUserId});
+  const ProfileScreen({required this.userId, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,27 +18,18 @@ class ProfileScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => ProfileBloc(
         getIt(),
-        getIt(),
       )..add(
-          FetchProfileEvent(targetUserId: targetUserId),
+          FetchProfileEvent(targetUserId: userId),
         ),
       child: BlocBuilder<ProfileBloc, ProfileState>(
         builder: (context, profileState) {
-          context.read<PostBloc>().add(
-                FetchPostEvent(targetUserId: targetUserId),
-              );
           return RefreshIndicator(
-            onRefresh: () async {
-              context.read<ProfileBloc>().add(
-                    FetchProfileEvent(targetUserId: targetUserId),
-                  );
-            },
+            onRefresh: () async {},
             child: Scaffold(
               appBar: AppBar(
                 title: const Text("Профиль"),
                 actions: [
-                  if (profileState is ProfileSuccess &&
-                      profileState.profile.isCurrentUser)
+                  if (profileState is ProfileSuccess)
                     IconButton(
                       icon: const Icon(Icons.edit),
                       onPressed: () {
@@ -57,9 +45,7 @@ class ProfileScreen extends StatelessWidget {
                           (value) {
                             if (context.mounted) {
                               context.read<ProfileBloc>().add(
-                                    FetchProfileEvent(
-                                      targetUserId: targetUserId,
-                                    ),
+                                    FetchProfileEvent(targetUserId: userId),
                                   );
                             }
                           },
@@ -87,8 +73,7 @@ class ProfileScreen extends StatelessWidget {
                                 name: profileState.profile.name,
                                 description: profileState.profile.description,
                                 avatarUrl: profileState.profile.avatar,
-                                isFollowing:
-                                    profileState.profile.currentUserFollowing,
+                                isFollowing: profileState.profile.isFollowing,
                                 isCurrentUser:
                                     profileState.profile.isCurrentUser,
                                 followersCount:
@@ -97,7 +82,8 @@ class ProfileScreen extends StatelessWidget {
                               ),
                             ),
                             SliverToBoxAdapter(
-                                child: const Divider(thickness: 4)),
+                              child: const Divider(thickness: 4),
+                            ),
                             SliverToBoxAdapter(
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -119,41 +105,18 @@ class ProfileScreen extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            BlocBuilder<PostBloc, PostState>(
-                              builder: (context, postState) {
-                                if (postState is PostSuccess) {
-                                  return SliverList.separated(
-                                    itemCount: postState.posts.length,
-                                    itemBuilder: (context, index) {
-                                      return PostWidget(
-                                        post: postState.posts[index],
-                                        showDetails: true,
-                                      );
-                                    },
-                                    separatorBuilder: (context, index) =>
-                                        SizedBox(
-                                      height: 4,
-                                    ),
-                                  );
-                                }
-                                if (postState is PostLoading) {
-                                  return SliverFillRemaining(
-                                    child: CustomCircularIndicatorWidget(),
-                                  );
-                                }
-                                return SliverToBoxAdapter(
-                                  child: CustomDataReceiveErrorWidget(
-                                    onTap: () {
-                                      context.read<PostBloc>().add(
-                                            FetchPostEvent(
-                                              targetUserId: targetUserId,
-                                            ),
-                                          );
-                                    },
-                                  ),
-                                );
-                              },
-                            ),
+                            // SliverList.separated(
+                            //   itemCount: profileState.profile.posts.length,
+                            //   itemBuilder: (context, index) {
+                            //     return PostWidget(
+                            //       post: profileState.profile.posts[index],
+                            //       showDetails: true,
+                            //     );
+                            //   },
+                            //   separatorBuilder: (context, index) => SizedBox(
+                            //     height: 4,
+                            //   ),
+                            // )
                           ],
                         );
                       }
@@ -161,7 +124,7 @@ class ProfileScreen extends StatelessWidget {
                         return SliverFillRemaining(
                           child: CustomDataReceiveErrorWidget(
                             onTap: () => context.read<ProfileBloc>().add(
-                                  FetchProfileEvent(targetUserId: targetUserId),
+                                  FetchProfileEvent(targetUserId: userId),
                                 ),
                           ),
                         );

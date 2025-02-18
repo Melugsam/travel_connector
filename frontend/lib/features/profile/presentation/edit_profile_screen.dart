@@ -70,7 +70,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       create: (context) =>
           ProfileEditBloc(
             getIt(),
-            getIt(),
           ),
       child: BlocListener<ProfileEditBloc, ProfileEditState>(
         listener: (context, editState) {

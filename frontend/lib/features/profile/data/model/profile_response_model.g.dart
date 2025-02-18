@@ -11,7 +11,7 @@ ProfileResponseModel _$ProfileResponseModelFromJson(
     ProfileResponseModel(
       id: (json['id'] as num).toInt(),
       name: json['name'] as String,
-      description: json['profile_description'] as String,
+      description: json['profile_description'] as String?,
       avatar: json['avatar'] as String?,
       followers: (json['followers'] as List<dynamic>)
           .map((e) => UserResponseModel.fromJson(e as Map<String, dynamic>))
@@ -19,8 +19,12 @@ ProfileResponseModel _$ProfileResponseModelFromJson(
       following: (json['following'] as List<dynamic>)
           .map((e) => UserResponseModel.fromJson(e as Map<String, dynamic>))
           .toList(),
-      isCurrentUser: json['is_current_user'] as bool,
-      currentUserFollowing: json['current_user_following'] as bool,
+      isFollowing: json['isFollowing'] as bool,
+      isCurrentUser: json['isCurrentUser'] as bool,
+      posts: (json['posts'] as List<dynamic>)
+          .map((e) =>
+              ProfilePostResponseModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$ProfileResponseModelToJson(
@@ -32,6 +36,32 @@ Map<String, dynamic> _$ProfileResponseModelToJson(
       'avatar': instance.avatar,
       'followers': instance.followers.map((e) => e.toJson()).toList(),
       'following': instance.following.map((e) => e.toJson()).toList(),
-      'is_current_user': instance.isCurrentUser,
-      'current_user_following': instance.currentUserFollowing,
+      'isFollowing': instance.isFollowing,
+      'isCurrentUser': instance.isCurrentUser,
+      'posts': instance.posts.map((e) => e.toJson()).toList(),
+    };
+
+ProfilePostResponseModel _$ProfilePostResponseModelFromJson(
+        Map<String, dynamic> json) =>
+    ProfilePostResponseModel(
+      id: (json['id'] as num).toInt(),
+      description: json['description'] as String,
+      createdAt: json['created_at'] as String,
+      likesCount: (json['likes_count'] as num).toInt(),
+      commentsCount: (json['comments_count'] as num).toInt(),
+      liked: json['liked'] as bool,
+      images:
+          (json['images'] as List<dynamic>).map((e) => e as String).toList(),
+    );
+
+Map<String, dynamic> _$ProfilePostResponseModelToJson(
+        ProfilePostResponseModel instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'description': instance.description,
+      'created_at': instance.createdAt,
+      'likes_count': instance.likesCount,
+      'comments_count': instance.commentsCount,
+      'liked': instance.liked,
+      'images': instance.images,
     };

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:travel_connector/core/injector/di.dart';
-import 'package:travel_connector/core/manager/user_manager.dart';
+import 'package:travel_connector/features/app/presentation/server_error_screen.dart';
+import 'package:travel_connector/features/app/presentation/splash_screen.dart';
 import 'package:travel_connector/features/auth/presentation/login_screen.dart';
 import 'package:travel_connector/features/auth/presentation/register_screen.dart';
 import 'package:travel_connector/features/navigation/presentation/navigation_screen.dart';
@@ -16,17 +16,28 @@ final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
 final GoRouter route = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: "/newsfeed",
+  initialLocation: "/splash",
   debugLogDiagnostics: true,
   routes: [
     GoRoute(
-      path: '/',
+      path: '/splash',
+      name: 'splash',
+      builder: (context, state) => SplashScreen(),
+    ),
+    GoRoute(
+      path: '/login',
+      name: 'login',
       builder: (context, state) => LoginScreen(),
     ),
     GoRoute(
       path: '/register',
       name: 'register',
       builder: (context, state) => RegisterScreen(),
+    ),
+    GoRoute(
+      path: '/server-error',
+      name: 'server-error',
+      builder: (context, state) => ServerErrorScreen(),
     ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
@@ -70,13 +81,10 @@ final GoRouter route = GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: '/profile',
-              name: "profile",
+              path: '/im',
+              name: "im",
               builder: (context, state) {
-                final targetUserId = state.extra as int?;
-                return ProfileScreen(
-                  targetUserId: targetUserId,
-                );
+                return ProfileScreen(userId: null,);
               },
               routes: [
                 GoRoute(

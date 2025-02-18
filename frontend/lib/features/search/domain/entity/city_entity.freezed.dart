@@ -17,10 +17,10 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$CityEntity {
   String get name => throw _privateConstructorUsedError;
-  String get countryCode => throw _privateConstructorUsedError;
-  String get stateCode => throw _privateConstructorUsedError;
+  String get country => throw _privateConstructorUsedError;
   double get latitude => throw _privateConstructorUsedError;
   double get longitude => throw _privateConstructorUsedError;
+  String? get region => throw _privateConstructorUsedError;
 
   /// Create a copy of CityEntity
   /// with the given fields replaced by the non-null parameter values.
@@ -37,10 +37,10 @@ abstract class $CityEntityCopyWith<$Res> {
   @useResult
   $Res call(
       {String name,
-      String countryCode,
-      String stateCode,
+      String country,
       double latitude,
-      double longitude});
+      double longitude,
+      String? region});
 }
 
 /// @nodoc
@@ -59,23 +59,19 @@ class _$CityEntityCopyWithImpl<$Res, $Val extends CityEntity>
   @override
   $Res call({
     Object? name = null,
-    Object? countryCode = null,
-    Object? stateCode = null,
+    Object? country = null,
     Object? latitude = null,
     Object? longitude = null,
+    Object? region = freezed,
   }) {
     return _then(_value.copyWith(
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      countryCode: null == countryCode
-          ? _value.countryCode
-          : countryCode // ignore: cast_nullable_to_non_nullable
-              as String,
-      stateCode: null == stateCode
-          ? _value.stateCode
-          : stateCode // ignore: cast_nullable_to_non_nullable
+      country: null == country
+          ? _value.country
+          : country // ignore: cast_nullable_to_non_nullable
               as String,
       latitude: null == latitude
           ? _value.latitude
@@ -85,6 +81,10 @@ class _$CityEntityCopyWithImpl<$Res, $Val extends CityEntity>
           ? _value.longitude
           : longitude // ignore: cast_nullable_to_non_nullable
               as double,
+      region: freezed == region
+          ? _value.region
+          : region // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -99,10 +99,10 @@ abstract class _$$CityEntityImplCopyWith<$Res>
   @useResult
   $Res call(
       {String name,
-      String countryCode,
-      String stateCode,
+      String country,
       double latitude,
-      double longitude});
+      double longitude,
+      String? region});
 }
 
 /// @nodoc
@@ -119,23 +119,19 @@ class __$$CityEntityImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? name = null,
-    Object? countryCode = null,
-    Object? stateCode = null,
+    Object? country = null,
     Object? latitude = null,
     Object? longitude = null,
+    Object? region = freezed,
   }) {
     return _then(_$CityEntityImpl(
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      countryCode: null == countryCode
-          ? _value.countryCode
-          : countryCode // ignore: cast_nullable_to_non_nullable
-              as String,
-      stateCode: null == stateCode
-          ? _value.stateCode
-          : stateCode // ignore: cast_nullable_to_non_nullable
+      country: null == country
+          ? _value.country
+          : country // ignore: cast_nullable_to_non_nullable
               as String,
       latitude: null == latitude
           ? _value.latitude
@@ -145,6 +141,10 @@ class __$$CityEntityImplCopyWithImpl<$Res>
           ? _value.longitude
           : longitude // ignore: cast_nullable_to_non_nullable
               as double,
+      region: freezed == region
+          ? _value.region
+          : region // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -154,25 +154,25 @@ class __$$CityEntityImplCopyWithImpl<$Res>
 class _$CityEntityImpl implements _CityEntity {
   const _$CityEntityImpl(
       {required this.name,
-      required this.countryCode,
-      required this.stateCode,
+      required this.country,
       required this.latitude,
-      required this.longitude});
+      required this.longitude,
+      required this.region});
 
   @override
   final String name;
   @override
-  final String countryCode;
-  @override
-  final String stateCode;
+  final String country;
   @override
   final double latitude;
   @override
   final double longitude;
+  @override
+  final String? region;
 
   @override
   String toString() {
-    return 'CityEntity(name: $name, countryCode: $countryCode, stateCode: $stateCode, latitude: $latitude, longitude: $longitude)';
+    return 'CityEntity(name: $name, country: $country, latitude: $latitude, longitude: $longitude, region: $region)';
   }
 
   @override
@@ -181,19 +181,17 @@ class _$CityEntityImpl implements _CityEntity {
         (other.runtimeType == runtimeType &&
             other is _$CityEntityImpl &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.countryCode, countryCode) ||
-                other.countryCode == countryCode) &&
-            (identical(other.stateCode, stateCode) ||
-                other.stateCode == stateCode) &&
+            (identical(other.country, country) || other.country == country) &&
             (identical(other.latitude, latitude) ||
                 other.latitude == latitude) &&
             (identical(other.longitude, longitude) ||
-                other.longitude == longitude));
+                other.longitude == longitude) &&
+            (identical(other.region, region) || other.region == region));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, name, countryCode, stateCode, latitude, longitude);
+  int get hashCode =>
+      Object.hash(runtimeType, name, country, latitude, longitude, region);
 
   /// Create a copy of CityEntity
   /// with the given fields replaced by the non-null parameter values.
@@ -207,21 +205,21 @@ class _$CityEntityImpl implements _CityEntity {
 abstract class _CityEntity implements CityEntity {
   const factory _CityEntity(
       {required final String name,
-      required final String countryCode,
-      required final String stateCode,
+      required final String country,
       required final double latitude,
-      required final double longitude}) = _$CityEntityImpl;
+      required final double longitude,
+      required final String? region}) = _$CityEntityImpl;
 
   @override
   String get name;
   @override
-  String get countryCode;
-  @override
-  String get stateCode;
+  String get country;
   @override
   double get latitude;
   @override
   double get longitude;
+  @override
+  String? get region;
 
   /// Create a copy of CityEntity
   /// with the given fields replaced by the non-null parameter values.

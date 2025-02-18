@@ -9,181 +9,207 @@ import 'package:travel_connector/core/widget/custom_circular_indicator_widget.da
 import 'package:travel_connector/core/widget/custom_text_field_widget.dart';
 import 'package:travel_connector/features/search/presentation/bloc/city/city_bloc.dart';
 import 'package:travel_connector/features/search/presentation/bloc/hotel/hotel_bloc.dart';
+import 'package:travel_connector/features/search/presentation/bloc/map/search_map_cubit.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class SearchMapWidget extends StatefulWidget {
-  const SearchMapWidget({super.key});
-
-  @override
-  State<SearchMapWidget> createState() => _SearchMapWidgetState();
-}
-
-class _SearchMapWidgetState extends State<SearchMapWidget> {
+class SearchMapWidget extends StatelessWidget {
   final cityController = TextEditingController();
-  LatLng _mapPoint = const LatLng(55.748886, 37.617209);
+
+  SearchMapWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        FlutterMap(
-          key: ValueKey(_mapPoint),
+    return BlocProvider(
+      create: (_) => SearchMapCubit(),
+      child: Stack(
+        children: [
+          _buildMap(context),
+          _buildPanel(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMap(BuildContext context) {
+    return BlocBuilder<SearchMapCubit, LatLng>(
+      builder: (context, mapPoint) {
+        return FlutterMap(
           options: MapOptions(
-            initialCenter: _mapPoint,
+            initialCenter: mapPoint,
             initialZoom: 8.2,
             onTap: (tapPosition, point) {
-              setState(() {
-                _mapPoint = point;
-              });
+              context.read<SearchMapCubit>().updateLocation(point);
             },
           ),
           children: [
-            TileLayer(
-              urlTemplate: stadiaMapsUrl,
-            ),
+            TileLayer(urlTemplate: stadiaMapsUrl),
             MarkerLayer(
               markers: [
                 Marker(
-                  point: _mapPoint,
+                  point: mapPoint,
                   child: const Icon(
                     Icons.location_on,
-                    color: Colors.redAccent,
+                    color: AppColors.primary,
                     size: 32,
                   ),
-                  width: 80.0,
-                  height: 80.0,
                 )
               ],
             ),
-            RichAttributionWidget(
-              animationConfig: const ScaleRAWA(),
-              attributions: [
-                TextSourceAttribution(
-                  textStyle: const TextStyle(fontSize: 16),
-                  'Stadia Maps',
-                  onTap: () => launchUrl(
-                    Uri.parse('https://stadiamaps.com/'),
-                  ),
-                ),
-                TextSourceAttribution(
-                  textStyle: const TextStyle(fontSize: 16),
-                  'OpenMapTiles',
-                  onTap: () => launchUrl(
-                    Uri.parse('https://openmaptiles.org/'),
-                  ),
-                ),
-                TextSourceAttribution(
-                  textStyle: const TextStyle(fontSize: 16),
-                  'OpenStreetMap',
-                  onTap: () => launchUrl(
-                    Uri.parse('https://www.openstreetmap.org/copyright'),
-                  ),
-                ),
-              ],
-            ),
+            _buildMapAttribution(),
           ],
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 24, horizontal: 32),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        );
+      },
+    );
+  }
+
+  Widget _buildPanel(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 24, horizontal: 32),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            spacing: 8,
             children: [
-              Column(
-                children: [
-                  CustomTextFieldWidget(
-                    onChanged: (value) {
-                      context.read<CityBloc>().add(
-                            FetchCityEvent(keyword: value),
-                          );
-                    },
-                    controller: cityController,
-                    hintText: "Поиск по городу",
-                    border: false,
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  BlocBuilder<CityBloc, CityState>(
-                    builder: (context, state) {
-                      return AnimatedContainer(
-                        padding: EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: AppColors.white,
-                          borderRadius: BorderRadius.circular(8),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black12,
-                              blurRadius: 8,
-                              offset: Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        width: double.infinity,
-                        curve: Curves.easeIn,
-                        duration: Duration(milliseconds: 300),
-                        height: state is CityInitial ? 0 : 150,
-                        child: Builder(
-                          builder: (context) {
-                            if (state is CityLoading) {
-                              return CustomCircularIndicatorWidget();
-                            }
-                            if (state is CityEmpty) {
-                              return Center(
-                                child: Text(
-                                  "Не удалось найти по заданным параметрам",
-                                ),
-                              );
-                            }
-                            if (state is CitySuccess) {
-                              return ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: state.cities.length,
-                                itemBuilder: (context, index) {
-                                  return InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        _mapPoint = LatLng(
-                                          state.cities[index].latitude,
-                                          state.cities[index].longitude,
-                                        );
-                                      });
-                                    },
-                                    child: Padding(
-                                      padding: EdgeInsets.only(bottom: 6),
-                                      child: Text(
-                                        state.cities[index].name,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
-                            }
-                            return SizedBox.shrink();
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                ],
+              _buildSearchField(context),
+              _buildCityPredictor(),
+            ],
+          ),
+          _buildSearchButton(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSearchField(
+      BuildContext context) {
+    return CustomTextFieldWidget(
+      controller: cityController,
+      onChanged: (value) {
+        context.read<CityBloc>().add(FetchCityEvent(cityName: value));
+      },
+      hintText: "Поиск по городу",
+      border: false,
+    );
+  }
+
+  Widget _buildSearchButton(BuildContext context) {
+    return CustomButtonWidget(
+      text: "Найти",
+      onPressed: () {
+        final mapPoint = context.read<SearchMapCubit>().state;
+        context.read<HotelBloc>().add(
+              FetchHotelEvent(
+                latitude: mapPoint.latitude,
+                longitude: mapPoint.longitude,
               ),
-              CustomButtonWidget(
-                text: "Найти",
-                onPressed: () {
-                  context.read<HotelBloc>().add(
-                        FetchHotelEvent(
-                          latitude: _mapPoint.latitude,
-                          longitude: _mapPoint.longitude,
-                        ),
-                      );
-                },
+            );
+      },
+    );
+  }
+
+  Widget _buildMapAttribution() {
+    return RichAttributionWidget(
+      animationConfig: const ScaleRAWA(),
+      attributions: [
+        TextSourceAttribution(
+          textStyle: const TextStyle(fontSize: 16),
+          'Stadia Maps',
+          onTap: () => launchUrl(Uri.parse('https://stadiamaps.com/')),
+        ),
+        TextSourceAttribution(
+          textStyle: const TextStyle(fontSize: 16),
+          'OpenMapTiles',
+          onTap: () => launchUrl(Uri.parse('https://openmaptiles.org/')),
+        ),
+        TextSourceAttribution(
+          textStyle: const TextStyle(fontSize: 16),
+          'OpenStreetMap',
+          onTap: () =>
+              launchUrl(Uri.parse('https://www.openstreetmap.org/copyright')),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCityPredictor() {
+    return BlocBuilder<CityBloc, CityState>(
+      builder: (context, state) {
+        return AnimatedContainer(
+          padding: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 8,
+                offset: Offset(0, 4),
               ),
             ],
           ),
-        )
-      ],
+          width: double.infinity,
+          curve: Curves.easeIn,
+          duration: Duration(milliseconds: 300),
+          height: state is CityInitial ? 0 : 150,
+          child: Builder(
+            builder: (context) {
+              if (state is CityLoading) {
+                return CustomCircularIndicatorWidget();
+              }
+              if (state is CityEmpty || state is CityError) {
+                return Center(
+                  child: Text(
+                    "Не удалось найти по заданным параметрам",
+                    textAlign: TextAlign.center,
+                  ),
+                );
+              }
+              if (state is CitySuccess) {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: state.cities.length,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () {
+                        context.read<SearchMapCubit>().updateLocation(
+                              LatLng(
+                                state.cities[index].latitude,
+                                state.cities[index].longitude,
+                              ),
+                            );
+                        context
+                            .read<CityBloc>()
+                            .add(FetchCityEvent(cityName: ''),);
+                        cityController.clear();
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 10),
+                        child: Wrap(
+                          children: [
+                            Text(
+                              '${state.cities[index].name}, ',
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                            Text(
+                              '${state.cities[index].country} ',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(fontWeight: FontWeight.w700),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              }
+              return SizedBox.shrink();
+            },
+          ),
+        );
+      },
     );
   }
 }

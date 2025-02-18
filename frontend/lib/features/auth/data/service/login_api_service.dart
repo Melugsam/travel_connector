@@ -10,5 +10,5 @@ abstract class LoginApiService {
   factory LoginApiService(Dio dio, {String baseUrl}) = _LoginApiService;
 
   @POST('/auth/login')
-  Future<AuthResponseModel> fetchLogin(@Body() LoginRequestModel request);
+  Future<AuthResponseModel> executeLogin(@Body() LoginRequestModel request);
 }

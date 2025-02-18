@@ -8,14 +8,11 @@ class PostUseCase {
 
   PostUseCase(this._postRepository);
 
-  Future<Either<DomainException,List<PostEntity>>> call(int userId, int? offset, int? limit) async {
-    try{
-      final result = await _postRepository.fetchPosts(userId, offset, limit);
-      return Right(result);
-    }on DomainException catch (e) {
-      return Left(e);
-    } catch (e) {
-      return Left(GenericDomainException("Неизвестная ошибка"));
-    }
+  Future<Either<DomainException, List<PostEntity>>> call(
+      int? offset, int? limit) async {
+    return await _postRepository.fetchPosts(
+      offset,
+      limit,
+    );
   }
 }

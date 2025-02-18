@@ -14,18 +14,11 @@ class HotelUseCase {
     String checkIn,
     String checkOut,
   ) async {
-    try {
-      final result = await _hotelRepository.fetchHotel(
-        latitude,
-        longitude,
-        checkIn,
-        checkOut,
-      );
-      return Right(result);
-    } on DomainException catch (e) {
-      return Left(e);
-    } catch (e) {
-      return Left(GenericDomainException("Неизвестная ошибка"));
-    }
+    return await _hotelRepository.fetchHotel(
+      latitude,
+      longitude,
+      checkIn,
+      checkOut,
+    );
   }
 }

@@ -6,9 +6,9 @@ part 'city_entity.freezed.dart';
 class CityEntity with _$CityEntity {
   const factory CityEntity({
     required String name,
-    required String countryCode,
-    required String stateCode,
+    required String country,
     required double latitude,
     required double longitude,
+    required String? region,
   }) = _CityEntity;
 }

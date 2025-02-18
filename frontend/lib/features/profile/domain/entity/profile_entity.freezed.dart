@@ -23,7 +23,8 @@ mixin _$ProfileEntity {
   List<PostUserEntity> get followers => throw _privateConstructorUsedError;
   List<PostUserEntity> get following => throw _privateConstructorUsedError;
   bool get isCurrentUser => throw _privateConstructorUsedError;
-  bool get currentUserFollowing => throw _privateConstructorUsedError;
+  bool get isFollowing => throw _privateConstructorUsedError;
+  List<ProfilePostEntity> get posts => throw _privateConstructorUsedError;
 
   /// Create a copy of ProfileEntity
   /// with the given fields replaced by the non-null parameter values.
@@ -46,7 +47,8 @@ abstract class $ProfileEntityCopyWith<$Res> {
       List<PostUserEntity> followers,
       List<PostUserEntity> following,
       bool isCurrentUser,
-      bool currentUserFollowing});
+      bool isFollowing,
+      List<ProfilePostEntity> posts});
 }
 
 /// @nodoc
@@ -71,7 +73,8 @@ class _$ProfileEntityCopyWithImpl<$Res, $Val extends ProfileEntity>
     Object? followers = null,
     Object? following = null,
     Object? isCurrentUser = null,
-    Object? currentUserFollowing = null,
+    Object? isFollowing = null,
+    Object? posts = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -102,10 +105,14 @@ class _$ProfileEntityCopyWithImpl<$Res, $Val extends ProfileEntity>
           ? _value.isCurrentUser
           : isCurrentUser // ignore: cast_nullable_to_non_nullable
               as bool,
-      currentUserFollowing: null == currentUserFollowing
-          ? _value.currentUserFollowing
-          : currentUserFollowing // ignore: cast_nullable_to_non_nullable
+      isFollowing: null == isFollowing
+          ? _value.isFollowing
+          : isFollowing // ignore: cast_nullable_to_non_nullable
               as bool,
+      posts: null == posts
+          ? _value.posts
+          : posts // ignore: cast_nullable_to_non_nullable
+              as List<ProfilePostEntity>,
     ) as $Val);
   }
 }
@@ -126,7 +133,8 @@ abstract class _$$ProfileEntityImplCopyWith<$Res>
       List<PostUserEntity> followers,
       List<PostUserEntity> following,
       bool isCurrentUser,
-      bool currentUserFollowing});
+      bool isFollowing,
+      List<ProfilePostEntity> posts});
 }
 
 /// @nodoc
@@ -149,7 +157,8 @@ class __$$ProfileEntityImplCopyWithImpl<$Res>
     Object? followers = null,
     Object? following = null,
     Object? isCurrentUser = null,
-    Object? currentUserFollowing = null,
+    Object? isFollowing = null,
+    Object? posts = null,
   }) {
     return _then(_$ProfileEntityImpl(
       id: null == id
@@ -180,10 +189,14 @@ class __$$ProfileEntityImplCopyWithImpl<$Res>
           ? _value.isCurrentUser
           : isCurrentUser // ignore: cast_nullable_to_non_nullable
               as bool,
-      currentUserFollowing: null == currentUserFollowing
-          ? _value.currentUserFollowing
-          : currentUserFollowing // ignore: cast_nullable_to_non_nullable
+      isFollowing: null == isFollowing
+          ? _value.isFollowing
+          : isFollowing // ignore: cast_nullable_to_non_nullable
               as bool,
+      posts: null == posts
+          ? _value._posts
+          : posts // ignore: cast_nullable_to_non_nullable
+              as List<ProfilePostEntity>,
     ));
   }
 }
@@ -199,9 +212,11 @@ class _$ProfileEntityImpl implements _ProfileEntity {
       required final List<PostUserEntity> followers,
       required final List<PostUserEntity> following,
       required this.isCurrentUser,
-      required this.currentUserFollowing})
+      required this.isFollowing,
+      required final List<ProfilePostEntity> posts})
       : _followers = followers,
-        _following = following;
+        _following = following,
+        _posts = posts;
 
   @override
   final int id;
@@ -230,11 +245,18 @@ class _$ProfileEntityImpl implements _ProfileEntity {
   @override
   final bool isCurrentUser;
   @override
-  final bool currentUserFollowing;
+  final bool isFollowing;
+  final List<ProfilePostEntity> _posts;
+  @override
+  List<ProfilePostEntity> get posts {
+    if (_posts is EqualUnmodifiableListView) return _posts;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_posts);
+  }
 
   @override
   String toString() {
-    return 'ProfileEntity(id: $id, name: $name, description: $description, avatar: $avatar, followers: $followers, following: $following, isCurrentUser: $isCurrentUser, currentUserFollowing: $currentUserFollowing)';
+    return 'ProfileEntity(id: $id, name: $name, description: $description, avatar: $avatar, followers: $followers, following: $following, isCurrentUser: $isCurrentUser, isFollowing: $isFollowing, posts: $posts)';
   }
 
   @override
@@ -253,8 +275,9 @@ class _$ProfileEntityImpl implements _ProfileEntity {
                 .equals(other._following, _following) &&
             (identical(other.isCurrentUser, isCurrentUser) ||
                 other.isCurrentUser == isCurrentUser) &&
-            (identical(other.currentUserFollowing, currentUserFollowing) ||
-                other.currentUserFollowing == currentUserFollowing));
+            (identical(other.isFollowing, isFollowing) ||
+                other.isFollowing == isFollowing) &&
+            const DeepCollectionEquality().equals(other._posts, _posts));
   }
 
   @override
@@ -267,7 +290,8 @@ class _$ProfileEntityImpl implements _ProfileEntity {
       const DeepCollectionEquality().hash(_followers),
       const DeepCollectionEquality().hash(_following),
       isCurrentUser,
-      currentUserFollowing);
+      isFollowing,
+      const DeepCollectionEquality().hash(_posts));
 
   /// Create a copy of ProfileEntity
   /// with the given fields replaced by the non-null parameter values.
@@ -287,7 +311,8 @@ abstract class _ProfileEntity implements ProfileEntity {
       required final List<PostUserEntity> followers,
       required final List<PostUserEntity> following,
       required final bool isCurrentUser,
-      required final bool currentUserFollowing}) = _$ProfileEntityImpl;
+      required final bool isFollowing,
+      required final List<ProfilePostEntity> posts}) = _$ProfileEntityImpl;
 
   @override
   int get id;
@@ -304,12 +329,285 @@ abstract class _ProfileEntity implements ProfileEntity {
   @override
   bool get isCurrentUser;
   @override
-  bool get currentUserFollowing;
+  bool get isFollowing;
+  @override
+  List<ProfilePostEntity> get posts;
 
   /// Create a copy of ProfileEntity
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ProfileEntityImplCopyWith<_$ProfileEntityImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$ProfilePostEntity {
+  int get id => throw _privateConstructorUsedError;
+  String get description => throw _privateConstructorUsedError;
+  String get createdAt => throw _privateConstructorUsedError;
+  int get likesCount => throw _privateConstructorUsedError;
+  bool get liked => throw _privateConstructorUsedError;
+  int get commentsCount => throw _privateConstructorUsedError;
+  List<String> get images => throw _privateConstructorUsedError;
+
+  /// Create a copy of ProfilePostEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $ProfilePostEntityCopyWith<ProfilePostEntity> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ProfilePostEntityCopyWith<$Res> {
+  factory $ProfilePostEntityCopyWith(
+          ProfilePostEntity value, $Res Function(ProfilePostEntity) then) =
+      _$ProfilePostEntityCopyWithImpl<$Res, ProfilePostEntity>;
+  @useResult
+  $Res call(
+      {int id,
+      String description,
+      String createdAt,
+      int likesCount,
+      bool liked,
+      int commentsCount,
+      List<String> images});
+}
+
+/// @nodoc
+class _$ProfilePostEntityCopyWithImpl<$Res, $Val extends ProfilePostEntity>
+    implements $ProfilePostEntityCopyWith<$Res> {
+  _$ProfilePostEntityCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of ProfilePostEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? description = null,
+    Object? createdAt = null,
+    Object? likesCount = null,
+    Object? liked = null,
+    Object? commentsCount = null,
+    Object? images = null,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      description: null == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as String,
+      likesCount: null == likesCount
+          ? _value.likesCount
+          : likesCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      liked: null == liked
+          ? _value.liked
+          : liked // ignore: cast_nullable_to_non_nullable
+              as bool,
+      commentsCount: null == commentsCount
+          ? _value.commentsCount
+          : commentsCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      images: null == images
+          ? _value.images
+          : images // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$ProfilePostEntityImplCopyWith<$Res>
+    implements $ProfilePostEntityCopyWith<$Res> {
+  factory _$$ProfilePostEntityImplCopyWith(_$ProfilePostEntityImpl value,
+          $Res Function(_$ProfilePostEntityImpl) then) =
+      __$$ProfilePostEntityImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int id,
+      String description,
+      String createdAt,
+      int likesCount,
+      bool liked,
+      int commentsCount,
+      List<String> images});
+}
+
+/// @nodoc
+class __$$ProfilePostEntityImplCopyWithImpl<$Res>
+    extends _$ProfilePostEntityCopyWithImpl<$Res, _$ProfilePostEntityImpl>
+    implements _$$ProfilePostEntityImplCopyWith<$Res> {
+  __$$ProfilePostEntityImplCopyWithImpl(_$ProfilePostEntityImpl _value,
+      $Res Function(_$ProfilePostEntityImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ProfilePostEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? description = null,
+    Object? createdAt = null,
+    Object? likesCount = null,
+    Object? liked = null,
+    Object? commentsCount = null,
+    Object? images = null,
+  }) {
+    return _then(_$ProfilePostEntityImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      description: null == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as String,
+      likesCount: null == likesCount
+          ? _value.likesCount
+          : likesCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      liked: null == liked
+          ? _value.liked
+          : liked // ignore: cast_nullable_to_non_nullable
+              as bool,
+      commentsCount: null == commentsCount
+          ? _value.commentsCount
+          : commentsCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      images: null == images
+          ? _value._images
+          : images // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$ProfilePostEntityImpl implements _ProfilePostEntity {
+  const _$ProfilePostEntityImpl(
+      {required this.id,
+      required this.description,
+      required this.createdAt,
+      required this.likesCount,
+      required this.liked,
+      required this.commentsCount,
+      required final List<String> images})
+      : _images = images;
+
+  @override
+  final int id;
+  @override
+  final String description;
+  @override
+  final String createdAt;
+  @override
+  final int likesCount;
+  @override
+  final bool liked;
+  @override
+  final int commentsCount;
+  final List<String> _images;
+  @override
+  List<String> get images {
+    if (_images is EqualUnmodifiableListView) return _images;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_images);
+  }
+
+  @override
+  String toString() {
+    return 'ProfilePostEntity(id: $id, description: $description, createdAt: $createdAt, likesCount: $likesCount, liked: $liked, commentsCount: $commentsCount, images: $images)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ProfilePostEntityImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.likesCount, likesCount) ||
+                other.likesCount == likesCount) &&
+            (identical(other.liked, liked) || other.liked == liked) &&
+            (identical(other.commentsCount, commentsCount) ||
+                other.commentsCount == commentsCount) &&
+            const DeepCollectionEquality().equals(other._images, _images));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      description,
+      createdAt,
+      likesCount,
+      liked,
+      commentsCount,
+      const DeepCollectionEquality().hash(_images));
+
+  /// Create a copy of ProfilePostEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ProfilePostEntityImplCopyWith<_$ProfilePostEntityImpl> get copyWith =>
+      __$$ProfilePostEntityImplCopyWithImpl<_$ProfilePostEntityImpl>(
+          this, _$identity);
+}
+
+abstract class _ProfilePostEntity implements ProfilePostEntity {
+  const factory _ProfilePostEntity(
+      {required final int id,
+      required final String description,
+      required final String createdAt,
+      required final int likesCount,
+      required final bool liked,
+      required final int commentsCount,
+      required final List<String> images}) = _$ProfilePostEntityImpl;
+
+  @override
+  int get id;
+  @override
+  String get description;
+  @override
+  String get createdAt;
+  @override
+  int get likesCount;
+  @override
+  bool get liked;
+  @override
+  int get commentsCount;
+  @override
+  List<String> get images;
+
+  /// Create a copy of ProfilePostEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ProfilePostEntityImplCopyWith<_$ProfilePostEntityImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

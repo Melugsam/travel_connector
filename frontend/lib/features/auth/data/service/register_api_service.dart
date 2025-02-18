@@ -10,5 +10,5 @@ abstract class RegisterApiService {
   factory RegisterApiService(Dio dio, {String baseUrl}) = _RegisterApiService;
 
   @POST('/auth/register')
-  Future<AuthResponseModel> fetchRegister(@Body() RegisterRequestModel request);
+  Future<AuthResponseModel> executeRegister(@Body() RegisterRequestModel request);
 }

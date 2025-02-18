@@ -10,7 +10,7 @@ part of 'city_api_service.dart';
 
 class _CityApiService implements CityApiService {
   _CityApiService(this._dio, {this.baseUrl, this.errorLogger}) {
-    baseUrl ??= 'https://city-search2.p.rapidapi.com';
+    baseUrl ??= 'https://api.geoapify.com/v1/geocode';
   }
 
   final Dio _dio;
@@ -20,24 +20,19 @@ class _CityApiService implements CityApiService {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<CityResponseModel> fetchCity(
-    String input,
-    String apiKey,
-    String apiHost,
-  ) async {
+  Future<CityResponseModel> fetchCity(String cityName, String apiKey) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{
-      r'x-rapidapi-key': apiKey,
-      r'x-rapidapi-host': apiHost,
+    final queryParameters = <String, dynamic>{
+      r'text': cityName,
+      r'apiKey': apiKey,
     };
-    _headers.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<CityResponseModel>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/city/autocomplete?input=${input}&countryCode=RU',
+            '/autocomplete',
             queryParameters: queryParameters,
             data: _data,
           )

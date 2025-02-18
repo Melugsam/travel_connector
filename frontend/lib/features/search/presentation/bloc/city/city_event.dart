@@ -3,7 +3,7 @@ part of 'city_bloc.dart';
 sealed class CityEvent {}
 
 final class FetchCityEvent extends CityEvent {
-  final String keyword;
+  final String cityName;
 
-  FetchCityEvent({required this.keyword});
+  FetchCityEvent({required this.cityName});
 }

@@ -18,7 +18,7 @@ class _LoginApiService implements LoginApiService {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<AuthResponseModel> fetchLogin(LoginRequestModel request) async {
+  Future<AuthResponseModel> executeLogin(LoginRequestModel request) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};

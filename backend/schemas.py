@@ -67,11 +67,9 @@ class CommentResponseSchema(BaseModel):
 
 class AddCommentSchema(BaseModel):
     post_id: int
-    user_id: int
     content: str
 
 class PostSchema(BaseModel):
-    user_id: int
     offset: Optional[int]
     limit: Optional[int]
 
@@ -83,7 +81,6 @@ class PostImageCreateSchema(BaseModel):
     url: str
 
 class PostCreateSchema(BaseModel):
-    user_id: int
     description: Optional[str]
     images: Optional[List[PostImageCreateSchema]] = []
 
@@ -92,10 +89,6 @@ class PostCreateSchema(BaseModel):
 
 class LikePostSchema(BaseModel):
     post_id: int
-    user_id: int
-
-class GetPostsRequest(BaseModel):
-    user_id: int
 
 class CommentSchema(BaseModel):
     id: int
@@ -110,14 +103,11 @@ class PostIdSchema(BaseModel):
     post_id: int
 
 class FollowUserSchema(BaseModel):
-    user_id: int
     target_user_id: int
 
 class ProfileSchema(BaseModel):
-    user_id: int
-    target_user_id: int
+    target_user_id: Optional[int] = None
 
 class UserUpdateSchema(BaseModel):
-    user_id: int
     name: str
     profile_description: Optional[str] = None

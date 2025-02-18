@@ -9,17 +9,7 @@ class ProfileUseCase {
   ProfileUseCase(this._profileRepository);
 
   Future<Either<DomainException, ProfileEntity>> call(
-      int postId, int targetUserId) async {
-    try {
-      final result = await _profileRepository.fetchProfile(
-        postId,
-        targetUserId
-      );
-      return Right(result);
-    } on DomainException catch (e) {
-      return Left(e);
-    } catch (e) {
-      return Left(GenericDomainException("Неизвестная ошибка"));
-    }
+     int? targetUserId) async {
+    return await _profileRepository.fetchProfile(targetUserId);
   }
 }

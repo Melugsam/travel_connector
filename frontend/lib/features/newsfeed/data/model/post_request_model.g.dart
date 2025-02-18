@@ -8,14 +8,12 @@ part of 'post_request_model.dart';
 
 PostRequestModel _$PostRequestModelFromJson(Map<String, dynamic> json) =>
     PostRequestModel(
-      userId: (json['user_id'] as num).toInt(),
       offset: (json['offset'] as num?)?.toInt(),
       limit: (json['limit'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$PostRequestModelToJson(PostRequestModel instance) =>
     <String, dynamic>{
-      'user_id': instance.userId,
       'offset': instance.offset,
       'limit': instance.limit,
     };

@@ -1,30 +1,28 @@
-import 'package:dio/dio.dart';
+import 'package:dartz/dartz.dart';
 import 'package:travel_connector/core/constant/api_keys.dart';
 import 'package:travel_connector/core/exception/data_exception.dart';
+import 'package:travel_connector/core/network/base_remote_datasource.dart';
+import 'package:travel_connector/core/service/logging_service.dart';
 import 'package:travel_connector/features/search/data/model/weather_response_model.dart';
 import 'package:travel_connector/features/search/data/service/weather_api_service.dart';
 
-class WeatherRemoteDataSource {
+class WeatherRemoteDataSource extends BaseRemoteDataSource {
   final WeatherApiService _weatherApiService;
 
-  WeatherRemoteDataSource(this._weatherApiService);
+  WeatherRemoteDataSource(
+      LoggingService loggingService, this._weatherApiService) : super(loggingService: loggingService,);
 
-  Future<WeatherResponseModel> fetchWeather(
+  Future<Either<DataException, WeatherResponseModel>> fetchWeather(
     double latitude,
     double longitude,
   ) async {
-    try {
-      final response = await _weatherApiService.fetchWeather(
+    return safeApiCall(
+      () => _weatherApiService.fetchWeather(
         latitude,
         longitude,
         rapidApiKey,
         weatherApiHost,
-      );
-      return response;
-    } on DioException {
-      throw NetworkException();
-    } catch (e) {
-      throw GenericDataSourceException();
-    }
+      ),
+    );
   }
 }

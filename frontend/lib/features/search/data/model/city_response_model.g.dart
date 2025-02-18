@@ -8,28 +8,40 @@ part of 'city_response_model.dart';
 
 CityResponseModel _$CityResponseModelFromJson(Map<String, dynamic> json) =>
     CityResponseModel(
-      data: (json['data'] as List<dynamic>)
-          .map((e) => CityModel.fromJson(e as Map<String, dynamic>))
+      features: (json['features'] as List<dynamic>)
+          .map((e) => FeatureModel.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
 Map<String, dynamic> _$CityResponseModelToJson(CityResponseModel instance) =>
     <String, dynamic>{
-      'data': instance.data,
+      'features': instance.features,
     };
 
-CityModel _$CityModelFromJson(Map<String, dynamic> json) => CityModel(
-      name: json['name'] as String,
-      countryCode: json['countryCode'] as String,
-      stateCode: json['stateCode'] as String,
-      latitude: json['latitude'] as String,
-      longitude: json['longitude'] as String,
+FeatureModel _$FeatureModelFromJson(Map<String, dynamic> json) => FeatureModel(
+      properties:
+          PropertiesModel.fromJson(json['properties'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$CityModelToJson(CityModel instance) => <String, dynamic>{
-      'name': instance.name,
-      'countryCode': instance.countryCode,
-      'stateCode': instance.stateCode,
-      'latitude': instance.latitude,
-      'longitude': instance.longitude,
+Map<String, dynamic> _$FeatureModelToJson(FeatureModel instance) =>
+    <String, dynamic>{
+      'properties': instance.properties,
+    };
+
+PropertiesModel _$PropertiesModelFromJson(Map<String, dynamic> json) =>
+    PropertiesModel(
+      city: json['city'] as String?,
+      country: json['country'] as String?,
+      lon: (json['lon'] as num?)?.toDouble(),
+      lat: (json['lat'] as num?)?.toDouble(),
+      region: json['region'] as String?,
+    );
+
+Map<String, dynamic> _$PropertiesModelToJson(PropertiesModel instance) =>
+    <String, dynamic>{
+      'city': instance.city,
+      'country': instance.country,
+      'lon': instance.lon,
+      'lat': instance.lat,
+      'region': instance.region,
     };
