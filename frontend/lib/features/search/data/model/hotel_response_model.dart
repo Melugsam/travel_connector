@@ -4,15 +4,9 @@ part 'hotel_response_model.g.dart';
 
 @JsonSerializable()
 class HotelResponseModel {
-  final bool status;
-  final String message;
-  final int timestamp;
   final HotelDataResponseModel data;
 
   HotelResponseModel({
-    required this.status,
-    required this.message,
-    required this.timestamp,
     required this.data,
   });
 
@@ -24,11 +18,9 @@ class HotelResponseModel {
 
 @JsonSerializable()
 class HotelDataResponseModel {
-  final String sortDisclaimer;
   final List<HotelItemModel> data;
 
   HotelDataResponseModel({
-    required this.sortDisclaimer,
     required this.data,
   });
 
@@ -40,17 +32,17 @@ class HotelDataResponseModel {
 
 @JsonSerializable()
 class HotelItemModel {
-  final String id;
-  final String title;
+  final String? id;
+  final String? title;
   final String? primaryInfo;
-  final String secondaryInfo;
-  final BubbleRatingModel bubbleRating;
-  final List<HotelPhotoModel> cardPhotos;
+  final String? secondaryInfo;
+  final BubbleRatingModel? bubbleRating;
+  final List<HotelPhotoSizesModel>? cardPhotos;
 
   HotelItemModel({
     required this.id,
     required this.title,
-    this.primaryInfo,
+    required this.primaryInfo,
     required this.secondaryInfo,
     required this.bubbleRating,
     required this.cardPhotos,
@@ -64,8 +56,8 @@ class HotelItemModel {
 
 @JsonSerializable()
 class BubbleRatingModel {
-  final String count;
-  final double rating;
+  final String? count;
+  final double? rating;
 
   BubbleRatingModel({
     required this.count,
@@ -79,8 +71,22 @@ class BubbleRatingModel {
 }
 
 @JsonSerializable()
+class HotelPhotoSizesModel {
+  final HotelPhotoModel? sizes;
+
+  HotelPhotoSizesModel({
+    required this.sizes,
+  });
+
+  factory HotelPhotoSizesModel.fromJson(Map<String, dynamic> json) =>
+      _$HotelPhotoSizesModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$HotelPhotoSizesModelToJson(this);
+}
+
+@JsonSerializable()
 class HotelPhotoModel {
-  final String urlTemplate;
+  final String? urlTemplate;
 
   HotelPhotoModel({
     required this.urlTemplate,

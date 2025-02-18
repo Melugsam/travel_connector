@@ -68,6 +68,7 @@ import 'package:travel_connector/features/search/data/mapper/hotel_mapper.dart';
 import 'package:travel_connector/features/search/data/mapper/places_mapper.dart';
 import 'package:travel_connector/features/search/data/mapper/weather_mapper.dart';
 import 'package:travel_connector/features/search/data/repository/city_repository_impl.dart';
+import 'package:travel_connector/features/search/data/repository/hotel_repository_impl.dart';
 import 'package:travel_connector/features/search/data/repository/places_repository_impl.dart';
 import 'package:travel_connector/features/search/data/repository/weather_repository_impl.dart';
 import 'package:travel_connector/features/search/data/service/city_api_service.dart';
@@ -471,12 +472,13 @@ Future<void> init() async {
       getIt<HotelApiService>(),
     ),
   );
-  // getIt.registerLazySingleton<HotelRepository>(
-  //       () => HotelRepositoryImpl(
-  //     getIt<HotelRemoteDataSource>(),
-  //     getIt<HotelMapper>(),
-  //   ),
-  // );
+  getIt.registerLazySingleton<HotelRepository>(
+        () => HotelRepositoryImpl(
+      getIt<HotelRemoteDataSource>(),
+      getIt<HotelMapper>(),
+      getIt<ErrorHandler>(),
+    ),
+  );
   getIt.registerLazySingleton(
     () => HotelUseCase(
       getIt<HotelRepository>(),

@@ -19,7 +19,7 @@ mixin _$HotelEntity {
   String get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String? get primaryInfo => throw _privateConstructorUsedError;
-  String get secondaryInfo => throw _privateConstructorUsedError;
+  String? get secondaryInfo => throw _privateConstructorUsedError;
   BubbleRatingEntity get bubbleRating => throw _privateConstructorUsedError;
   List<String> get photos => throw _privateConstructorUsedError;
 
@@ -40,7 +40,7 @@ abstract class $HotelEntityCopyWith<$Res> {
       {String id,
       String title,
       String? primaryInfo,
-      String secondaryInfo,
+      String? secondaryInfo,
       BubbleRatingEntity bubbleRating,
       List<String> photos});
 
@@ -65,7 +65,7 @@ class _$HotelEntityCopyWithImpl<$Res, $Val extends HotelEntity>
     Object? id = null,
     Object? title = null,
     Object? primaryInfo = freezed,
-    Object? secondaryInfo = null,
+    Object? secondaryInfo = freezed,
     Object? bubbleRating = null,
     Object? photos = null,
   }) {
@@ -82,10 +82,10 @@ class _$HotelEntityCopyWithImpl<$Res, $Val extends HotelEntity>
           ? _value.primaryInfo
           : primaryInfo // ignore: cast_nullable_to_non_nullable
               as String?,
-      secondaryInfo: null == secondaryInfo
+      secondaryInfo: freezed == secondaryInfo
           ? _value.secondaryInfo
           : secondaryInfo // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       bubbleRating: null == bubbleRating
           ? _value.bubbleRating
           : bubbleRating // ignore: cast_nullable_to_non_nullable
@@ -120,7 +120,7 @@ abstract class _$$HotelEntityImplCopyWith<$Res>
       {String id,
       String title,
       String? primaryInfo,
-      String secondaryInfo,
+      String? secondaryInfo,
       BubbleRatingEntity bubbleRating,
       List<String> photos});
 
@@ -144,7 +144,7 @@ class __$$HotelEntityImplCopyWithImpl<$Res>
     Object? id = null,
     Object? title = null,
     Object? primaryInfo = freezed,
-    Object? secondaryInfo = null,
+    Object? secondaryInfo = freezed,
     Object? bubbleRating = null,
     Object? photos = null,
   }) {
@@ -161,10 +161,10 @@ class __$$HotelEntityImplCopyWithImpl<$Res>
           ? _value.primaryInfo
           : primaryInfo // ignore: cast_nullable_to_non_nullable
               as String?,
-      secondaryInfo: null == secondaryInfo
+      secondaryInfo: freezed == secondaryInfo
           ? _value.secondaryInfo
           : secondaryInfo // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       bubbleRating: null == bubbleRating
           ? _value.bubbleRating
           : bubbleRating // ignore: cast_nullable_to_non_nullable
@@ -183,7 +183,7 @@ class _$HotelEntityImpl implements _HotelEntity {
   const _$HotelEntityImpl(
       {required this.id,
       required this.title,
-      this.primaryInfo,
+      required this.primaryInfo,
       required this.secondaryInfo,
       required this.bubbleRating,
       required final List<String> photos})
@@ -196,7 +196,7 @@ class _$HotelEntityImpl implements _HotelEntity {
   @override
   final String? primaryInfo;
   @override
-  final String secondaryInfo;
+  final String? secondaryInfo;
   @override
   final BubbleRatingEntity bubbleRating;
   final List<String> _photos;
@@ -251,8 +251,8 @@ abstract class _HotelEntity implements HotelEntity {
   const factory _HotelEntity(
       {required final String id,
       required final String title,
-      final String? primaryInfo,
-      required final String secondaryInfo,
+      required final String? primaryInfo,
+      required final String? secondaryInfo,
       required final BubbleRatingEntity bubbleRating,
       required final List<String> photos}) = _$HotelEntityImpl;
 
@@ -263,7 +263,7 @@ abstract class _HotelEntity implements HotelEntity {
   @override
   String? get primaryInfo;
   @override
-  String get secondaryInfo;
+  String? get secondaryInfo;
   @override
   BubbleRatingEntity get bubbleRating;
   @override

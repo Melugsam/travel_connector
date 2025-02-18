@@ -8,25 +8,18 @@ part of 'hotel_response_model.dart';
 
 HotelResponseModel _$HotelResponseModelFromJson(Map<String, dynamic> json) =>
     HotelResponseModel(
-      status: json['status'] as bool,
-      message: json['message'] as String,
-      timestamp: (json['timestamp'] as num).toInt(),
       data:
           HotelDataResponseModel.fromJson(json['data'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$HotelResponseModelToJson(HotelResponseModel instance) =>
     <String, dynamic>{
-      'status': instance.status,
-      'message': instance.message,
-      'timestamp': instance.timestamp,
       'data': instance.data,
     };
 
 HotelDataResponseModel _$HotelDataResponseModelFromJson(
         Map<String, dynamic> json) =>
     HotelDataResponseModel(
-      sortDisclaimer: json['sortDisclaimer'] as String,
       data: (json['data'] as List<dynamic>)
           .map((e) => HotelItemModel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -35,20 +28,21 @@ HotelDataResponseModel _$HotelDataResponseModelFromJson(
 Map<String, dynamic> _$HotelDataResponseModelToJson(
         HotelDataResponseModel instance) =>
     <String, dynamic>{
-      'sortDisclaimer': instance.sortDisclaimer,
       'data': instance.data,
     };
 
 HotelItemModel _$HotelItemModelFromJson(Map<String, dynamic> json) =>
     HotelItemModel(
-      id: json['id'] as String,
-      title: json['title'] as String,
+      id: json['id'] as String?,
+      title: json['title'] as String?,
       primaryInfo: json['primaryInfo'] as String?,
-      secondaryInfo: json['secondaryInfo'] as String,
-      bubbleRating: BubbleRatingModel.fromJson(
-          json['bubbleRating'] as Map<String, dynamic>),
-      cardPhotos: (json['cardPhotos'] as List<dynamic>)
-          .map((e) => HotelPhotoModel.fromJson(e as Map<String, dynamic>))
+      secondaryInfo: json['secondaryInfo'] as String?,
+      bubbleRating: json['bubbleRating'] == null
+          ? null
+          : BubbleRatingModel.fromJson(
+              json['bubbleRating'] as Map<String, dynamic>),
+      cardPhotos: (json['cardPhotos'] as List<dynamic>?)
+          ?.map((e) => HotelPhotoSizesModel.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
@@ -64,8 +58,8 @@ Map<String, dynamic> _$HotelItemModelToJson(HotelItemModel instance) =>
 
 BubbleRatingModel _$BubbleRatingModelFromJson(Map<String, dynamic> json) =>
     BubbleRatingModel(
-      count: json['count'] as String,
-      rating: (json['rating'] as num).toDouble(),
+      count: json['count'] as String?,
+      rating: (json['rating'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$BubbleRatingModelToJson(BubbleRatingModel instance) =>
@@ -74,9 +68,23 @@ Map<String, dynamic> _$BubbleRatingModelToJson(BubbleRatingModel instance) =>
       'rating': instance.rating,
     };
 
+HotelPhotoSizesModel _$HotelPhotoSizesModelFromJson(
+        Map<String, dynamic> json) =>
+    HotelPhotoSizesModel(
+      sizes: json['sizes'] == null
+          ? null
+          : HotelPhotoModel.fromJson(json['sizes'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$HotelPhotoSizesModelToJson(
+        HotelPhotoSizesModel instance) =>
+    <String, dynamic>{
+      'sizes': instance.sizes,
+    };
+
 HotelPhotoModel _$HotelPhotoModelFromJson(Map<String, dynamic> json) =>
     HotelPhotoModel(
-      urlTemplate: json['urlTemplate'] as String,
+      urlTemplate: json['urlTemplate'] as String?,
     );
 
 Map<String, dynamic> _$HotelPhotoModelToJson(HotelPhotoModel instance) =>

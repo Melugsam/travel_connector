@@ -3,24 +3,39 @@ import 'package:travel_connector/features/search/domain/entity/hotel_entity.dart
 
 class HotelMapper {
   List<HotelEntity> mapToEntity(HotelResponseModel model) {
-    return model.data.data
-        .map(
-          (hotel) => HotelEntity(
-            id: hotel.id,
-            title: hotel.title,
-            primaryInfo: hotel.primaryInfo,
-            secondaryInfo: hotel.secondaryInfo,
-            bubbleRating: BubbleRatingEntity(
-              count: hotel.bubbleRating.count,
-              rating: hotel.bubbleRating.rating,
-            ),
-            photos: hotel.cardPhotos
-                .map(
-                  (photo) => photo.urlTemplate,
-                )
-                .toList(),
-          ),
-        )
-        .toList();
+    return model.data.data.where(_isValidHotel).map(_mapToHotelEntity).toList();
+  }
+
+  bool _isValidHotel(HotelItemModel hotel) {
+    return hotel.id != null &&
+        hotel.title != null &&
+        hotel.bubbleRating != null &&
+        hotel.cardPhotos != null &&
+        hotel.cardPhotos!.isNotEmpty &&
+        hotel.cardPhotos!.any(
+          (photo) => photo.sizes != null,
+        );
+  }
+
+  HotelEntity _mapToHotelEntity(HotelItemModel hotel) {
+    return HotelEntity(
+      id: hotel.id!,
+      title: hotel.title!,
+      primaryInfo: hotel.primaryInfo,
+      secondaryInfo: hotel.secondaryInfo,
+      bubbleRating: BubbleRatingEntity(
+        count: hotel.bubbleRating!.count ?? '',
+        rating: hotel.bubbleRating!.rating ?? 0,
+      ),
+      photos: hotel.cardPhotos!
+          .where(
+            (element) => element.sizes != null,
+          )
+          .where(
+            (sizes) => sizes.sizes!.urlTemplate != null,
+          )
+          .map((photo) => photo.sizes!.urlTemplate!)
+          .toList(),
+    );
   }
 }

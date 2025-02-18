@@ -10,8 +10,8 @@ final ThemeData lightTheme = ThemeData(
   dividerTheme: const DividerThemeData(color: AppColors.dividerColor),
   dialogBackgroundColor: AppColors.white,
   canvasColor: AppColors.white,
-  splashColor: AppColors.primary,
-  highlightColor: AppColors.primary,
+  splashColor: AppColors.splashColor,
+  highlightColor: AppColors.splashColor,
   textTheme: TextTheme(
     bodyLarge: TextStyle(color: AppColors.black, fontSize: 16),
     bodyMedium: TextStyle(color: AppColors.black, fontSize: 14),

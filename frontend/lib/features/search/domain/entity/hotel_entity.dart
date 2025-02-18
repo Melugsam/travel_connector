@@ -7,8 +7,8 @@ class HotelEntity with _$HotelEntity {
   const factory HotelEntity({
     required String id,
     required String title,
-    String? primaryInfo,
-    required String secondaryInfo,
+    required String? primaryInfo,
+    required String? secondaryInfo,
     required BubbleRatingEntity bubbleRating,
     required List<String> photos,
   }) = _HotelEntity;

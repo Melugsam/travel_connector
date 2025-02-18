@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:travel_connector/core/color/app_colors.dart';
-import 'package:travel_connector/core/constant/url.dart';
+import 'package:travel_connector/core/constant/api_keys.dart';
 import 'package:travel_connector/core/widget/custom_button_widget.dart';
 import 'package:travel_connector/core/widget/custom_circular_indicator_widget.dart';
 import 'package:travel_connector/core/widget/custom_text_field_widget.dart';
@@ -21,48 +21,48 @@ class SearchMapWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => SearchMapCubit(),
-      child: Stack(
-        children: [
-          _buildMap(context),
-          _buildPanel(context),
-        ],
+      child: BlocBuilder<SearchMapCubit, LatLng>(
+        builder: (context, mapPoint) {
+          return Stack(
+            children: [
+              _buildMap(context, mapPoint),
+              _buildPanel(context, mapPoint),
+            ],
+          );
+        },
       ),
     );
   }
 
-  Widget _buildMap(BuildContext context) {
-    return BlocBuilder<SearchMapCubit, LatLng>(
-      builder: (context, mapPoint) {
-        return FlutterMap(
-          options: MapOptions(
-            initialCenter: mapPoint,
-            initialZoom: 8.2,
-            onTap: (tapPosition, point) {
-              context.read<SearchMapCubit>().updateLocation(point);
-            },
-          ),
-          children: [
-            TileLayer(urlTemplate: stadiaMapsUrl),
-            MarkerLayer(
-              markers: [
-                Marker(
-                  point: mapPoint,
-                  child: const Icon(
-                    Icons.location_on,
-                    color: AppColors.primary,
-                    size: 32,
-                  ),
-                )
-              ],
-            ),
-            _buildMapAttribution(),
+  Widget _buildMap(BuildContext context, LatLng mapPoint) {
+    return FlutterMap(
+      options: MapOptions(
+        initialCenter: mapPoint,
+        initialZoom: 8.2,
+        onTap: (tapPosition, point) {
+          context.read<SearchMapCubit>().updateLocation(point);
+        },
+      ),
+      children: [
+        TileLayer(urlTemplate: mapApiKey),
+        MarkerLayer(
+          markers: [
+            Marker(
+              point: mapPoint,
+              child: const Icon(
+                Icons.location_on,
+                color: AppColors.primary,
+                size: 32,
+              ),
+            )
           ],
-        );
-      },
+        ),
+        _buildMapAttribution(),
+      ],
     );
   }
 
-  Widget _buildPanel(BuildContext context) {
+  Widget _buildPanel(BuildContext context, LatLng mapPoint) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 24, horizontal: 32),
       child: Column(
@@ -75,14 +75,13 @@ class SearchMapWidget extends StatelessWidget {
               _buildCityPredictor(),
             ],
           ),
-          _buildSearchButton(context),
+          _buildSearchButton(context, mapPoint),
         ],
       ),
     );
   }
 
-  Widget _buildSearchField(
-      BuildContext context) {
+  Widget _buildSearchField(BuildContext context) {
     return CustomTextFieldWidget(
       controller: cityController,
       onChanged: (value) {
@@ -93,17 +92,16 @@ class SearchMapWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildSearchButton(BuildContext context) {
+  Widget _buildSearchButton(BuildContext context, LatLng mapPoint) {
     return CustomButtonWidget(
       text: "Найти",
       onPressed: () {
-        final mapPoint = context.read<SearchMapCubit>().state;
         context.read<HotelBloc>().add(
-              FetchHotelEvent(
-                latitude: mapPoint.latitude,
-                longitude: mapPoint.longitude,
-              ),
-            );
+          FetchHotelEvent(
+            latitude: mapPoint.latitude,
+            longitude: mapPoint.longitude,
+          ),
+        );
       },
     );
   }
@@ -173,11 +171,11 @@ class SearchMapWidget extends StatelessWidget {
                     return InkWell(
                       onTap: () {
                         context.read<SearchMapCubit>().updateLocation(
-                              LatLng(
-                                state.cities[index].latitude,
-                                state.cities[index].longitude,
-                              ),
-                            );
+                          LatLng(
+                            state.cities[index].latitude,
+                            state.cities[index].longitude,
+                          ),
+                        );
                         context
                             .read<CityBloc>()
                             .add(FetchCityEvent(cityName: ''),);
@@ -189,11 +187,15 @@ class SearchMapWidget extends StatelessWidget {
                           children: [
                             Text(
                               '${state.cities[index].name}, ',
-                              style: Theme.of(context).textTheme.bodyMedium,
+                              style: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .bodyMedium,
                             ),
                             Text(
                               '${state.cities[index].country} ',
-                              style: Theme.of(context)
+                              style: Theme
+                                  .of(context)
                                   .textTheme
                                   .bodyMedium!
                                   .copyWith(fontWeight: FontWeight.w700),

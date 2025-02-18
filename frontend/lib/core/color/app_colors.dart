@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppColors{
   static const Color primary = Color.fromRGBO(245, 110, 112,1);
+  static const Color splashColor = Color.fromRGBO(250, 205, 205, 1.0);
   static const Color secondary = Color.fromRGBO(57, 152, 233,1);
   static const Color success = Color.fromRGBO(52, 168, 70, 1.0);
   static const Color warning = Color.fromRGBO(232, 174, 51,1);
