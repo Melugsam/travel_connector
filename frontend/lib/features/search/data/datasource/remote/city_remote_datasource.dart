@@ -9,8 +9,8 @@ import 'package:travel_connector/features/search/data/service/city_api_service.d
 class CityRemoteDataSource extends BaseRemoteDataSource {
   final CityApiService _cityApiService;
 
-  CityRemoteDataSource(LoggingService loggingService, this._cityApiService)
-      : super(loggingService: loggingService);
+  CityRemoteDataSource(this._cityApiService)
+      : super();
 
   Future<Either<DataException, CityResponseModel>> fetchCity(
     String cityName,

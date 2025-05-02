@@ -9,8 +9,8 @@ import 'package:travel_connector/features/auth/data/service/login_api_service.da
 class LoginRemoteDataSource extends BaseRemoteDataSource {
   final LoginApiService _loginApiService;
 
-  LoginRemoteDataSource(LoggingService loggingService, this._loginApiService)
-      : super(loggingService: loggingService);
+  LoginRemoteDataSource(this._loginApiService)
+      : super();
 
   Future<Either<DataException, AuthResponseModel>> login(
       LoginRequestModel requestModel) async {

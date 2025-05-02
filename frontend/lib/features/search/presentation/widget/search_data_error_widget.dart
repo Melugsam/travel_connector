@@ -22,8 +22,7 @@ class SearchDataErrorWidget extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               "Не удалось получить данные",
-              style: Theme.of(context).textTheme.bodyLarge,
-              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyLarge
             ),
           ],
         ),

@@ -6,14 +6,19 @@ class WeatherMapper {
     return WeatherEntity(
       cityName: model.city.name,
       country: model.city.country,
-      weatherDetails: model.list.map((weatherData) {
-        return WeatherDetailEntity(
-          dateTime: DateTime.parse(weatherData.dtTxt),
-          temperature: weatherData.main.temp,
-          description: weatherData.weather.first.description,
-          icon: weatherData.weather.first.icon,
-        );
-      }).toList(),
+      weatherDetails: model.list.map(
+        (weatherData) {
+          return WeatherDetailEntity(
+            dateTime: weatherData.dtTxt,
+            temperature: weatherData.main.temp,
+            description: weatherData.weather.first.description,
+            icon: weatherData.weather.first.icon,
+            humidity: weatherData.main.humidity,
+            pressure: weatherData.main.pressure,
+            windSpeed: weatherData.wind.speed,
+          );
+        },
+      ).toList(),
     );
   }
 }

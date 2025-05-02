@@ -9,9 +9,8 @@ import 'package:travel_connector/features/profile/data/service/profile_edit_api_
 class ProfileEditRemoteDataSource extends BaseRemoteDataSource {
   final ProfileEditApiService _profileEditApiService;
 
-  ProfileEditRemoteDataSource(
-      LoggingService loggingService, this._profileEditApiService)
-      : super(loggingService: loggingService);
+  ProfileEditRemoteDataSource(this._profileEditApiService)
+      : super();
 
   Future<Either<DataException, ProfileEditResponseModel>> executeEdit(
       String? name, String? description, File? avatarFile) async {

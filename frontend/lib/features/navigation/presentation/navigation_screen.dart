@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:travel_connector/core/injector/di.dart';
 import 'package:travel_connector/features/newsfeed/presentation/bloc/post_like/post_like_bloc.dart';
 import 'package:travel_connector/features/newsfeed/presentation/bloc/post_write_comment/post_write_comment_bloc.dart';
+import 'package:travel_connector/features/search/presentation/bloc/city/city_bloc.dart';
 
 import 'widget/nav_bar_item_widget.dart';
 
@@ -14,24 +15,15 @@ class NavigationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
     return MultiBlocProvider(
       providers: [
-        // BlocProvider(
-        //   create: (context) =>
-        //       PostBloc(
-        //         getIt(),
-        //         getIt(),
-        //       ),
-        // ),
         BlocProvider(
-          create: (context) => PostLikeBloc(
-            getIt(),
-          ),
+          create: (context) => PostLikeBloc(getIt()),
         ),
         BlocProvider(
-          create: (context) => PostWriteCommentBloc(
-            getIt(),
-          ),
+          create: (context) => PostWriteCommentBloc(getIt()),
         ),
       ],
       child: Scaffold(

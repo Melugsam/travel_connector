@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomButtonWidget extends StatelessWidget {
   final String text;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final bool outline;
   final double? height;
   final double? width;
@@ -24,6 +24,19 @@ class CustomButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDisabled = onPressed == null;
+
+    final backgroundColor = outline
+        ? Colors.transparent
+        : isDisabled
+        ? theme.disabledColor
+        : theme.primaryColor;
+
+    final foregroundColor = isDisabled
+        ? theme.disabledColor.withOpacity(0.6)
+        : outline
+        ? theme.primaryColor
+        : Colors.white;
 
     return SizedBox(
       height: height ?? 40,
@@ -31,9 +44,14 @@ class CustomButtonWidget extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: outline ? Colors.transparent : theme.primaryColor,
+          backgroundColor: backgroundColor,
           side: outline
-              ? BorderSide(color: theme.primaryColor, width: 2)
+              ? BorderSide(
+            color: isDisabled
+                ? theme.disabledColor.withOpacity(0.5)
+                : theme.primaryColor,
+            width: 2,
+          )
               : BorderSide.none,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
@@ -47,7 +65,7 @@ class CustomButtonWidget extends StatelessWidget {
             if (icon != null)
               Icon(
                 icon,
-                color: outline ? theme.primaryColor : Colors.white,
+                color: foregroundColor,
                 size: 20,
               ),
             if (svgPath != null)
@@ -55,12 +73,13 @@ class CustomButtonWidget extends StatelessWidget {
                 svgPath!,
                 height: 20,
                 width: 20,
+                colorFilter: ColorFilter.mode(foregroundColor, BlendMode.srcIn),
               ),
             if (icon != null || svgPath != null) const SizedBox(width: 8),
             Text(
               text,
               style: theme.textTheme.bodyMedium!.copyWith(
-                color: outline ? theme.primaryColor : Colors.white,
+                color: foregroundColor,
               ),
             ),
           ],

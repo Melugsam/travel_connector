@@ -9,8 +9,7 @@ import 'package:travel_connector/features/search/data/service/weather_api_servic
 class WeatherRemoteDataSource extends BaseRemoteDataSource {
   final WeatherApiService _weatherApiService;
 
-  WeatherRemoteDataSource(
-      LoggingService loggingService, this._weatherApiService) : super(loggingService: loggingService,);
+  WeatherRemoteDataSource(this._weatherApiService) : super();
 
   Future<Either<DataException, WeatherResponseModel>> fetchWeather(
     double latitude,

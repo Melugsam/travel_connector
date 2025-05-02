@@ -9,8 +9,8 @@ import 'package:travel_connector/features/newsfeed/data/service/post_api_service
 class PostRemoteDataSource extends BaseRemoteDataSource {
   final PostApiService _postApiService;
 
-  PostRemoteDataSource(LoggingService loggingService, this._postApiService)
-      : super(loggingService: loggingService);
+  PostRemoteDataSource(this._postApiService)
+      : super();
 
   Future<Either<DataException, List<PostResponseModel>>> fetchPosts(
       int? offset, int? limit) async {

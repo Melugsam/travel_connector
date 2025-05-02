@@ -8,10 +8,9 @@ final ThemeData lightTheme = ThemeData(
   primaryColor: AppColors.primary,
   scaffoldBackgroundColor: AppColors.white,
   dividerTheme: const DividerThemeData(color: AppColors.dividerColor),
-  dialogBackgroundColor: AppColors.white,
   canvasColor: AppColors.white,
-  splashColor: AppColors.splashColor,
-  highlightColor: AppColors.splashColor,
+  splashColor: AppColors.splashColor.withOpacity(0.2),
+  highlightColor: AppColors.splashColor.withOpacity(0.2),
   textTheme: TextTheme(
     bodyLarge: TextStyle(color: AppColors.black, fontSize: 16),
     bodyMedium: TextStyle(color: AppColors.black, fontSize: 14),
@@ -21,6 +20,7 @@ final ThemeData lightTheme = ThemeData(
   tabBarTheme: TabBarTheme(
     indicatorColor: AppColors.primary,
     labelColor: AppColors.primary,
+    overlayColor: WidgetStatePropertyAll<Color>(AppColors.splashColor),
     unselectedLabelColor: AppColors.black,
     dividerColor: Colors.transparent,
     dividerHeight: 0,
@@ -30,6 +30,10 @@ final ThemeData lightTheme = ThemeData(
     minLeadingWidth: 0,
     minTileHeight: 0,
   ),
+  popupMenuTheme: PopupMenuThemeData(
+    color: Colors.white,
+  ),
+
   appBarTheme: const AppBarTheme(
     elevation: 0,
     scrolledUnderElevation: 0,
@@ -64,6 +68,7 @@ final ThemeData lightTheme = ThemeData(
     headerBackgroundColor: AppColors.white,
   ),
   dialogTheme: DialogTheme(
+    backgroundColor: Colors.white,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(8.0),
     ),

@@ -3,13 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:travel_connector/core/color/app_colors.dart';
-import 'package:travel_connector/core/constant/api_keys.dart';
+import 'package:travel_connector/core/constant/url.dart';
 import 'package:travel_connector/core/widget/custom_button_widget.dart';
 import 'package:travel_connector/core/widget/custom_circular_indicator_widget.dart';
 import 'package:travel_connector/core/widget/custom_text_field_widget.dart';
 import 'package:travel_connector/features/search/presentation/bloc/city/city_bloc.dart';
 import 'package:travel_connector/features/search/presentation/bloc/hotel/hotel_bloc.dart';
-import 'package:travel_connector/features/search/presentation/bloc/map/search_map_cubit.dart';
+import 'package:travel_connector/features/search/presentation/bloc/places/places_bloc.dart';
+import 'package:travel_connector/features/search/presentation/bloc/search_map_point/search_map_point_cubit.dart';
+import 'package:travel_connector/features/search/presentation/bloc/tab_controller/tab_controller_cubit.dart';
+import 'package:travel_connector/features/search/presentation/bloc/weather/weather_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SearchMapWidget extends StatelessWidget {
@@ -20,8 +23,8 @@ class SearchMapWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SearchMapCubit(),
-      child: BlocBuilder<SearchMapCubit, LatLng>(
+      create: (_) => SearchMapPointCubit(),
+      child: BlocBuilder<SearchMapPointCubit, LatLng>(
         builder: (context, mapPoint) {
           return Stack(
             children: [
@@ -40,11 +43,11 @@ class SearchMapWidget extends StatelessWidget {
         initialCenter: mapPoint,
         initialZoom: 8.2,
         onTap: (tapPosition, point) {
-          context.read<SearchMapCubit>().updateLocation(point);
+          context.read<SearchMapPointCubit>().updateLocation(point);
         },
       ),
       children: [
-        TileLayer(urlTemplate: mapApiKey),
+        TileLayer(urlTemplate: geoapifyMapUrl),
         MarkerLayer(
           markers: [
             Marker(
@@ -97,11 +100,25 @@ class SearchMapWidget extends StatelessWidget {
       text: "Найти",
       onPressed: () {
         context.read<HotelBloc>().add(
-          FetchHotelEvent(
-            latitude: mapPoint.latitude,
-            longitude: mapPoint.longitude,
-          ),
-        );
+              FetchHotelEvent(
+                latitude: mapPoint.latitude,
+                longitude: mapPoint.longitude,
+              ),
+            );
+        context.read<WeatherBloc>().add(
+              FetchWeatherEvent(
+                latitude: mapPoint.latitude,
+                longitude: mapPoint.longitude,
+              ),
+            );
+        context.read<PlacesBloc>().add(
+              FetchPlacesEvent(
+                latitude: mapPoint.latitude,
+                longitude: mapPoint.longitude,
+                keyword: 'attractions',
+              ),
+            );
+        context.read<TabControllerCubit>().changeTab(1);
       },
     );
   }
@@ -170,15 +187,15 @@ class SearchMapWidget extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return InkWell(
                       onTap: () {
-                        context.read<SearchMapCubit>().updateLocation(
-                          LatLng(
-                            state.cities[index].latitude,
-                            state.cities[index].longitude,
-                          ),
-                        );
-                        context
-                            .read<CityBloc>()
-                            .add(FetchCityEvent(cityName: ''),);
+                        context.read<SearchMapPointCubit>().updateLocation(
+                              LatLng(
+                                state.cities[index].latitude,
+                                state.cities[index].longitude,
+                              ),
+                            );
+                        context.read<CityBloc>().add(
+                              FetchCityEvent(cityName: ''),
+                            );
                         cityController.clear();
                       },
                       child: Padding(
@@ -187,15 +204,11 @@ class SearchMapWidget extends StatelessWidget {
                           children: [
                             Text(
                               '${state.cities[index].name}, ',
-                              style: Theme
-                                  .of(context)
-                                  .textTheme
-                                  .bodyMedium,
+                              style: Theme.of(context).textTheme.bodyMedium,
                             ),
                             Text(
                               '${state.cities[index].country} ',
-                              style: Theme
-                                  .of(context)
+                              style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium!
                                   .copyWith(fontWeight: FontWeight.w700),

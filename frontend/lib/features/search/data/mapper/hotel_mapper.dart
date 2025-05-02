@@ -24,17 +24,16 @@ class HotelMapper {
       primaryInfo: hotel.primaryInfo,
       secondaryInfo: hotel.secondaryInfo,
       bubbleRating: BubbleRatingEntity(
-        count: hotel.bubbleRating!.count ?? '',
-        rating: hotel.bubbleRating!.rating ?? 0,
+        count: hotel.bubbleRating?.count ?? '0',
+        rating: hotel.bubbleRating?.rating ?? 0.0,
       ),
       photos: hotel.cardPhotos!
-          .where(
-            (element) => element.sizes != null,
+          .where((photo) => photo.sizes?.urlTemplate != null)
+          .map(
+            (photo) => photo.sizes!.urlTemplate!
+                .replaceAll("{width}", "500")
+                .replaceAll("{height}", "300"),
           )
-          .where(
-            (sizes) => sizes.sizes!.urlTemplate != null,
-          )
-          .map((photo) => photo.sizes!.urlTemplate!)
           .toList(),
     );
   }

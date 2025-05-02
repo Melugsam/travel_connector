@@ -199,9 +199,12 @@ abstract class _WeatherEntity implements WeatherEntity {
 
 /// @nodoc
 mixin _$WeatherDetailEntity {
-  DateTime get dateTime => throw _privateConstructorUsedError;
+  String get dateTime => throw _privateConstructorUsedError;
   double get temperature => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
+  int get pressure => throw _privateConstructorUsedError;
+  int get humidity => throw _privateConstructorUsedError;
+  double get windSpeed => throw _privateConstructorUsedError;
   String get icon => throw _privateConstructorUsedError;
 
   /// Create a copy of WeatherDetailEntity
@@ -218,7 +221,13 @@ abstract class $WeatherDetailEntityCopyWith<$Res> {
       _$WeatherDetailEntityCopyWithImpl<$Res, WeatherDetailEntity>;
   @useResult
   $Res call(
-      {DateTime dateTime, double temperature, String description, String icon});
+      {String dateTime,
+      double temperature,
+      String description,
+      int pressure,
+      int humidity,
+      double windSpeed,
+      String icon});
 }
 
 /// @nodoc
@@ -239,13 +248,16 @@ class _$WeatherDetailEntityCopyWithImpl<$Res, $Val extends WeatherDetailEntity>
     Object? dateTime = null,
     Object? temperature = null,
     Object? description = null,
+    Object? pressure = null,
+    Object? humidity = null,
+    Object? windSpeed = null,
     Object? icon = null,
   }) {
     return _then(_value.copyWith(
       dateTime: null == dateTime
           ? _value.dateTime
           : dateTime // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
       temperature: null == temperature
           ? _value.temperature
           : temperature // ignore: cast_nullable_to_non_nullable
@@ -254,6 +266,18 @@ class _$WeatherDetailEntityCopyWithImpl<$Res, $Val extends WeatherDetailEntity>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
+      pressure: null == pressure
+          ? _value.pressure
+          : pressure // ignore: cast_nullable_to_non_nullable
+              as int,
+      humidity: null == humidity
+          ? _value.humidity
+          : humidity // ignore: cast_nullable_to_non_nullable
+              as int,
+      windSpeed: null == windSpeed
+          ? _value.windSpeed
+          : windSpeed // ignore: cast_nullable_to_non_nullable
+              as double,
       icon: null == icon
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
@@ -271,7 +295,13 @@ abstract class _$$WeatherDetailEntityImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {DateTime dateTime, double temperature, String description, String icon});
+      {String dateTime,
+      double temperature,
+      String description,
+      int pressure,
+      int humidity,
+      double windSpeed,
+      String icon});
 }
 
 /// @nodoc
@@ -290,13 +320,16 @@ class __$$WeatherDetailEntityImplCopyWithImpl<$Res>
     Object? dateTime = null,
     Object? temperature = null,
     Object? description = null,
+    Object? pressure = null,
+    Object? humidity = null,
+    Object? windSpeed = null,
     Object? icon = null,
   }) {
     return _then(_$WeatherDetailEntityImpl(
       dateTime: null == dateTime
           ? _value.dateTime
           : dateTime // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
       temperature: null == temperature
           ? _value.temperature
           : temperature // ignore: cast_nullable_to_non_nullable
@@ -305,6 +338,18 @@ class __$$WeatherDetailEntityImplCopyWithImpl<$Res>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
+      pressure: null == pressure
+          ? _value.pressure
+          : pressure // ignore: cast_nullable_to_non_nullable
+              as int,
+      humidity: null == humidity
+          ? _value.humidity
+          : humidity // ignore: cast_nullable_to_non_nullable
+              as int,
+      windSpeed: null == windSpeed
+          ? _value.windSpeed
+          : windSpeed // ignore: cast_nullable_to_non_nullable
+              as double,
       icon: null == icon
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
@@ -320,20 +365,29 @@ class _$WeatherDetailEntityImpl implements _WeatherDetailEntity {
       {required this.dateTime,
       required this.temperature,
       required this.description,
+      required this.pressure,
+      required this.humidity,
+      required this.windSpeed,
       required this.icon});
 
   @override
-  final DateTime dateTime;
+  final String dateTime;
   @override
   final double temperature;
   @override
   final String description;
   @override
+  final int pressure;
+  @override
+  final int humidity;
+  @override
+  final double windSpeed;
+  @override
   final String icon;
 
   @override
   String toString() {
-    return 'WeatherDetailEntity(dateTime: $dateTime, temperature: $temperature, description: $description, icon: $icon)';
+    return 'WeatherDetailEntity(dateTime: $dateTime, temperature: $temperature, description: $description, pressure: $pressure, humidity: $humidity, windSpeed: $windSpeed, icon: $icon)';
   }
 
   @override
@@ -347,12 +401,18 @@ class _$WeatherDetailEntityImpl implements _WeatherDetailEntity {
                 other.temperature == temperature) &&
             (identical(other.description, description) ||
                 other.description == description) &&
+            (identical(other.pressure, pressure) ||
+                other.pressure == pressure) &&
+            (identical(other.humidity, humidity) ||
+                other.humidity == humidity) &&
+            (identical(other.windSpeed, windSpeed) ||
+                other.windSpeed == windSpeed) &&
             (identical(other.icon, icon) || other.icon == icon));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, dateTime, temperature, description, icon);
+  int get hashCode => Object.hash(runtimeType, dateTime, temperature,
+      description, pressure, humidity, windSpeed, icon);
 
   /// Create a copy of WeatherDetailEntity
   /// with the given fields replaced by the non-null parameter values.
@@ -366,17 +426,26 @@ class _$WeatherDetailEntityImpl implements _WeatherDetailEntity {
 
 abstract class _WeatherDetailEntity implements WeatherDetailEntity {
   const factory _WeatherDetailEntity(
-      {required final DateTime dateTime,
+      {required final String dateTime,
       required final double temperature,
       required final String description,
+      required final int pressure,
+      required final int humidity,
+      required final double windSpeed,
       required final String icon}) = _$WeatherDetailEntityImpl;
 
   @override
-  DateTime get dateTime;
+  String get dateTime;
   @override
   double get temperature;
   @override
   String get description;
+  @override
+  int get pressure;
+  @override
+  int get humidity;
+  @override
+  double get windSpeed;
   @override
   String get icon;
 

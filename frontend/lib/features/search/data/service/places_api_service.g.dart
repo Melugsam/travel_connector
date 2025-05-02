@@ -28,7 +28,7 @@ class _PlacesApiService implements PlacesApiService {
     String apiHost,
   ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'keyword': keyword};
     final _headers = <String, dynamic>{
       r'x-rapidapi-key': apiKey,
       r'x-rapidapi-host': apiHost,
@@ -39,7 +39,7 @@ class _PlacesApiService implements PlacesApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/maps/api/place/nearbysearch/json?location=${latitude}%2C${longitude}&radius=1000&language=ru&opennow=true&rankby=prominence&keyword=${keyword}',
+            '/maps/api/place/nearbysearch/json?location=${latitude}%2C${longitude}&radius=1000&language=ru&opennow=true&rankby=prominence',
             queryParameters: queryParameters,
             data: _data,
           )

@@ -14,7 +14,7 @@ class ProfileResponseModel {
   final List<UserResponseModel> following;
   final bool isFollowing;
   final bool isCurrentUser;
-  final List<ProfilePostResponseModel> posts;
+  final List<PostResponseModel> posts;
 
   ProfileResponseModel({
     required this.id,
@@ -45,7 +45,8 @@ class ProfilePostResponseModel {
   @JsonKey(name: 'comments_count')
   final int commentsCount;
   final bool liked;
-  final List<String> images;
+  @JsonKey(name: 'images')
+  final List<PostImageModel> images;
 
   factory ProfilePostResponseModel.fromJson(Map<String, dynamic> json) =>
       _$ProfilePostResponseModelFromJson(json);

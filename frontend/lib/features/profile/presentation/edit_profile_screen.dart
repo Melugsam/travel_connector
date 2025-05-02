@@ -5,12 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:travel_connector/core/color/app_colors.dart';
 import 'package:travel_connector/core/injector/di.dart';
-import 'package:travel_connector/core/manager/notification_manager.dart';
 import 'package:travel_connector/core/widget/custom_button_widget.dart';
 import 'package:travel_connector/core/widget/custom_circular_indicator_widget.dart';
 import 'package:travel_connector/core/widget/custom_default_avatar_widget.dart';
 import 'package:travel_connector/core/widget/custom_text_labeled_form_widget.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:travel_connector/features/app/presentation/bloc/notification/notification_cubit.dart';
 
 import 'bloc/profile_edit/profile_edit_bloc.dart';
 
@@ -74,11 +74,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       child: BlocListener<ProfileEditBloc, ProfileEditState>(
         listener: (context, editState) {
           if (editState is ProfileEditSuccess) {
-            getIt<NotificationManager>()
-                .showSuccess(message: "Данные сохранены");
+            context.read<NotificationCubit>().showSuccess(message: "Данные сохранены");
           }
           if (editState is ProfileEditError) {
-            getIt<NotificationManager>().showError(message: editState.message);
+            context.read<NotificationCubit>().showError(message: editState.message);
           }
         },
         child: Scaffold(

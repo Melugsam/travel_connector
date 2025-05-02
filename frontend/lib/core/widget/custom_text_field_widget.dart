@@ -6,6 +6,7 @@ class CustomTextFieldWidget extends StatelessWidget {
   final String hintText;
   final bool border;
   final ValueChanged? onChanged;
+  final FocusNode? focusNode;
 
   const CustomTextFieldWidget({
     super.key,
@@ -13,6 +14,7 @@ class CustomTextFieldWidget extends StatelessWidget {
     required this.hintText,
     this.border = true,
     this.onChanged,
+    this.focusNode,
   });
 
   @override
@@ -20,6 +22,7 @@ class CustomTextFieldWidget extends StatelessWidget {
     return TextField(
       onChanged: onChanged,
       controller: controller,
+      focusNode: focusNode,
       decoration: InputDecoration(
         filled: true,
         fillColor: AppColors.white,

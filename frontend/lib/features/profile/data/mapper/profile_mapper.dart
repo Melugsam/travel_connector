@@ -1,8 +1,13 @@
+import 'package:travel_connector/features/newsfeed/data/mapper/post_mapper.dart';
 import 'package:travel_connector/features/newsfeed/domain/entity/post_entity.dart';
 import 'package:travel_connector/features/profile/data/model/profile_response_model.dart';
 import 'package:travel_connector/features/profile/domain/entity/profile_entity.dart';
 
 class ProfileMapper {
+  final PostMapper postMapper;
+
+  ProfileMapper({required this.postMapper});
+
   ProfileEntity mapToEntity(ProfileResponseModel model) {
     return ProfileEntity(
       id: model.id,
@@ -29,19 +34,7 @@ class ProfileMapper {
             ),
           )
           .toList(),
-      posts: model.posts
-          .map(
-            (e) => ProfilePostEntity(
-              id: e.id,
-              description: e.description,
-              createdAt: e.createdAt,
-              likesCount: e.likesCount,
-              liked: e.liked,
-              commentsCount: e.commentsCount,
-              images: e.images,
-            ),
-          )
-          .toList(),
+      posts: postMapper.mapToEntity(model.posts),
     );
   }
 }

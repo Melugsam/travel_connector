@@ -7,13 +7,11 @@ abstract class ErrorHandler {
 }
 
 class ApiErrorHandler implements ErrorHandler {
-  final LoggingService _loggingService;
 
-  ApiErrorHandler(this._loggingService);
+  ApiErrorHandler();
 
   @override
   DomainException handle(DataException error) {
-    _loggingService.logError("ApiErrorHandler", error);
 
     if (error is ServerException) {
       switch (error.serverError.errorCode) {

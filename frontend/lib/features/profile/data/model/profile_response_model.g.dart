@@ -22,8 +22,7 @@ ProfileResponseModel _$ProfileResponseModelFromJson(
       isFollowing: json['isFollowing'] as bool,
       isCurrentUser: json['isCurrentUser'] as bool,
       posts: (json['posts'] as List<dynamic>)
-          .map((e) =>
-              ProfilePostResponseModel.fromJson(e as Map<String, dynamic>))
+          .map((e) => PostResponseModel.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
@@ -50,8 +49,9 @@ ProfilePostResponseModel _$ProfilePostResponseModelFromJson(
       likesCount: (json['likes_count'] as num).toInt(),
       commentsCount: (json['comments_count'] as num).toInt(),
       liked: json['liked'] as bool,
-      images:
-          (json['images'] as List<dynamic>).map((e) => e as String).toList(),
+      images: (json['images'] as List<dynamic>)
+          .map((e) => PostImageModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$ProfilePostResponseModelToJson(
@@ -63,5 +63,5 @@ Map<String, dynamic> _$ProfilePostResponseModelToJson(
       'likes_count': instance.likesCount,
       'comments_count': instance.commentsCount,
       'liked': instance.liked,
-      'images': instance.images,
+      'images': instance.images.map((e) => e.toJson()).toList(),
     };

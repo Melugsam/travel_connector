@@ -9,9 +9,8 @@ import 'package:travel_connector/features/profile/data/service/profile_api_servi
 class ProfileRemoteDataSource extends BaseRemoteDataSource {
   final ProfileApiService _profileApiService;
 
-  ProfileRemoteDataSource(
-      LoggingService loggingService, this._profileApiService)
-      : super(loggingService: loggingService);
+  ProfileRemoteDataSource(this._profileApiService)
+      : super();
 
   Future<Either<DataException, ProfileResponseModel>> fetchProfile(
       int? targetUserId) async {

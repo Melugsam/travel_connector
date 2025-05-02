@@ -9,8 +9,8 @@ import 'package:travel_connector/features/search/data/service/hotel_api_service.
 class HotelRemoteDataSource extends BaseRemoteDataSource {
   final HotelApiService _hotelApiService;
 
-  HotelRemoteDataSource(LoggingService loggingService, this._hotelApiService)
-      : super(loggingService: loggingService);
+  HotelRemoteDataSource(this._hotelApiService)
+      : super();
 
   Future<Either<DataException, HotelResponseModel>> fetchHotel(
     double latitude,

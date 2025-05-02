@@ -10,8 +10,8 @@ class PostCommentRemoteDataSource extends BaseRemoteDataSource {
   final PostCommentApiService _postCommentApiService;
 
   PostCommentRemoteDataSource(
-      LoggingService loggingService, this._postCommentApiService)
-      : super(loggingService: loggingService);
+      this._postCommentApiService)
+      : super();
 
   Future<Either<DataException, PostCommentResponseModel>> fetchPostComments(
       int postId) async {

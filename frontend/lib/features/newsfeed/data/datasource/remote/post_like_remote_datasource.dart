@@ -9,9 +9,8 @@ import 'package:travel_connector/features/newsfeed/data/service/post_like_api_se
 class PostLikeRemoteDataSource extends BaseRemoteDataSource {
   final PostLikeApiService _postLikeApiService;
 
-  PostLikeRemoteDataSource(
-      LoggingService loggingService, this._postLikeApiService)
-      : super(loggingService: loggingService);
+  PostLikeRemoteDataSource(this._postLikeApiService)
+      : super();
 
   Future<Either<DataException, PostLikeResponseModel>> executeLike(
       int postId) async {

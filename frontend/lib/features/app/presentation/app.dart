@@ -5,8 +5,8 @@ import 'package:toastification/toastification.dart';
 import 'package:travel_connector/core/injector/di.dart';
 import 'package:travel_connector/core/router/routes.dart';
 import 'package:travel_connector/core/theme/theme.dart';
+import 'package:travel_connector/features/app/presentation/bloc/notification/notification_cubit.dart';
 import 'package:travel_connector/features/app/presentation/bloc/session/session_bloc.dart';
-
 class App extends StatelessWidget {
   const App({super.key});
 
@@ -24,17 +24,21 @@ class App extends StatelessWidget {
         theme: lightTheme,
         debugShowCheckedModeBanner: false,
         builder: (context, child) {
-          return BlocProvider.value(
-            value: getIt<SessionBloc>(),
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider.value(
+                value: getIt<SessionBloc>(),
+              ),
+              BlocProvider.value(
+                value: getIt<NotificationCubit>(),
+              ),
+            ],
             child: BlocListener<SessionBloc, SessionState>(
               listener: (context, state) {
-                if (state is SessionLogout){
+                if (state is SessionLogout) {
                   route.pushReplacementNamed('login');
                 }
-                if (state is SessionServerError){
-                  route.pushReplacementNamed('server-error');
-                }
-                if (state is SessionAuthenticated){
+                if (state is SessionAuthenticated) {
                   route.pushReplacementNamed('newsfeed');
                 }
               },

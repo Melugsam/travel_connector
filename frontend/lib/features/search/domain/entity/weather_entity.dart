@@ -14,9 +14,12 @@ class WeatherEntity with _$WeatherEntity {
 @freezed
 class WeatherDetailEntity with _$WeatherDetailEntity {
   const factory WeatherDetailEntity({
-    required DateTime dateTime,
+    required String dateTime,
     required double temperature,
     required String description,
+    required int pressure,
+    required int humidity,
+    required double windSpeed,
     required String icon,
   }) = _WeatherDetailEntity;
 }

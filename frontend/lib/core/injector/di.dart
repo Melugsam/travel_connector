@@ -2,13 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:travel_connector/core/manager/notification_manager.dart';
 import 'package:travel_connector/core/manager/token_manager.dart';
 import 'package:travel_connector/core/network/api_error_handler.dart';
 import 'package:travel_connector/core/network/dio_client.dart';
 import 'package:travel_connector/core/service/local_database_service.dart';
 import 'package:travel_connector/core/service/logging_service.dart';
 import 'package:travel_connector/core/service/notification_service.dart';
+import 'package:travel_connector/features/app/presentation/bloc/notification/notification_cubit.dart';
 import 'package:travel_connector/features/app/presentation/bloc/session/session_bloc.dart';
 import 'package:travel_connector/features/auth/data/datasource/remote/login_remote_datasource.dart';
 import 'package:travel_connector/features/auth/data/datasource/remote/register_remote_datasource.dart';
@@ -23,6 +23,7 @@ import 'package:travel_connector/features/auth/domain/repository/register_reposi
 import 'package:travel_connector/features/auth/domain/usecase/login_usecase.dart';
 import 'package:travel_connector/features/auth/domain/usecase/register_usecase.dart';
 import 'package:travel_connector/features/newsfeed/data/datasource/remote/post_comment_remote_datasource.dart';
+import 'package:travel_connector/features/newsfeed/data/datasource/remote/post_create_remote_datasource.dart';
 import 'package:travel_connector/features/newsfeed/data/datasource/remote/post_write_comment_remote_datasource.dart';
 import 'package:travel_connector/features/newsfeed/data/datasource/remote/post_like_remote_datasource.dart';
 import 'package:travel_connector/features/newsfeed/data/datasource/remote/post_remote_datasource.dart';
@@ -31,32 +32,40 @@ import 'package:travel_connector/features/newsfeed/data/mapper/post_write_commen
 import 'package:travel_connector/features/newsfeed/data/mapper/post_like_mapper.dart';
 import 'package:travel_connector/features/newsfeed/data/mapper/post_mapper.dart';
 import 'package:travel_connector/features/newsfeed/data/repository/post_comment_repository_impl.dart';
+import 'package:travel_connector/features/newsfeed/data/repository/post_create_repository_impl.dart';
 import 'package:travel_connector/features/newsfeed/data/repository/post_write_comment_repository_impl.dart';
 import 'package:travel_connector/features/newsfeed/data/repository/post_like_repository_impl.dart';
 import 'package:travel_connector/features/newsfeed/data/repository/post_repository_impl.dart';
 import 'package:travel_connector/features/newsfeed/data/service/post_api_service.dart';
 import 'package:travel_connector/features/newsfeed/data/service/post_comment_api_service.dart';
+import 'package:travel_connector/features/newsfeed/data/service/post_create_api_service.dart';
 import 'package:travel_connector/features/newsfeed/data/service/post_write_comment_api_service.dart';
 import 'package:travel_connector/features/newsfeed/data/service/post_like_api_service.dart';
 import 'package:travel_connector/features/newsfeed/domain/repository/post_comment_repository.dart';
+import 'package:travel_connector/features/newsfeed/domain/repository/post_create_repository.dart';
 import 'package:travel_connector/features/newsfeed/domain/repository/post_write_comment_repository.dart';
 import 'package:travel_connector/features/newsfeed/domain/repository/post_like_repository.dart';
 import 'package:travel_connector/features/newsfeed/domain/repository/post_repository.dart';
 import 'package:travel_connector/features/newsfeed/domain/usecase/post_comment_usecase.dart';
+import 'package:travel_connector/features/newsfeed/domain/usecase/post_create_usecase.dart';
 import 'package:travel_connector/features/newsfeed/domain/usecase/post_write_comment_usecase.dart';
 import 'package:travel_connector/features/newsfeed/domain/usecase/post_like_usecase.dart';
 import 'package:travel_connector/features/newsfeed/domain/usecase/post_usecase.dart';
 import 'package:travel_connector/features/newsfeed/presentation/bloc/post/post_bloc.dart';
+import 'package:travel_connector/features/profile/data/datasource/remote/follow_remote_datasource.dart';
 import 'package:travel_connector/features/profile/data/datasource/remote/profile_edit_remote_datasource.dart';
 import 'package:travel_connector/features/profile/data/datasource/remote/profile_remote_datasource.dart';
 import 'package:travel_connector/features/profile/data/mapper/profile_edit_mapper.dart';
 import 'package:travel_connector/features/profile/data/mapper/profile_mapper.dart';
 import 'package:travel_connector/features/profile/data/repository/profile_edit_repository_impl.dart';
 import 'package:travel_connector/features/profile/data/repository/profile_repository_impl.dart';
+import 'package:travel_connector/features/profile/data/service/follow_api_service.dart';
 import 'package:travel_connector/features/profile/data/service/profile_api_service.dart';
 import 'package:travel_connector/features/profile/data/service/profile_edit_api_service.dart';
+import 'package:travel_connector/features/profile/domain/repository/follow_repository.dart';
 import 'package:travel_connector/features/profile/domain/repository/profile_edit_repository.dart';
 import 'package:travel_connector/features/profile/domain/repository/profile_repository.dart';
+import 'package:travel_connector/features/profile/domain/usecase/follow_usecase.dart';
 import 'package:travel_connector/features/profile/domain/usecase/profile_edit_usecase.dart';
 import 'package:travel_connector/features/profile/domain/usecase/profile_usecase.dart';
 import 'package:travel_connector/features/search/data/datasource/remote/city_remote_datasource.dart';
@@ -83,6 +92,9 @@ import 'package:travel_connector/features/search/domain/usecase/city_usecase.dar
 import 'package:travel_connector/features/search/domain/usecase/hotel_usecase.dart';
 import 'package:travel_connector/features/search/domain/usecase/places_usecase.dart';
 import 'package:travel_connector/features/search/domain/usecase/weather_usecase.dart';
+import 'package:travel_connector/features/search/domain/utils/weather_util.dart';
+
+import '../../features/profile/data/repository/follow_repository_impl.dart';
 
 final getIt = GetIt.instance;
 
@@ -92,9 +104,7 @@ Future<void> init() async {
 
   // ErrorHandler
   getIt.registerSingleton<ErrorHandler>(
-    ApiErrorHandler(
-      getIt<LoggingService>(),
-    ),
+    ApiErrorHandler(),
   );
 
   // LocalDB
@@ -112,19 +122,19 @@ Future<void> init() async {
     ),
   );
 
-  // NotificationManager
+  // NotificationService
   getIt.registerLazySingleton<NotificationService>(
     () => NotificationService(),
   );
-  getIt.registerLazySingleton<NotificationManager>(
-    () => NotificationManager(
+  getIt.registerLazySingleton<NotificationCubit>(
+    () => NotificationCubit(
       getIt<NotificationService>(),
     ),
   );
 
   // Session
   getIt.registerLazySingleton<SessionBloc>(
-        () => SessionBloc(
+    () => SessionBloc(
       getIt<TokenManager>(),
     ),
   );
@@ -134,6 +144,7 @@ Future<void> init() async {
     () => DioClient(
       getIt<TokenManager>(),
       getIt<SessionBloc>(),
+      getIt<NotificationCubit>(),
     ).createDio(withAccess: true),
     instanceName: "dioWithAccess",
   );
@@ -141,6 +152,7 @@ Future<void> init() async {
     () => DioClient(
       getIt<TokenManager>(),
       getIt<SessionBloc>(),
+      getIt<NotificationCubit>(),
     ).createDio(withAccess: false),
     instanceName: "dioWithoutAccess",
   );
@@ -160,7 +172,6 @@ Future<void> init() async {
   );
   getIt.registerLazySingleton<LoginRemoteDataSource>(
     () => LoginRemoteDataSource(
-      getIt<LoggingService>(),
       getIt<LoginApiService>(),
     ),
   );
@@ -185,7 +196,6 @@ Future<void> init() async {
   );
   getIt.registerLazySingleton<RegisterRemoteDataSource>(
     () => RegisterRemoteDataSource(
-      getIt<LoggingService>(),
       getIt<RegisterApiService>(),
     ),
   );
@@ -214,7 +224,6 @@ Future<void> init() async {
   );
   getIt.registerLazySingleton<PostRemoteDataSource>(
     () => PostRemoteDataSource(
-      getIt<LoggingService>(),
       getIt<PostApiService>(),
     ),
   );
@@ -242,7 +251,6 @@ Future<void> init() async {
   );
   getIt.registerLazySingleton<PostLikeRemoteDataSource>(
     () => PostLikeRemoteDataSource(
-      getIt<LoggingService>(),
       getIt<PostLikeApiService>(),
     ),
   );
@@ -270,7 +278,6 @@ Future<void> init() async {
   );
   getIt.registerLazySingleton<PostWriteCommentRemoteDataSource>(
     () => PostWriteCommentRemoteDataSource(
-      getIt<LoggingService>(),
       getIt<PostWriteCommentApiService>(),
     ),
   );
@@ -298,7 +305,6 @@ Future<void> init() async {
   );
   getIt.registerLazySingleton<PostCommentRemoteDataSource>(
     () => PostCommentRemoteDataSource(
-      getIt<LoggingService>(),
       getIt<PostCommentApiService>(),
     ),
   );
@@ -318,7 +324,9 @@ Future<void> init() async {
   //// Profile
   // FetchProfile
   getIt.registerLazySingleton<ProfileMapper>(
-    () => ProfileMapper(),
+    () => ProfileMapper(
+      postMapper: getIt<PostMapper>()
+    ),
   );
   getIt.registerLazySingleton<ProfileApiService>(
     () => ProfileApiService(
@@ -327,7 +335,6 @@ Future<void> init() async {
   );
   getIt.registerLazySingleton<ProfileRemoteDataSource>(
     () => ProfileRemoteDataSource(
-      getIt<LoggingService>(),
       getIt<ProfileApiService>(),
     ),
   );
@@ -355,7 +362,6 @@ Future<void> init() async {
   );
   getIt.registerLazySingleton<ProfileEditRemoteDataSource>(
     () => ProfileEditRemoteDataSource(
-      getIt<LoggingService>(),
       getIt<ProfileEditApiService>(),
     ),
   );
@@ -377,6 +383,9 @@ Future<void> init() async {
   getIt.registerLazySingleton<WeatherMapper>(
     () => WeatherMapper(),
   );
+  getIt.registerLazySingleton<WeatherUtil>(
+    () => WeatherUtil(),
+  );
   getIt.registerLazySingleton<WeatherApiService>(
     () => WeatherApiService(
       getIt<Dio>(instanceName: 'dioWithoutAccess'),
@@ -384,7 +393,6 @@ Future<void> init() async {
   );
   getIt.registerLazySingleton<WeatherRemoteDataSource>(
     () => WeatherRemoteDataSource(
-      getIt<LoggingService>(),
       getIt<WeatherApiService>(),
     ),
   );
@@ -412,7 +420,6 @@ Future<void> init() async {
   );
   getIt.registerLazySingleton<PlacesRemoteDataSource>(
     () => PlacesRemoteDataSource(
-      getIt<LoggingService>(),
       getIt<PlacesApiService>(),
     ),
   );
@@ -440,7 +447,6 @@ Future<void> init() async {
   );
   getIt.registerLazySingleton<CityRemoteDataSource>(
     () => CityRemoteDataSource(
-      getIt<LoggingService>(),
       getIt<CityApiService>(),
     ),
   );
@@ -468,12 +474,11 @@ Future<void> init() async {
   );
   getIt.registerLazySingleton<HotelRemoteDataSource>(
     () => HotelRemoteDataSource(
-      getIt<LoggingService>(),
       getIt<HotelApiService>(),
     ),
   );
   getIt.registerLazySingleton<HotelRepository>(
-        () => HotelRepositoryImpl(
+    () => HotelRepositoryImpl(
       getIt<HotelRemoteDataSource>(),
       getIt<HotelMapper>(),
       getIt<ErrorHandler>(),
@@ -482,6 +487,56 @@ Future<void> init() async {
   getIt.registerLazySingleton(
     () => HotelUseCase(
       getIt<HotelRepository>(),
+    ),
+  );
+
+  // Post Create
+  getIt.registerLazySingleton<PostCreateApiService>(
+        () => PostCreateApiService(
+      getIt<Dio>(instanceName: 'dioWithAccess'),
+    ),
+  );
+  getIt.registerLazySingleton<PostCreateRemoteDataSource>(
+        () => PostCreateRemoteDataSource(
+         dio: getIt<Dio>(instanceName: 'dioWithAccess'),
+    ),
+  );
+
+  getIt.registerLazySingleton<PostCreateRepository>(
+        () => PostCreateRepositoryImpl(
+      getIt<PostCreateRemoteDataSource>(),
+      getIt<ErrorHandler>(),
+    ),
+  );
+
+  getIt.registerLazySingleton(
+        () => PostCreateUseCase(
+      getIt<PostCreateRepository>(),
+    ),
+  );
+
+  // Follow
+  getIt.registerLazySingleton<FollowApiService>(
+        () => FollowApiService(
+      getIt<Dio>(instanceName: 'dioWithAccess'),
+    ),
+  );
+  getIt.registerLazySingleton<FollowRemoteDataSource>(
+        () => FollowRemoteDataSource(
+      getIt<FollowApiService>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<FollowRepository>(
+        () => FollowRepositoryImpl(
+      getIt<FollowRemoteDataSource>(),
+      getIt<ErrorHandler>(),
+    ),
+  );
+
+  getIt.registerLazySingleton(
+        () => FollowUseCase(
+      getIt<FollowRepository>(),
     ),
   );
 

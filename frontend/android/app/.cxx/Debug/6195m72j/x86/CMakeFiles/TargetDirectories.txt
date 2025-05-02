@@ -1,0 +1,2 @@
+D:/Studying/University/Diplomas/travel_connector/frontend/android/app/.cxx/Debug/6195m72j/x86/CMakeFiles/edit_cache.dir
+D:/Studying/University/Diplomas/travel_connector/frontend/android/app/.cxx/Debug/6195m72j/x86/CMakeFiles/rebuild_cache.dir

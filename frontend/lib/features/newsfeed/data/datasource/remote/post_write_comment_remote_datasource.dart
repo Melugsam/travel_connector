@@ -9,9 +9,8 @@ import 'package:travel_connector/features/newsfeed/data/service/post_write_comme
 class PostWriteCommentRemoteDataSource extends BaseRemoteDataSource {
   final PostWriteCommentApiService _postWriteCommentApiService;
 
-  PostWriteCommentRemoteDataSource(
-      LoggingService loggingService, this._postWriteCommentApiService)
-      : super(loggingService: loggingService);
+  PostWriteCommentRemoteDataSource(this._postWriteCommentApiService)
+      : super();
 
   Future<Either<DataException, PostWriteCommentResponseModel>> executeComment(
       int postId, String content) async {

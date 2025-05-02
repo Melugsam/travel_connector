@@ -111,3 +111,23 @@ class ProfileSchema(BaseModel):
 class UserUpdateSchema(BaseModel):
     name: str
     profile_description: Optional[str] = None
+
+class CustomMarkerSchema(BaseModel):
+    lat: float
+    lng: float
+    type: str
+    label: Optional[str]
+
+class RouteConnectionSchema(BaseModel):
+    from_index: int  # индекс в массиве маркеров
+    to_index: int
+
+class MapRouteSchema(BaseModel):
+    markers: List[CustomMarkerSchema]
+    routes: List[RouteConnectionSchema]
+
+class PostCreateSchema(BaseModel):
+    description: str
+    images: Optional[List[PostImageSchema]] = []
+    map_route: Optional[MapRouteSchema] = None
+

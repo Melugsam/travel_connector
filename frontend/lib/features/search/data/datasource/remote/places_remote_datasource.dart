@@ -9,9 +9,8 @@ import 'package:travel_connector/features/search/data/service/places_api_service
 class PlacesRemoteDataSource extends BaseRemoteDataSource {
   final PlacesApiService _placesApiService;
 
-  PlacesRemoteDataSource(LoggingService loggingService, this._placesApiService)
+  PlacesRemoteDataSource(this._placesApiService)
       : super(
-          loggingService: loggingService,
         );
 
   Future<Either<DataException, PlacesResponseModel>> fetchPlaces(

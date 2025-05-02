@@ -9,7 +9,7 @@ import 'package:travel_connector/features/auth/data/service/register_api_service
 class RegisterRemoteDataSource extends BaseRemoteDataSource{
   final RegisterApiService _registerApiService;
 
-  RegisterRemoteDataSource(LoggingService loggingService,this._registerApiService): super(loggingService: loggingService);
+  RegisterRemoteDataSource(this._registerApiService): super();
 
   Future<Either<DataException,AuthResponseModel>> register(RegisterRequestModel requestModel) async {
     return safeApiCall(

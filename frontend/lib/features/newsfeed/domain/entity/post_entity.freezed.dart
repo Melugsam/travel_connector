@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$PostEntity {
   int get id => throw _privateConstructorUsedError;
+  String? get title => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   String get createdAt => throw _privateConstructorUsedError;
   int get likesCount => throw _privateConstructorUsedError;
@@ -26,6 +27,7 @@ mixin _$PostEntity {
   PostUserEntity get user => throw _privateConstructorUsedError;
   List<String> get images => throw _privateConstructorUsedError;
   List<PostCommentEntity> get comments => throw _privateConstructorUsedError;
+  MapRouteEntity? get route => throw _privateConstructorUsedError;
 
   /// Create a copy of PostEntity
   /// with the given fields replaced by the non-null parameter values.
@@ -42,6 +44,7 @@ abstract class $PostEntityCopyWith<$Res> {
   @useResult
   $Res call(
       {int id,
+      String? title,
       String description,
       String createdAt,
       int likesCount,
@@ -50,9 +53,11 @@ abstract class $PostEntityCopyWith<$Res> {
       List<int> likedBy,
       PostUserEntity user,
       List<String> images,
-      List<PostCommentEntity> comments});
+      List<PostCommentEntity> comments,
+      MapRouteEntity? route});
 
   $PostUserEntityCopyWith<$Res> get user;
+  $MapRouteEntityCopyWith<$Res>? get route;
 }
 
 /// @nodoc
@@ -71,6 +76,7 @@ class _$PostEntityCopyWithImpl<$Res, $Val extends PostEntity>
   @override
   $Res call({
     Object? id = null,
+    Object? title = freezed,
     Object? description = null,
     Object? createdAt = null,
     Object? likesCount = null,
@@ -80,12 +86,17 @@ class _$PostEntityCopyWithImpl<$Res, $Val extends PostEntity>
     Object? user = null,
     Object? images = null,
     Object? comments = null,
+    Object? route = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
+      title: freezed == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String?,
       description: null == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -122,6 +133,10 @@ class _$PostEntityCopyWithImpl<$Res, $Val extends PostEntity>
           ? _value.comments
           : comments // ignore: cast_nullable_to_non_nullable
               as List<PostCommentEntity>,
+      route: freezed == route
+          ? _value.route
+          : route // ignore: cast_nullable_to_non_nullable
+              as MapRouteEntity?,
     ) as $Val);
   }
 
@@ -132,6 +147,20 @@ class _$PostEntityCopyWithImpl<$Res, $Val extends PostEntity>
   $PostUserEntityCopyWith<$Res> get user {
     return $PostUserEntityCopyWith<$Res>(_value.user, (value) {
       return _then(_value.copyWith(user: value) as $Val);
+    });
+  }
+
+  /// Create a copy of PostEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $MapRouteEntityCopyWith<$Res>? get route {
+    if (_value.route == null) {
+      return null;
+    }
+
+    return $MapRouteEntityCopyWith<$Res>(_value.route!, (value) {
+      return _then(_value.copyWith(route: value) as $Val);
     });
   }
 }
@@ -146,6 +175,7 @@ abstract class _$$PostEntityImplCopyWith<$Res>
   @useResult
   $Res call(
       {int id,
+      String? title,
       String description,
       String createdAt,
       int likesCount,
@@ -154,10 +184,13 @@ abstract class _$$PostEntityImplCopyWith<$Res>
       List<int> likedBy,
       PostUserEntity user,
       List<String> images,
-      List<PostCommentEntity> comments});
+      List<PostCommentEntity> comments,
+      MapRouteEntity? route});
 
   @override
   $PostUserEntityCopyWith<$Res> get user;
+  @override
+  $MapRouteEntityCopyWith<$Res>? get route;
 }
 
 /// @nodoc
@@ -174,6 +207,7 @@ class __$$PostEntityImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? title = freezed,
     Object? description = null,
     Object? createdAt = null,
     Object? likesCount = null,
@@ -183,12 +217,17 @@ class __$$PostEntityImplCopyWithImpl<$Res>
     Object? user = null,
     Object? images = null,
     Object? comments = null,
+    Object? route = freezed,
   }) {
     return _then(_$PostEntityImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
+      title: freezed == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String?,
       description: null == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -225,6 +264,10 @@ class __$$PostEntityImplCopyWithImpl<$Res>
           ? _value._comments
           : comments // ignore: cast_nullable_to_non_nullable
               as List<PostCommentEntity>,
+      route: freezed == route
+          ? _value.route
+          : route // ignore: cast_nullable_to_non_nullable
+              as MapRouteEntity?,
     ));
   }
 }
@@ -234,6 +277,7 @@ class __$$PostEntityImplCopyWithImpl<$Res>
 class _$PostEntityImpl implements _PostEntity {
   const _$PostEntityImpl(
       {required this.id,
+      required this.title,
       required this.description,
       required this.createdAt,
       required this.likesCount,
@@ -242,13 +286,16 @@ class _$PostEntityImpl implements _PostEntity {
       required final List<int> likedBy,
       required this.user,
       required final List<String> images,
-      required final List<PostCommentEntity> comments})
+      required final List<PostCommentEntity> comments,
+      this.route})
       : _likedBy = likedBy,
         _images = images,
         _comments = comments;
 
   @override
   final int id;
+  @override
+  final String? title;
   @override
   final String description;
   @override
@@ -286,8 +333,11 @@ class _$PostEntityImpl implements _PostEntity {
   }
 
   @override
+  final MapRouteEntity? route;
+
+  @override
   String toString() {
-    return 'PostEntity(id: $id, description: $description, createdAt: $createdAt, likesCount: $likesCount, liked: $liked, commentsCount: $commentsCount, likedBy: $likedBy, user: $user, images: $images, comments: $comments)';
+    return 'PostEntity(id: $id, title: $title, description: $description, createdAt: $createdAt, likesCount: $likesCount, liked: $liked, commentsCount: $commentsCount, likedBy: $likedBy, user: $user, images: $images, comments: $comments, route: $route)';
   }
 
   @override
@@ -296,6 +346,7 @@ class _$PostEntityImpl implements _PostEntity {
         (other.runtimeType == runtimeType &&
             other is _$PostEntityImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.title, title) || other.title == title) &&
             (identical(other.description, description) ||
                 other.description == description) &&
             (identical(other.createdAt, createdAt) ||
@@ -308,13 +359,15 @@ class _$PostEntityImpl implements _PostEntity {
             const DeepCollectionEquality().equals(other._likedBy, _likedBy) &&
             (identical(other.user, user) || other.user == user) &&
             const DeepCollectionEquality().equals(other._images, _images) &&
-            const DeepCollectionEquality().equals(other._comments, _comments));
+            const DeepCollectionEquality().equals(other._comments, _comments) &&
+            (identical(other.route, route) || other.route == route));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       id,
+      title,
       description,
       createdAt,
       likesCount,
@@ -323,7 +376,8 @@ class _$PostEntityImpl implements _PostEntity {
       const DeepCollectionEquality().hash(_likedBy),
       user,
       const DeepCollectionEquality().hash(_images),
-      const DeepCollectionEquality().hash(_comments));
+      const DeepCollectionEquality().hash(_comments),
+      route);
 
   /// Create a copy of PostEntity
   /// with the given fields replaced by the non-null parameter values.
@@ -337,6 +391,7 @@ class _$PostEntityImpl implements _PostEntity {
 abstract class _PostEntity implements PostEntity {
   const factory _PostEntity(
       {required final int id,
+      required final String? title,
       required final String description,
       required final String createdAt,
       required final int likesCount,
@@ -345,10 +400,13 @@ abstract class _PostEntity implements PostEntity {
       required final List<int> likedBy,
       required final PostUserEntity user,
       required final List<String> images,
-      required final List<PostCommentEntity> comments}) = _$PostEntityImpl;
+      required final List<PostCommentEntity> comments,
+      final MapRouteEntity? route}) = _$PostEntityImpl;
 
   @override
   int get id;
+  @override
+  String? get title;
   @override
   String get description;
   @override
@@ -367,6 +425,8 @@ abstract class _PostEntity implements PostEntity {
   List<String> get images;
   @override
   List<PostCommentEntity> get comments;
+  @override
+  MapRouteEntity? get route;
 
   /// Create a copy of PostEntity
   /// with the given fields replaced by the non-null parameter values.
@@ -740,4 +800,509 @@ abstract class _PostCommentEntity implements PostCommentEntity {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PostCommentEntityImplCopyWith<_$PostCommentEntityImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$MapRouteEntity {
+  List<MarkerEntity> get markers => throw _privateConstructorUsedError;
+  List<RouteConnectionEntity> get routes => throw _privateConstructorUsedError;
+
+  /// Create a copy of MapRouteEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $MapRouteEntityCopyWith<MapRouteEntity> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $MapRouteEntityCopyWith<$Res> {
+  factory $MapRouteEntityCopyWith(
+          MapRouteEntity value, $Res Function(MapRouteEntity) then) =
+      _$MapRouteEntityCopyWithImpl<$Res, MapRouteEntity>;
+  @useResult
+  $Res call({List<MarkerEntity> markers, List<RouteConnectionEntity> routes});
+}
+
+/// @nodoc
+class _$MapRouteEntityCopyWithImpl<$Res, $Val extends MapRouteEntity>
+    implements $MapRouteEntityCopyWith<$Res> {
+  _$MapRouteEntityCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of MapRouteEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? markers = null,
+    Object? routes = null,
+  }) {
+    return _then(_value.copyWith(
+      markers: null == markers
+          ? _value.markers
+          : markers // ignore: cast_nullable_to_non_nullable
+              as List<MarkerEntity>,
+      routes: null == routes
+          ? _value.routes
+          : routes // ignore: cast_nullable_to_non_nullable
+              as List<RouteConnectionEntity>,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$MapRouteEntityImplCopyWith<$Res>
+    implements $MapRouteEntityCopyWith<$Res> {
+  factory _$$MapRouteEntityImplCopyWith(_$MapRouteEntityImpl value,
+          $Res Function(_$MapRouteEntityImpl) then) =
+      __$$MapRouteEntityImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({List<MarkerEntity> markers, List<RouteConnectionEntity> routes});
+}
+
+/// @nodoc
+class __$$MapRouteEntityImplCopyWithImpl<$Res>
+    extends _$MapRouteEntityCopyWithImpl<$Res, _$MapRouteEntityImpl>
+    implements _$$MapRouteEntityImplCopyWith<$Res> {
+  __$$MapRouteEntityImplCopyWithImpl(
+      _$MapRouteEntityImpl _value, $Res Function(_$MapRouteEntityImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of MapRouteEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? markers = null,
+    Object? routes = null,
+  }) {
+    return _then(_$MapRouteEntityImpl(
+      markers: null == markers
+          ? _value._markers
+          : markers // ignore: cast_nullable_to_non_nullable
+              as List<MarkerEntity>,
+      routes: null == routes
+          ? _value._routes
+          : routes // ignore: cast_nullable_to_non_nullable
+              as List<RouteConnectionEntity>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$MapRouteEntityImpl implements _MapRouteEntity {
+  const _$MapRouteEntityImpl(
+      {required final List<MarkerEntity> markers,
+      required final List<RouteConnectionEntity> routes})
+      : _markers = markers,
+        _routes = routes;
+
+  final List<MarkerEntity> _markers;
+  @override
+  List<MarkerEntity> get markers {
+    if (_markers is EqualUnmodifiableListView) return _markers;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_markers);
+  }
+
+  final List<RouteConnectionEntity> _routes;
+  @override
+  List<RouteConnectionEntity> get routes {
+    if (_routes is EqualUnmodifiableListView) return _routes;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_routes);
+  }
+
+  @override
+  String toString() {
+    return 'MapRouteEntity(markers: $markers, routes: $routes)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$MapRouteEntityImpl &&
+            const DeepCollectionEquality().equals(other._markers, _markers) &&
+            const DeepCollectionEquality().equals(other._routes, _routes));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_markers),
+      const DeepCollectionEquality().hash(_routes));
+
+  /// Create a copy of MapRouteEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$MapRouteEntityImplCopyWith<_$MapRouteEntityImpl> get copyWith =>
+      __$$MapRouteEntityImplCopyWithImpl<_$MapRouteEntityImpl>(
+          this, _$identity);
+}
+
+abstract class _MapRouteEntity implements MapRouteEntity {
+  const factory _MapRouteEntity(
+          {required final List<MarkerEntity> markers,
+          required final List<RouteConnectionEntity> routes}) =
+      _$MapRouteEntityImpl;
+
+  @override
+  List<MarkerEntity> get markers;
+  @override
+  List<RouteConnectionEntity> get routes;
+
+  /// Create a copy of MapRouteEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$MapRouteEntityImplCopyWith<_$MapRouteEntityImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$MarkerEntity {
+  double get latitude => throw _privateConstructorUsedError;
+  double get longitude => throw _privateConstructorUsedError;
+  String get type => throw _privateConstructorUsedError;
+  String? get label => throw _privateConstructorUsedError;
+
+  /// Create a copy of MarkerEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $MarkerEntityCopyWith<MarkerEntity> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $MarkerEntityCopyWith<$Res> {
+  factory $MarkerEntityCopyWith(
+          MarkerEntity value, $Res Function(MarkerEntity) then) =
+      _$MarkerEntityCopyWithImpl<$Res, MarkerEntity>;
+  @useResult
+  $Res call({double latitude, double longitude, String type, String? label});
+}
+
+/// @nodoc
+class _$MarkerEntityCopyWithImpl<$Res, $Val extends MarkerEntity>
+    implements $MarkerEntityCopyWith<$Res> {
+  _$MarkerEntityCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of MarkerEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? latitude = null,
+    Object? longitude = null,
+    Object? type = null,
+    Object? label = freezed,
+  }) {
+    return _then(_value.copyWith(
+      latitude: null == latitude
+          ? _value.latitude
+          : latitude // ignore: cast_nullable_to_non_nullable
+              as double,
+      longitude: null == longitude
+          ? _value.longitude
+          : longitude // ignore: cast_nullable_to_non_nullable
+              as double,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
+      label: freezed == label
+          ? _value.label
+          : label // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$MarkerEntityImplCopyWith<$Res>
+    implements $MarkerEntityCopyWith<$Res> {
+  factory _$$MarkerEntityImplCopyWith(
+          _$MarkerEntityImpl value, $Res Function(_$MarkerEntityImpl) then) =
+      __$$MarkerEntityImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({double latitude, double longitude, String type, String? label});
+}
+
+/// @nodoc
+class __$$MarkerEntityImplCopyWithImpl<$Res>
+    extends _$MarkerEntityCopyWithImpl<$Res, _$MarkerEntityImpl>
+    implements _$$MarkerEntityImplCopyWith<$Res> {
+  __$$MarkerEntityImplCopyWithImpl(
+      _$MarkerEntityImpl _value, $Res Function(_$MarkerEntityImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of MarkerEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? latitude = null,
+    Object? longitude = null,
+    Object? type = null,
+    Object? label = freezed,
+  }) {
+    return _then(_$MarkerEntityImpl(
+      latitude: null == latitude
+          ? _value.latitude
+          : latitude // ignore: cast_nullable_to_non_nullable
+              as double,
+      longitude: null == longitude
+          ? _value.longitude
+          : longitude // ignore: cast_nullable_to_non_nullable
+              as double,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
+      label: freezed == label
+          ? _value.label
+          : label // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$MarkerEntityImpl implements _MarkerEntity {
+  const _$MarkerEntityImpl(
+      {required this.latitude,
+      required this.longitude,
+      required this.type,
+      this.label});
+
+  @override
+  final double latitude;
+  @override
+  final double longitude;
+  @override
+  final String type;
+  @override
+  final String? label;
+
+  @override
+  String toString() {
+    return 'MarkerEntity(latitude: $latitude, longitude: $longitude, type: $type, label: $label)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$MarkerEntityImpl &&
+            (identical(other.latitude, latitude) ||
+                other.latitude == latitude) &&
+            (identical(other.longitude, longitude) ||
+                other.longitude == longitude) &&
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.label, label) || other.label == label));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, latitude, longitude, type, label);
+
+  /// Create a copy of MarkerEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$MarkerEntityImplCopyWith<_$MarkerEntityImpl> get copyWith =>
+      __$$MarkerEntityImplCopyWithImpl<_$MarkerEntityImpl>(this, _$identity);
+}
+
+abstract class _MarkerEntity implements MarkerEntity {
+  const factory _MarkerEntity(
+      {required final double latitude,
+      required final double longitude,
+      required final String type,
+      final String? label}) = _$MarkerEntityImpl;
+
+  @override
+  double get latitude;
+  @override
+  double get longitude;
+  @override
+  String get type;
+  @override
+  String? get label;
+
+  /// Create a copy of MarkerEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$MarkerEntityImplCopyWith<_$MarkerEntityImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$RouteConnectionEntity {
+  int get fromIndex => throw _privateConstructorUsedError;
+  int get toIndex => throw _privateConstructorUsedError;
+
+  /// Create a copy of RouteConnectionEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $RouteConnectionEntityCopyWith<RouteConnectionEntity> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $RouteConnectionEntityCopyWith<$Res> {
+  factory $RouteConnectionEntityCopyWith(RouteConnectionEntity value,
+          $Res Function(RouteConnectionEntity) then) =
+      _$RouteConnectionEntityCopyWithImpl<$Res, RouteConnectionEntity>;
+  @useResult
+  $Res call({int fromIndex, int toIndex});
+}
+
+/// @nodoc
+class _$RouteConnectionEntityCopyWithImpl<$Res,
+        $Val extends RouteConnectionEntity>
+    implements $RouteConnectionEntityCopyWith<$Res> {
+  _$RouteConnectionEntityCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of RouteConnectionEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? fromIndex = null,
+    Object? toIndex = null,
+  }) {
+    return _then(_value.copyWith(
+      fromIndex: null == fromIndex
+          ? _value.fromIndex
+          : fromIndex // ignore: cast_nullable_to_non_nullable
+              as int,
+      toIndex: null == toIndex
+          ? _value.toIndex
+          : toIndex // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$RouteConnectionEntityImplCopyWith<$Res>
+    implements $RouteConnectionEntityCopyWith<$Res> {
+  factory _$$RouteConnectionEntityImplCopyWith(
+          _$RouteConnectionEntityImpl value,
+          $Res Function(_$RouteConnectionEntityImpl) then) =
+      __$$RouteConnectionEntityImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({int fromIndex, int toIndex});
+}
+
+/// @nodoc
+class __$$RouteConnectionEntityImplCopyWithImpl<$Res>
+    extends _$RouteConnectionEntityCopyWithImpl<$Res,
+        _$RouteConnectionEntityImpl>
+    implements _$$RouteConnectionEntityImplCopyWith<$Res> {
+  __$$RouteConnectionEntityImplCopyWithImpl(_$RouteConnectionEntityImpl _value,
+      $Res Function(_$RouteConnectionEntityImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of RouteConnectionEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? fromIndex = null,
+    Object? toIndex = null,
+  }) {
+    return _then(_$RouteConnectionEntityImpl(
+      fromIndex: null == fromIndex
+          ? _value.fromIndex
+          : fromIndex // ignore: cast_nullable_to_non_nullable
+              as int,
+      toIndex: null == toIndex
+          ? _value.toIndex
+          : toIndex // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$RouteConnectionEntityImpl implements _RouteConnectionEntity {
+  const _$RouteConnectionEntityImpl(
+      {required this.fromIndex, required this.toIndex});
+
+  @override
+  final int fromIndex;
+  @override
+  final int toIndex;
+
+  @override
+  String toString() {
+    return 'RouteConnectionEntity(fromIndex: $fromIndex, toIndex: $toIndex)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$RouteConnectionEntityImpl &&
+            (identical(other.fromIndex, fromIndex) ||
+                other.fromIndex == fromIndex) &&
+            (identical(other.toIndex, toIndex) || other.toIndex == toIndex));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, fromIndex, toIndex);
+
+  /// Create a copy of RouteConnectionEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$RouteConnectionEntityImplCopyWith<_$RouteConnectionEntityImpl>
+      get copyWith => __$$RouteConnectionEntityImplCopyWithImpl<
+          _$RouteConnectionEntityImpl>(this, _$identity);
+}
+
+abstract class _RouteConnectionEntity implements RouteConnectionEntity {
+  const factory _RouteConnectionEntity(
+      {required final int fromIndex,
+      required final int toIndex}) = _$RouteConnectionEntityImpl;
+
+  @override
+  int get fromIndex;
+  @override
+  int get toIndex;
+
+  /// Create a copy of RouteConnectionEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$RouteConnectionEntityImplCopyWith<_$RouteConnectionEntityImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

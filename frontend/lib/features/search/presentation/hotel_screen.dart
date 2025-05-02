@@ -21,14 +21,21 @@ class HotelScreen extends StatelessWidget {
           return SearchDataErrorWidget();
         }
         if (state is HotelSuccess) {
-          return ListView.separated(
-            itemBuilder: (context, index) => HotelItemWidget(
-              hotel: state.hotels[index],
+          return Padding(
+            padding: const EdgeInsets.only(
+              top: 12.0,
+              left: 24.0,
+              right: 24.0,
             ),
-            separatorBuilder: (context, index) => SizedBox(
-              height: 8,
+            child: ListView.separated(
+              itemBuilder: (context, index) => HotelItemWidget(
+                hotel: state.hotels[index],
+              ),
+              separatorBuilder: (context, index) => SizedBox(
+                height: 16,
+              ),
+              itemCount: state.hotels.length,
             ),
-            itemCount: state.hotels.length,
           );
         }
         if (state is HotelEmpty){
