@@ -10,7 +10,7 @@ class PlacesMapper {
           vicinity: place.vicinity,
           rating: place.rating,
           userRatingsTotal: place.userRatingsTotal,
-          icon: place.icon,
+          icon: place.photos?.first.photoReference,
           isOpenNow: place.openingHours?.openNow ?? false,
           latitude: place.geometry.location.lat,
           longitude: place.geometry.location.lng,

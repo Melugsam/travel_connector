@@ -156,7 +156,7 @@ mixin _$PlaceEntity {
   String get vicinity => throw _privateConstructorUsedError;
   double? get rating => throw _privateConstructorUsedError;
   int? get userRatingsTotal => throw _privateConstructorUsedError;
-  String get icon => throw _privateConstructorUsedError;
+  String? get icon => throw _privateConstructorUsedError;
   bool get isOpenNow => throw _privateConstructorUsedError;
   double get latitude => throw _privateConstructorUsedError;
   double get longitude => throw _privateConstructorUsedError;
@@ -179,7 +179,7 @@ abstract class $PlaceEntityCopyWith<$Res> {
       String vicinity,
       double? rating,
       int? userRatingsTotal,
-      String icon,
+      String? icon,
       bool isOpenNow,
       double latitude,
       double longitude});
@@ -204,7 +204,7 @@ class _$PlaceEntityCopyWithImpl<$Res, $Val extends PlaceEntity>
     Object? vicinity = null,
     Object? rating = freezed,
     Object? userRatingsTotal = freezed,
-    Object? icon = null,
+    Object? icon = freezed,
     Object? isOpenNow = null,
     Object? latitude = null,
     Object? longitude = null,
@@ -226,10 +226,10 @@ class _$PlaceEntityCopyWithImpl<$Res, $Val extends PlaceEntity>
           ? _value.userRatingsTotal
           : userRatingsTotal // ignore: cast_nullable_to_non_nullable
               as int?,
-      icon: null == icon
+      icon: freezed == icon
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       isOpenNow: null == isOpenNow
           ? _value.isOpenNow
           : isOpenNow // ignore: cast_nullable_to_non_nullable
@@ -259,7 +259,7 @@ abstract class _$$PlaceEntityImplCopyWith<$Res>
       String vicinity,
       double? rating,
       int? userRatingsTotal,
-      String icon,
+      String? icon,
       bool isOpenNow,
       double latitude,
       double longitude});
@@ -282,7 +282,7 @@ class __$$PlaceEntityImplCopyWithImpl<$Res>
     Object? vicinity = null,
     Object? rating = freezed,
     Object? userRatingsTotal = freezed,
-    Object? icon = null,
+    Object? icon = freezed,
     Object? isOpenNow = null,
     Object? latitude = null,
     Object? longitude = null,
@@ -304,10 +304,10 @@ class __$$PlaceEntityImplCopyWithImpl<$Res>
           ? _value.userRatingsTotal
           : userRatingsTotal // ignore: cast_nullable_to_non_nullable
               as int?,
-      icon: null == icon
+      icon: freezed == icon
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       isOpenNow: null == isOpenNow
           ? _value.isOpenNow
           : isOpenNow // ignore: cast_nullable_to_non_nullable
@@ -346,7 +346,7 @@ class _$PlaceEntityImpl implements _PlaceEntity {
   @override
   final int? userRatingsTotal;
   @override
-  final String icon;
+  final String? icon;
   @override
   final bool isOpenNow;
   @override
@@ -398,7 +398,7 @@ abstract class _PlaceEntity implements PlaceEntity {
       required final String vicinity,
       required final double? rating,
       required final int? userRatingsTotal,
-      required final String icon,
+      required final String? icon,
       required final bool isOpenNow,
       required final double latitude,
       required final double longitude}) = _$PlaceEntityImpl;
@@ -412,7 +412,7 @@ abstract class _PlaceEntity implements PlaceEntity {
   @override
   int? get userRatingsTotal;
   @override
-  String get icon;
+  String? get icon;
   @override
   bool get isOpenNow;
   @override

@@ -16,7 +16,7 @@ class PlaceEntity with _$PlaceEntity {
     required String vicinity,
     required double? rating,
     required int? userRatingsTotal,
-    required String icon,
+    required String? icon,
     required bool isOpenNow,
     required double latitude,
     required double longitude,

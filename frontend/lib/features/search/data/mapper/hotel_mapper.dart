@@ -6,6 +6,12 @@ class HotelMapper {
     return model.data.data.where(_isValidHotel).map(_mapToHotelEntity).toList();
   }
 
+  String cleanTitle(String title) {
+    final regex = RegExp(r'^\d+\.\s+');
+    return title.replaceFirst(regex, '');
+  }
+
+
   bool _isValidHotel(HotelItemModel hotel) {
     return hotel.id != null &&
         hotel.title != null &&
@@ -20,7 +26,7 @@ class HotelMapper {
   HotelEntity _mapToHotelEntity(HotelItemModel hotel) {
     return HotelEntity(
       id: hotel.id!,
-      title: hotel.title!,
+      title: cleanTitle(hotel.title!),
       primaryInfo: hotel.primaryInfo,
       secondaryInfo: hotel.secondaryInfo,
       bubbleRating: BubbleRatingEntity(
